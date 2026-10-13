@@ -1,0 +1,37 @@
+.dashboard-placeholder {
+  display: grid;
+  min-height: 60vh;
+  place-items: center;
+  padding: 64px 24px;
+  background: linear-gradient(115deg, #fff 35%, #eff5ff 100%);
+  text-align: center;
+}
+
+.dashboard-placeholder-card {
+  max-width: 560px;
+  padding: clamp(28px, 6vw, 56px);
+  border: 1px solid #e4ebf5;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 20px 55px #173c7010;
+}
+
+.dashboard-placeholder-card > span {
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.dashboard-placeholder-card h1 {
+  margin: 14px 0 10px;
+  color: var(--navy);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(28px, 5vw, 42px);
+  letter-spacing: -1.5px;
+}
+
+.dashboard-placeholder-card p {
+  margin: 0;
+  font-size: 14px;
+}
