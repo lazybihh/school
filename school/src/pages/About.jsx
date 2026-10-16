@@ -5,13 +5,13 @@ import {
   ArrowRight,
   ArrowUpRight,
   BookOpen,
+  CalendarCheck,
   Check,
   Compass,
   GraduationCap,
   HeartHandshake,
   Lightbulb,
-  School,
-  Sparkles,
+  MessageSquare,
   Users
 } from "lucide-react";
 
@@ -19,30 +19,51 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "./About.css";
 
+const benefits = [
+  {
+    icon: CalendarCheck,
+    title: "More Organisation",
+    text: "Keep classes, assignments, attendance and notices in one place.",
+    color: "blue"
+  },
+  {
+    icon: MessageSquare,
+    title: "Better Communication",
+    text: "Make important school updates easier to share and follow.",
+    color: "yellow"
+  },
+  {
+    icon: Users,
+    title: "Greater Accessibility",
+    text: "Find relevant school information from a clear, responsive interface.",
+    color: "green"
+  }
+];
+
 const values = [
   {
     icon: Lightbulb,
     title: "Thoughtful Ideas",
-    description:
-      "We explore simple solutions to make everyday school experiences easier."
+    text: "We explore simple solutions to make everyday school experiences easier.",
+    color: "blue"
   },
   {
     icon: Users,
     title: "Connection",
-    description:
-      "Different members of a school community deserve experiences that work together."
+    text: "Students, teachers and parents deserve experiences that work together.",
+    color: "green"
   },
   {
     icon: HeartHandshake,
     title: "People First",
-    description:
-      "Every design decision begins with the people who will use the platform."
+    text: "Every design decision begins with the people who use the platform.",
+    color: "yellow"
   },
   {
     icon: Compass,
     title: "Purpose",
-    description:
-      "We focus on useful features and clear information rather than unnecessary complexity."
+    text: "We focus on useful features and clear information, not unnecessary complexity.",
+    color: "purple"
   }
 ];
 
@@ -51,13 +72,18 @@ function AboutPhoto({ src, alt, className = "" }) {
 
   return (
     <div className={`about-photo ${className}`}>
-      {!failed ? (
-        <img src={src} alt={alt} onError={() => setFailed(true)} />
-      ) : (
+      {failed ? (
         <div className="about-photo-fallback">
-          <GraduationCap size={48} />
+          <GraduationCap size={42} />
           <span>Inspired by education.</span>
         </div>
+      ) : (
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          onError={() => setFailed(true)}
+        />
       )}
     </div>
   );
@@ -74,293 +100,247 @@ export default function About() {
 
         <section className="about-hero">
           <div className="about-container about-hero-grid">
-            <div className="about-hero-copy">
-              <span className="about-eyebrow">ABOUT EDUFLOW</span>
-
-              <h1>
-                A little more clarity.
-                <em> A lot more possibility.</em>
-              </h1>
-
-              <p>
-                EduFlow is built around a simple idea: school technology
-                should bring people together, make information easier
-                to understand and leave more room for what matters —
-                education.
-              </p>
-
-              <div className="about-hero-actions">
-                <a href="#our-story" className="about-btn about-btn-primary">
-                  Discover Our Story
-                  <ArrowRight size={19} />
-                </a>
-
-                <Link to="/features" className="about-btn about-btn-outline">
-                  Explore Features
-                  <ArrowUpRight size={19} />
-                </Link>
-              </div>
-
-              <div className="about-hero-caption">
-                <Sparkles size={19} />
-                Thoughtfully designed for school communities.
-              </div>
-            </div>
 
             <div className="about-hero-visual">
-              <div className="about-hero-shape"></div>
+              <div className="about-hero-shape" />
 
               <AboutPhoto
-                src="/images/about-hero.jpg"
-                alt="Students on a bright school campus"
+                src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1400&q=85"
+                alt="Teacher helping students in a classroom"
                 className="about-hero-photo"
               />
 
-              <div className="about-hero-floating">
-                <span><GraduationCap size={22} /></span>
-                <div>
-                  <strong>Better school days</strong>
-                  <small>Begin with thoughtful ideas.</small>
-                </div>
+              <div className="about-photo-note">
+                <span>
+                  <GraduationCap size={25} />
+                </span>
+
+                <strong>
+                  Better tools.
+                  <br />
+                  Brighter futures.
+                </strong>
               </div>
 
-              <span className="about-hero-decoration">
-                Better tools.
-                <br />
-                Brighter futures. ↗
-              </span>
+              <span className="about-spark about-spark-one">✳</span>
+              <span className="about-spark about-spark-two">✦</span>
             </div>
+
+            <div className="about-hero-copy">
+              <span className="about-eyebrow">
+                <span className="about-eyebrow-dot" />
+                ABOUT EDUFLOW
+              </span>
+
+              <h1>
+                School life is complicated.
+                <span> Staying connected shouldn't be.</span>
+              </h1>
+
+              <p className="about-hero-intro">
+                EduFlow was created to bring students, teachers and
+                parents together through one simple digital experience.
+                We believe school information should be easy to find,
+                understand and follow — from the classroom to home.
+              </p>
+
+              <div className="about-benefits">
+                {benefits.map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <article
+                      key={item.title}
+                      className={`about-benefit about-${item.color}`}
+                    >
+                      <span className="about-benefit-icon">
+                        <Icon size={25} strokeWidth={2} />
+                      </span>
+
+                      <h3>{item.title}</h3>
+                      <p>{item.text}</p>
+                    </article>
+                  );
+                })}
+              </div>
+
+              <div className="about-hero-actions">
+                <Link to="/working" className="about-btn about-btn-primary">
+                  Learn How It Works
+                  <ArrowRight size={18} />
+                </Link>
+
+                <Link to="/features" className="about-text-link">
+                  Explore Features
+                  <ArrowUpRight size={18} />
+                </Link>
+              </div>
+            </div>
+
           </div>
         </section>
 
         {/* VALUES */}
 
         <section className="about-values">
-          <div className="about-container">
-            <div className="about-section-heading">
-              <span className="about-eyebrow">WHAT DRIVES US</span>
+          <div className="about-container about-values-layout">
+
+            <div className="about-values-heading">
+              <span className="about-eyebrow">
+                <span className="about-eyebrow-dot" />
+                OUR VALUES
+              </span>
 
               <h2>
-                The thinking behind
-                <em> EduFlow.</em>
+                What guides us.
+                <span> Every step of the way.</span>
               </h2>
 
               <p>
-                Four simple principles guide the way we approach
-                this school-management concept.
+                Our values shape how we design and improve EduFlow.
+                They keep us focused on what matters most — making
+                the school experience more useful for everyone.
               </p>
+
+              <div className="about-values-accent" />
             </div>
 
             <div className="about-values-grid">
-              {values.map((value) => {
-                const Icon = value.icon;
+              {values.map((item) => {
+                const Icon = item.icon;
 
                 return (
-                  <article className="about-value" key={value.title}>
+                  <article
+                    key={item.title}
+                    className={`about-value about-${item.color}`}
+                  >
                     <span className="about-value-icon">
-                      <Icon size={26} />
+                      <Icon size={27} strokeWidth={1.9} />
                     </span>
 
-                    <h3>{value.title}</h3>
-                    <p>{value.description}</p>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
                   </article>
                 );
               })}
             </div>
+
           </div>
         </section>
 
-        {/* STORY */}
+        {/* OUR STORY */}
 
         <section className="about-story" id="our-story">
           <div className="about-container about-story-grid">
+
+            <div className="about-story-copy">
+              <span className="about-eyebrow">
+                <span className="about-eyebrow-dot" />
+                THE IDEA BEHIND EDUFLOW
+              </span>
+
+              <h2>
+                Built around a simple question.
+                <span> What if school life felt easier?</span>
+              </h2>
+
+              <p>
+                Everyday school activities involve different people,
+                responsibilities and information. Teachers prepare
+                lessons and manage records. Students need to follow
+                their work. Parents want to stay informed about
+                their child's progress.
+              </p>
+
+              <p>
+                EduFlow brings these experiences together through
+                connected role-based dashboards. It's currently a
+                frontend demonstration built to explore how school
+                management can feel more organised and approachable.
+              </p>
+
+              <div className="about-story-points">
+                <span><Check size={16} /> Information that is easier to follow</span>
+                <span><Check size={16} /> Connected school experiences</span>
+                <span><Check size={16} /> Simple, responsive interfaces</span>
+              </div>
+
+              <Link to="/solutions" className="about-text-link">
+                Explore Our Solutions
+                <ArrowRight size={18} />
+              </Link>
+            </div>
+
             <div className="about-story-visual">
               <AboutPhoto
-                src="/images/about-story.jpg"
-                alt="Teacher helping students during a classroom activity"
+                src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=1200&q=85"
+                alt="Students learning together in a classroom"
                 className="about-story-photo"
               />
 
-              <div className="about-story-note">
-                <span><BookOpen size={22} /></span>
-                <div>
-                  <strong>Education comes first.</strong>
-                  <small>Technology should support it.</small>
-                </div>
+              <div className="about-story-photo-label">
+                <BookOpen size={21} />
+                <span>Education comes first. Technology supports it.</span>
               </div>
             </div>
 
-            <div className="about-story-copy">
-              <span className="about-eyebrow">OUR STORY</span>
-
-              <h2>
-                It started with
-                <em> one simple question.</em>
-              </h2>
-
-              <p className="about-story-question">
-                What if managing everyday school activities
-                could feel less complicated?
-              </p>
-
-              <p>
-                Students, teachers, parents and administrators all
-                depend on clear information. Yet each has different
-                responsibilities and needs.
-              </p>
-
-              <p>
-                EduFlow began as a frontend project concept to explore
-                how those everyday experiences could come together
-                through one organized and approachable platform.
-              </p>
-
-              <div className="about-story-checks">
-                <span><Check size={17} /> Simple, readable interfaces</span>
-                <span><Check size={17} /> Clear school information</span>
-                <span><Check size={17} /> Experiences for different roles</span>
-              </div>
-
-              <Link to="/features" className="about-text-link">
-                Discover the Platform
-                <ArrowRight size={19} />
-              </Link>
-            </div>
           </div>
         </section>
 
-        {/* MISSION AND VISION */}
+        {/* CONNECTION */}
 
-        <section className="about-purpose">
-          <div className="about-container">
-            <div className="about-purpose-heading">
-              <span className="about-eyebrow">OUR DIRECTION</span>
+        <section className="about-connection">
+          <div className="about-container about-connection-grid">
 
-              <h2>
-                A simple purpose.
-                <em> A meaningful vision.</em>
-              </h2>
-            </div>
-
-            <div className="about-purpose-grid">
-              <article className="about-purpose-card">
-                <div className="about-purpose-top">
-                  <span className="about-purpose-icon">
-                    <Compass size={27} />
-                  </span>
-                  <small>01 / MISSION</small>
-                </div>
-
-                <h3>Make school life simpler.</h3>
-
-                <p>
-                  Explore a more organized digital experience that
-                  makes important school information easier to
-                  find, follow and understand.
-                </p>
-              </article>
-
-              <article className="about-purpose-card about-purpose-yellow">
-                <div className="about-purpose-top">
-                  <span className="about-purpose-icon">
-                    <GraduationCap size={28} />
-                  </span>
-                  <small>02 / VISION</small>
-                </div>
-
-                <h3>Make room for better learning.</h3>
-
-                <p>
-                  Imagine a more connected school experience where
-                  thoughtful technology supports the entire
-                  education community.
-                </p>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        {/* PEOPLE */}
-
-        <section className="about-community">
-          <div className="about-container about-community-grid">
-            <div className="about-community-copy">
-              <span className="about-eyebrow">WHO WE DESIGN FOR</span>
+            <div className="about-connection-copy">
+              <span className="about-eyebrow">
+                ONE CONNECTED EXPERIENCE
+              </span>
 
               <h2>
                 Different people.
-                <em> One school community.</em>
+                <span> One school community.</span>
               </h2>
 
               <p>
-                EduFlow explores how the right information can be
-                presented to the right people through a clear,
-                consistent digital experience.
+                A school works best when the right information
+                reaches the right people. EduFlow gives each
+                user a dedicated space while keeping relevant
+                school records connected.
               </p>
 
-              <div className="about-community-roles">
-                <span><GraduationCap size={20} /> Students</span>
-                <span><BookOpen size={20} /> Teachers</span>
-                <span><Users size={20} /> Parents</span>
-                <span><School size={20} /> Administrators</span>
-              </div>
-
-              <Link to="/features" className="about-btn about-btn-primary">
-                See Our Features
-                <ArrowUpRight size={19} />
+              <Link to="/login" className="about-btn about-btn-primary">
+                Explore EduFlow
+                <ArrowRight size={18} />
               </Link>
             </div>
 
-            <div className="about-community-graphic">
-              <div className="about-community-orbit"></div>
-
-              <div className="about-community-centre">
-                <GraduationCap size={35} />
-                <strong>eduflow.</strong>
-                <small>One connected vision</small>
+            <div className="about-connection-roles">
+              <div>
+                <span className="about-role-icon">
+                  <GraduationCap size={24} />
+                </span>
+                <strong>Students</strong>
+                <p>Follow lessons, homework, results and timetables.</p>
               </div>
 
-              <span className="about-community-chip chip-one">
-                <BookOpen size={18} /> Teachers
-              </span>
+              <div>
+                <span className="about-role-icon">
+                  <BookOpen size={24} />
+                </span>
+                <strong>Teachers</strong>
+                <p>Manage attendance, assignments and academic records.</p>
+              </div>
 
-              <span className="about-community-chip chip-two">
-                <Users size={18} /> Parents
-              </span>
-
-              <span className="about-community-chip chip-three">
-                <GraduationCap size={18} /> Students
-              </span>
-
-              <span className="about-community-chip chip-four">
-                <School size={18} /> Admin
-              </span>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA */}
-
-        <section className="about-final">
-          <div className="about-container about-final-inner">
-            <div>
-              <span className="about-eyebrow">LET'S CONNECT</span>
-
-              <h2>
-                Have an idea?
-                <em> We'd love to hear it.</em>
-              </h2>
-
-              <p>
-                Explore the EduFlow concept or share your thoughts
-                about how school technology could be better.
-              </p>
+              <div>
+                <span className="about-role-icon">
+                  <Users size={24} />
+                </span>
+                <strong>Parents</strong>
+                <p>Stay informed about their child's school journey.</p>
+              </div>
             </div>
 
-            <Link to="/contact" className="about-btn about-btn-primary">
-              Get in Touch
-              <ArrowUpRight size={19} />
-            </Link>
           </div>
         </section>
 

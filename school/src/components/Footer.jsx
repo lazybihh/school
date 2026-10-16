@@ -3,80 +3,110 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   GraduationCap,
-  ArrowRight,
+  ArrowUpRight,
   Mail,
-  MapPin,
-  Instagram,
-  Linkedin
+  ChevronUp
 } from "lucide-react";
+
 import "./Footer.css";
 
 export default function Footer() {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
   return (
     <footer className="footer">
-      <div className="container footer-content">
+      <div className="footer-container">
 
-        <div className="footer-about">
-          <Link to="/" className="footer-logo">
-            <span className="footer-logo-icon">
-              <GraduationCap size={24} />
+        <div className="footer-content">
+
+          <div className="footer-about">
+            <Link to="/" className="footer-logo">
+              <span className="footer-logo-icon">
+                <GraduationCap size={24} />
+              </span>
+
+              <span className="footer-logo-name">
+                edu<span>flow</span><i>.</i>
+              </span>
+            </Link>
+
+            <h3>
+              Making education <span>flow better.</span>
+            </h3>
+
+            <p>
+              Connecting students, teachers, parents and
+              schools through one simple experience.
+              Everything in its place, everyone connected.
+            </p>
+
+            <span className="footer-tagline">
+              SIMPLER. SMARTER. CONNECTED.
             </span>
-            edu<span>flow</span><i>.</i>
-          </Link>
-
-          <p>
-            Making school management simpler, smarter,
-            and more connected for everyone.
-          </p>
-
-          <div className="footer-socials" aria-label="Social media placeholders">
-            <Instagram size={19} />
-            <Linkedin size={19} />
           </div>
+
+          <div className="footer-column">
+            <h4>Explore</h4>
+
+            <Link to="/">Home</Link>
+            <Link to="/about">About Us</Link>
+            <Link to="/features">Features</Link>
+            <Link to="/solutions">Solutions</Link>
+          </div>
+
+          <div className="footer-column">
+            <h4>Solutions</h4>
+
+            <Link to="/solutions/teacher">For Teachers</Link>
+            <Link to="/solutions/student">For Students</Link>
+            <Link to="/solutions/parent">For Parents</Link>
+            <Link to="/working">How It Works</Link>
+          </div>
+
+          <div className="footer-contact">
+            <h4>Let's Connect</h4>
+
+            <p>
+              Curious about EduFlow? Explore the project
+              or get in touch with us.
+            </p>
+
+            <Link to="/contact" className="footer-contact-btn">
+              <Mail size={17} />
+              Contact Us
+              <ArrowUpRight size={17} />
+            </Link>
+
+            <Link to="/login" className="footer-dashboard-link">
+              Explore Dashboards
+              <ArrowUpRight size={15} />
+            </Link>
+          </div>
+
         </div>
 
-        <div className="footer-column">
-          <h4>Explore</h4>
-          <Link to="/">Home</Link>
-          <Link to="/about">About Us</Link>
-          <Link to="/features">Features</Link>
-          <Link to="/#solutions">Solutions</Link>
-        </div>
-
-        <div className="footer-column">
-          <h4>Our Platform</h4>
-          <Link to="/features">Student Management</Link>
-          <Link to="/features">Attendance</Link>
-          <Link to="/features">Fee Management</Link>
-          <Link to="/#how-it-works">How It Works</Link>
-        </div>
-
-        <div className="footer-column footer-contact">
-          <h4>Get In Touch</h4>
-
+        <div className="footer-bottom">
           <p>
-            <Mail size={17} />
-            hello@eduflow.example
+            © {new Date().getFullYear()} EduFlow.
+            <span> Frontend school management project.</span>
           </p>
 
-          <p>
-            <MapPin size={17} />
-            Your school, connected.
-          </p>
+          <span>Designed for better learning.</span>
 
-          <Link to="/contact" className="footer-contact-link">
-            Send an Enquiry
-            <ArrowRight size={16} />
-          </Link>
+          <button
+            type="button"
+            onClick={scrollToTop}
+            className="footer-back-top"
+          >
+            Back to Top <ChevronUp size={16} />
+          </button>
         </div>
 
-      </div>
-
-      <div className="container footer-bottom">
-        <span>
-          © {new Date().getFullYear()} EduFlow. Frontend concept project.
-        </span>
-        <span>Designed for better learning.</span>
       </div>
     </footer>
   );

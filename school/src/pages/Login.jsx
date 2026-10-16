@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   BookOpen,
@@ -14,7 +14,9 @@ import {
   ShieldCheck,
   Users
 } from "lucide-react";
+
 import Navbar from "../components/Navbar";
+import { useSchool } from "../context/SchoolContext";
 import "./Login.css";
 
 const roles = [
@@ -25,12 +27,12 @@ const roles = [
   },
   {
     name: "Teacher",
-    icon: Users,
+    icon: BookOpen,
     description: "Manage classes"
   },
   {
     name: "Parent",
-    icon: ShieldCheck,
+    icon: Users,
     description: "Follow progress"
   },
   {
@@ -41,6 +43,9 @@ const roles = [
 ];
 
 export default function Login() {
+  const navigate = useNavigate();
+  const school = useSchool();
+
   const [role, setRole] = useState("Student");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,11 +59,41 @@ export default function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    setMessage("");
 
-    setMessage(
-      `${role} login preview completed. Authentication is not connected yet.`
+    const user = school.users.find(
+      (item) =>
+        item.email.toLowerCase() === email.trim().toLowerCase() &&
+        item.password === password
     );
-    setPassword("");
+
+    if (!user) {
+      setMessage("Incorrect email or password. Please try again.");
+      return;
+    }
+
+    if (user.role !== role.toLowerCase()) {
+      setMessage(
+        `This account belongs to the ${user.role} dashboard. Please select the correct role.`
+      );
+      return;
+    }
+
+    const loggedInUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      classId: user.classId,
+      childId: user.childId
+    };
+
+    localStorage.setItem(
+      "eduflowUser",
+      JSON.stringify(loggedInUser)
+    );
+
+    navigate(`/dashboard/${user.role}`, { replace: true });
   }
 
   return (
@@ -66,197 +101,249 @@ export default function Login() {
       <Navbar />
 
       <main className="login-page">
-        <div className="login-shell">
-          <section className="login-main">
-            <div className="login-art">
-              <div className="login-art-photo" />
+        <div className="login-container">
 
-              <div className="login-art-overlay" />
+          {/* LEFT SIDE */}
 
-              <Link to="/" className="login-art-brand">
-                <span className="login-art-brand-icon">
-                  <GraduationCap size={25} />
-                </span>
-                edu<span>flow</span><i>.</i>
-              </Link>
+          <section className="login-showcase">
 
-              <div className="login-art-content">
-                <span className="login-eyebrow">
-                  YOUR FUTURE STARTS HERE
-                </span>
+            <div className="login-showcase-copy">
+              <span className="login-eyebrow">
+                YOUR EDUCATION PLATFORM
+              </span>
 
-                <h1>
-                  Learning today.
-                  <br />
-                  <span>Leading tomorrow.</span>
-                </h1>
+              <h1>
+                Learning today.
+                <span>Leading tomorrow.</span>
+              </h1>
 
-                <p>
-                  One place for students, teachers, parents,
-                  and schools to learn and grow together.
-                </p>
+              <p>
+                One simple platform for students, teachers,
+                parents and schools. Everything you need to
+                learn, grow and succeed together.
+              </p>
 
-                <div className="login-art-note">
-                  <span className="login-art-note-icon">
-                    <Check size={17} />
+              <div className="login-benefits">
+
+                <div className="login-benefit">
+                  <span className="login-benefit-icon yellow">
+                    <Users size={22} />
                   </span>
-                  <span>Better learning, brighter futures.</span>
+
+                  <div>
+                    <strong>Connected Community</strong>
+                    <small>Students, teachers, parents & schools</small>
+                  </div>
                 </div>
+
+                <div className="login-benefit">
+                  <span className="login-benefit-icon blue">
+                    <BookOpen size={22} />
+                  </span>
+
+                  <div>
+                    <strong>Smarter Management</strong>
+                    <small>Classes, attendance, progress & more</small>
+                  </div>
+                </div>
+
+                <div className="login-benefit">
+                  <span className="login-benefit-icon green">
+                    <ShieldCheck size={22} />
+                  </span>
+
+                  <div>
+                    <strong>Better School Experience</strong>
+                    <small>Clear information, better communication</small>
+                  </div>
+                </div>
+
               </div>
 
-              <div className="login-art-decoration decoration-one" />
-              <div className="login-art-decoration decoration-two" />
+              <div className="login-handwritten">
+                Better learning,
+                <span>brighter futures.</span>
+              </div>
             </div>
 
-            <div className="login-form-side">
-              <section className="login-card">
-                <div className="login-card-heading">
-                  <span className="login-card-kicker">
-                    WELCOME TO EDUFLOW
-                  </span>
-                  <h2>Welcome back!</h2>
-                  <p>
-                    Sign in to continue your learning journey.
-                  </p>
-                </div>
+            {/* PHOTO COLLAGE */}
 
-                <div className="login-role-heading">
-                  <span>Continue as</span>
-                  <span className="login-role-hint">
-                    Choose your role
-                  </span>
-                </div>
+            <div className="login-collage">
+              <span className="login-shape login-shape-one" />
+              <span className="login-shape login-shape-two" />
+              <span className="login-shape login-shape-three" />
 
-                <div className="login-role-picker">
-                  {roles.map((item) => {
-                    const Icon = item.icon;
-                    const active = role === item.name;
+              <div className="login-collage-photo login-photo-campus">
+                <img
+                  src="/login-school.png"
+                  alt="School campus"
+                />
+              </div>
 
-                    return (
-                      <button
-                        key={item.name}
-                        type="button"
-                        className={`login-role-option ${
-                          active ? "active" : ""
-                        }`}
-                        onClick={() => chooseRole(item.name)}
-                        aria-pressed={active}
-                      >
-                        <Icon size={21} strokeWidth={1.9} />
-                        <span>{item.name}</span>
-                      </button>
-                    );
-                  })}
-                </div>
+              <div className="login-collage-photo login-photo-students">
+                <img
+                  src="/features-students.jpeg"
+                  alt="Students learning together"
+                />
+              </div>
 
-                <form className="login-form" onSubmit={handleSubmit}>
-                  <label htmlFor="login-email">
-                    Email address
-                  </label>
+              <div className="login-collage-photo login-photo-teacher">
+                <img
+                  src="/feature-attendance.jfif"
+                  alt="Teacher helping students"
+                />
+              </div>
 
-                  <div className="login-input">
-                    <Mail size={19} aria-hidden="true" />
+              <div className="login-collage-photo login-photo-family">
+                <img
+                  src="/how-it-works-hero.png"
+                  alt="School community"
+                />
+              </div>
+            </div>
 
-                    <input
-                      id="login-email"
-                      type="email"
-                      placeholder="you@example.com"
-                      autoComplete="email"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
-                      required
-                    />
-                  </div>
+          </section>
 
-                  <div className="login-password-label">
-                    <label htmlFor="login-password">
-                      Password
-                    </label>
-                  </div>
+          {/* RIGHT SIDE */}
 
-                  <div className="login-input">
-                    <LockKeyhole size={19} aria-hidden="true" />
+          <section className="login-form-side">
+            <div className="login-card">
 
-                    <input
-                      id="login-password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
-                      autoComplete="current-password"
-                      value={password}
-                      onChange={(event) => setPassword(event.target.value)}
-                      required
-                    />
+              <div className="login-card-heading">
+                <span className="login-card-kicker">
+                  WELCOME BACK
+                </span>
 
+                <h2>Sign in to your account</h2>
+
+                <p>
+                  Choose your role and enter your details to continue.
+                </p>
+              </div>
+
+              {/* ROLE SELECTION */}
+
+              <div className="login-role-heading">
+                <strong>Continue as</strong>
+                <span>Choose your role</span>
+              </div>
+
+              <div className="login-role-picker">
+                {roles.map((item) => {
+                  const Icon = item.icon;
+                  const active = role === item.name;
+
+                  return (
                     <button
                       type="button"
-                      className="login-eye"
-                      onClick={() => setShowPassword(!showPassword)}
-                      aria-label={
-                        showPassword ? "Hide password" : "Show password"
-                      }
+                      key={item.name}
+                      className={`login-role-option ${
+                        active ? "active" : ""
+                      }`}
+                      onClick={() => chooseRole(item.name)}
+                      aria-pressed={active}
                     >
-                      {showPassword ? (
-                        <EyeOff size={19} />
-                      ) : (
-                        <Eye size={19} />
-                      )}
+                      <Icon size={25} strokeWidth={1.9} />
+
+                      <strong>{item.name}</strong>
+                      <small>{item.description}</small>
                     </button>
-                  </div>
+                  );
+                })}
+              </div>
 
-                  <p className="login-demo-note">
-                    Demo mode — authentication is not connected yet.
-                  </p>
+              {/* LOGIN FORM */}
 
-                  <button type="submit" className="login-submit">
-                    <span>Sign In as {role}</span>
-                    <ArrowRight size={19} />
-                  </button>
+              <form className="login-form" onSubmit={handleSubmit}>
 
-                  {message && (
-                    <p className="login-message" role="status">
-                      <Check size={17} />
-                      <span>{message}</span>
-                    </p>
-                  )}
-                </form>
+                <label htmlFor="login-email">
+                  Email address
+                </label>
 
-                <div className="login-divider">
-                  <span>OR EXPLORE EDUFLOW</span>
+                <div className="login-input">
+                  <Mail size={19} />
+
+                  <input
+                    id="login-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    required
+                  />
                 </div>
 
-                <Link to="/features" className="login-explore">
-                  <span className="login-explore-icon">
-                    <BookOpen size={19} />
-                  </span>
+                <label htmlFor="login-password">
+                  Password
+                </label>
 
-                  <span className="login-explore-text">
-                    <strong>Discover our features</strong>
-                    <small>See what Eduflow can do for you</small>
-                  </span>
+                <div className="login-input">
+                  <LockKeyhole size={19} />
 
-                  <ArrowRight size={18} className="login-explore-arrow" />
-                </Link>
+                  <input
+                    id="login-password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    required
+                  />
 
-                <p className="login-card-bottom">
-                  New to Eduflow?{" "}
-                  <Link to="/about">Get to know us</Link>
+                  <button
+                    type="button"
+                    className="login-eye"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showPassword ? (
+                      <EyeOff size={19} />
+                    ) : (
+                      <Eye size={19} />
+                    )}
+                  </button>
+                </div>
+
+                <p className="login-demo-note">
+                  Demo mode — use one of your test accounts to sign in.
                 </p>
-              </section>
+
+                {message && (
+                  <p className="login-message" role="alert">
+                    {message}
+                  </p>
+                )}
+
+                <button type="submit" className="login-submit">
+                  Sign In as {role}
+                  <ArrowRight size={19} />
+                </button>
+
+              </form>
+
+              {/* EXPLORE */}
+
+              <div className="login-divider">
+                <span>OR EXPLORE EDUFLOW</span>
+              </div>
+
+              <Link to="/features" className="login-explore">
+                <BookOpen size={19} />
+                Discover our features
+                <ArrowRight size={18} />
+              </Link>
+
+              <p className="login-card-bottom">
+                New to EduFlow?{" "}
+                <Link to="/about">Get to know us</Link>
+              </p>
+
             </div>
           </section>
 
-          <footer className="login-footer">
-            <div className="login-footer-brand">
-              <GraduationCap size={20} />
-              <span>Learning made better.</span>
-            </div>
-
-            <span className="login-footer-message">
-              Built for every step of the learning journey.
-            </span>
-
-            <Link to="/contact">Contact us <ArrowRight size={15} /></Link>
-          </footer>
         </div>
       </main>
     </>

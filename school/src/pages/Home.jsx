@@ -4,520 +4,621 @@ import { Link } from "react-router-dom";
 import {
   ArrowRight,
   ArrowUpRight,
+  Award,
+  Bell,
   BookOpen,
   CalendarDays,
   Check,
-  ChevronDown,
+  ClipboardCheck,
   ClipboardList,
+  Clock,
   GraduationCap,
-  LayoutDashboard,
-  MessageSquare,
-  School,
-  ShieldCheck,
+  Megaphone,
+  Play,
   Sparkles,
-  TrendingUp,
-  Users
+  Users,
 } from "lucide-react";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "./Home.css";
 
-const audiences = [
+const IMAGES = {
+  hero: "/features-students.jpeg",
+  heroTeacher: "/feature-attendance.jfif",
+  heroCommunity: "/home-community.jfif",
+  student: "/features-students.jpeg",
+  teacher: "/feature-attendance.jfif",
+  parents: "/home-community.jfif",
+  campus: "/features-hero.jpeg",
+};
+
+const roles = [
   {
     icon: GraduationCap,
+    tone: "blue",
     title: "For Students",
-    text: "Find schedules, assignments and important school updates in one place."
+    text: "Access your timetable, assignments, results and notices — all in one place.",
+    link: "Explore Student Dashboard",
+    href: "/solutions/student",
+    image: IMAGES.student,
+    alt: "Students studying together with laptops",
   },
   {
     icon: BookOpen,
+    tone: "amber",
     title: "For Teachers",
-    text: "Explore simpler ways to organize classes and everyday academic tasks."
+    text: "Manage classes, track attendance, create assignments and share updates with ease.",
+    link: "Explore Teacher Dashboard",
+    href: "/solutions/teacher",
+    image: IMAGES.teacher,
+    alt: "Teacher guiding students in a classroom",
   },
   {
     icon: Users,
+    tone: "green",
     title: "For Parents",
-    text: "Stay connected with the information that matters to your child's education."
+    text: "Stay connected with your child's attendance, performance, fees and announcements.",
+    link: "Explore Parent Dashboard",
+    href: "/solutions/parent",
+    image: IMAGES.parents,
+    alt: "Parents with their child at home",
+  },
+];
+
+const platformPoints = [
+  "Quick access to classes, assignments and results",
+  "Shared updates and announcements",
+  "A connected view of school and home",
+  "A smooth experience on both desktop and mobile",
+];
+
+const steps = [
+  {
+    icon: ClipboardCheck,
+    tone: "blue",
+    title: "Teacher Posts",
+    text: "The teacher adds homework, attendance or marks for the class.",
   },
   {
-    icon: School,
-    title: "For Administrators",
-    text: "See how a more organized platform could support school operations."
-  }
+    icon: Bell,
+    tone: "amber",
+    title: "Students Receive",
+    text: "Students can view shared assignments, timetables and notices in their dashboard.",
+  },
+  {
+    icon: Users,
+    tone: "green",
+    title: "Parents Stay Informed",
+    text: "Parents can track progress, attendance, fees and important notices.",
+  },
 ];
 
 const features = [
   {
     icon: CalendarDays,
+    tone: "blue",
     title: "Attendance",
-    text: "A clearer view of everyday attendance records."
+    text: "Track daily attendance easily.",
+    href: "/features#module-02",
   },
   {
     icon: ClipboardList,
+    tone: "amber",
     title: "Assignments",
-    text: "Keep classroom tasks organized and easy to follow."
+    text: "Keep tasks organized and on time.",
+    href: "/features#module-04",
   },
   {
-    icon: MessageSquare,
-    title: "Communication",
-    text: "Bring important announcements into one familiar space."
+    icon: Award,
+    tone: "green",
+    title: "Results",
+    text: "Record and view examination marks.",
+    href: "/features#module-04",
   },
   {
-    icon: LayoutDashboard,
-    title: "Dashboard",
-    text: "See relevant information without unnecessary complexity."
-  }
+    icon: Clock,
+    tone: "violet",
+    title: "Timetable",
+    text: "Manage class schedules and periods.",
+    href: "/features#module-06",
+  },
+  {
+    icon: Megaphone,
+    tone: "rose",
+    title: "Notices",
+    text: "Share important updates with everyone.",
+    href: "/features#module-05",
+  },
 ];
 
-const faqs = [
-  {
-    question: "What is EduFlow?",
-    answer:
-      "EduFlow is a frontend school-management website concept designed to demonstrate a clearer digital experience for school communities."
-  },
-  {
-    question: "Does the website store real school information?",
-    answer:
-      "No. The current project uses illustrative content and frontend interactions. It does not connect to a live school database."
-  },
-  {
-    question: "Who is EduFlow designed for?",
-    answer:
-      "The concept explores experiences for students, teachers, parents and school administrators."
-  }
-];
-
-function Photo({ src, alt, className = "" }) {
+function Photo({ src, alt = "", className = "", priority = false }) {
   const [failed, setFailed] = useState(false);
 
   return (
     <div className={`home-photo ${className}`}>
-      {!failed ? (
-        <img src={src} alt={alt} onError={() => setFailed(true)} />
-      ) : (
-        <div className="home-photo-fallback">
-          <GraduationCap size={45} />
-          <span>Learning creates possibilities.</span>
+      {failed ? (
+        <div className="home-photo-fallback" aria-hidden="true">
+          <GraduationCap size={36} />
         </div>
+      ) : (
+        <img
+          src={src}
+          alt={alt}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
+          onError={() => setFailed(true)}
+        />
       )}
     </div>
   );
 }
 
-function DashboardPreview() {
-  const bars = [43, 62, 54, 80, 67, 91, 75];
-
+function SectionHeading({
+  eyebrow,
+  title,
+  highlight,
+  text,
+  center = false,
+}) {
   return (
-    <div className="home-dashboard">
-      <aside className="home-dashboard-side">
-        <div className="home-dashboard-brand">
-          <GraduationCap size={20} />
-          <strong>eduflow.</strong>
-        </div>
+    <div
+      className={`home-heading ${
+        center ? "home-heading-center" : ""
+      }`}
+    >
+      <span className="home-eyebrow">{eyebrow}</span>
 
-        <span className="home-dashboard-active">
-          <LayoutDashboard size={16} />
-          Dashboard
-        </span>
+      <h2>
+        {title} <em>{highlight}</em>
+      </h2>
 
-        <span><BookOpen size={16} /> Classes</span>
-        <span><ClipboardList size={16} /> Assignments</span>
-        <span><CalendarDays size={16} /> Calendar</span>
-        <span><MessageSquare size={16} /> Messages</span>
-      </aside>
-
-      <div className="home-dashboard-main">
-        <div className="home-dashboard-heading">
-          <div>
-            <small>STUDENT OVERVIEW</small>
-            <h3>Welcome back, Sarah 👋</h3>
-            <p>Here's what is happening in your school today.</p>
-          </div>
-
-          <span className="home-dashboard-avatar">S</span>
-        </div>
-
-        <div className="home-dashboard-stats">
-          <div>
-            <CalendarDays size={19} />
-            <strong>03</strong>
-            <span>Upcoming Classes</span>
-          </div>
-
-          <div>
-            <ClipboardList size={19} />
-            <strong>02</strong>
-            <span>Assignments Due</span>
-          </div>
-
-          <div>
-            <TrendingUp size={19} />
-            <strong>94%</strong>
-            <span>Attendance</span>
-          </div>
-        </div>
-
-        <div className="home-dashboard-lower">
-          <div className="home-dashboard-chart">
-            <div className="home-dashboard-widget-title">
-              <strong>Learning Activity</strong>
-              <small>This week</small>
-            </div>
-
-            <div className="home-dashboard-bars">
-              {bars.map((height, index) => (
-                <div key={index}>
-                  <span style={{ height: `${height}%` }}></span>
-                  <small>{"MTWTFSS"[index]}</small>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="home-dashboard-notices">
-            <strong>Announcements</strong>
-
-            <p>
-              <span></span>
-              School Science Fair
-            </p>
-
-            <p>
-              <span></span>
-              Parent Meeting
-            </p>
-
-            <p>
-              <span></span>
-              Holiday Notice
-            </p>
-          </div>
-        </div>
-      </div>
+      {text && <p>{text}</p>}
     </div>
   );
 }
 
-export default function Home() {
-  const [openFaq, setOpenFaq] = useState(null);
+/* HERO */
 
+function Hero() {
+  return (
+    <section className="home-hero" id="home">
+      <div className="home-container home-hero-grid">
+
+        <div className="home-hero-copy">
+          <span className="home-eyebrow">
+            <Sparkles size={14} />
+            Modern School Management System
+          </span>
+
+          <h1 className="home-hero-title">
+            Smarter School Management for a
+
+            <span className="home-gradient-text">
+              Brighter Tomorrow
+
+              <svg
+                className="home-underline"
+                viewBox="0 0 300 14"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path d="M3 10 Q 75 2 150 8 T 297 6" />
+              </svg>
+            </span>
+          </h1>
+
+          <p className="home-hero-text">
+            EduFlow brings students, parents and teachers together
+            in one powerful platform — making school life simpler,
+            more organized and more connected.
+          </p>
+
+          <div className="home-hero-actions">
+            <Link to="/features" className="home-btn home-btn-gold">
+              Explore Features
+              <ArrowRight size={18} />
+            </Link>
+
+            <a href="#how-it-works" className="home-btn home-btn-outline">
+              <span className="home-play">
+                <Play size={11} fill="currentColor" />
+              </span>
+              See How It Works
+            </a>
+          </div>
+        </div>
+
+        <div className="home-hero-visual">
+          <div className="home-hero-shape" aria-hidden="true" />
+
+          <span className="home-script" aria-hidden="true">
+            Better Learning,
+            <br />
+            Brighter Future ♡
+          </span>
+
+          <div className="home-hero-collage">
+            <Photo
+              className="home-hero-photo home-hero-photo-main"
+              src={IMAGES.hero}
+              alt="Students learning together in a bright classroom"
+              priority
+            />
+
+            <Photo
+              className="home-hero-photo home-hero-photo-teacher"
+              src={IMAGES.heroTeacher}
+              alt="Teacher guiding students during a lesson"
+              priority
+            />
+
+            <Photo
+              className="home-hero-photo home-hero-photo-community"
+              src={IMAGES.heroCommunity}
+              alt="Families and students sharing a school community moment"
+              priority
+            />
+          </div>
+
+          <div className="home-float home-float-update" aria-hidden="true">
+            <span className="home-icon-tile home-tone-amber">
+              <Bell size={18} />
+            </span>
+
+            <div>
+              <small>Sample Notice</small>
+              <strong>Parent-Teacher Meeting</strong>
+              <small>School announcement</small>
+            </div>
+          </div>
+
+          <div className="home-float home-float-attendance" aria-hidden="true">
+            <span className="home-icon-tile home-tone-green">
+              <Check size={18} />
+            </span>
+
+            <div>
+              <small>School Records</small>
+              <strong>Attendance</strong>
+              <small>Organized by student</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* STUDENTS, TEACHERS AND PARENTS */
+
+function Roles() {
+  return (
+    <section className="home-section home-roles" id="solutions">
+      <div className="home-container">
+
+        <div className="home-split-heading">
+          <SectionHeading
+            eyebrow="Built for your school community"
+            title="Three Roles."
+            highlight="One Connected System."
+            text="For students, teachers and parents, EduFlow keeps the school day informed, involved and in sync."
+          />
+
+          <Link to="/solutions" className="home-btn home-btn-outline">
+            Explore Solutions
+            <ArrowRight size={18} />
+          </Link>
+        </div>
+
+        <div className="home-roles-grid">
+          {roles.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <article
+                className={`home-role home-tone-${item.tone}`}
+                key={item.title}
+              >
+                <Photo
+                  className="home-role-photo"
+                  src={item.image}
+                  alt={item.alt}
+                />
+
+                <span className="home-role-icon">
+                  <Icon size={22} />
+                </span>
+
+                <h3>{item.title}</h3>
+
+                <p>{item.text}</p>
+
+                <Link to={item.href} className="home-role-link">
+                  {item.link}
+                  <ArrowRight size={16} />
+                </Link>
+              </article>
+            );
+          })}
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* CONNECTED SCHOOL EXPERIENCE */
+
+function Platform() {
+  return (
+    <section className="home-section home-platform" id="showcase">
+      <div className="home-container home-platform-grid">
+
+        <div className="home-platform-visual">
+          <Photo
+            className="home-platform-photo"
+            src={IMAGES.campus}
+            alt="A welcoming modern school campus"
+          />
+
+          <div className="home-platform-photo-note">
+            <span className="home-icon-tile home-tone-blue">
+              <GraduationCap size={23} />
+            </span>
+
+            <div>
+              <strong>One school community</strong>
+              <small>Information in one connected place</small>
+            </div>
+          </div>
+        </div>
+
+        <div className="home-platform-copy">
+          <SectionHeading
+            eyebrow="A more organized school day"
+            title="The important details,"
+            highlight="without the confusion."
+            text="A timetable should be easy to find. Homework should reach the right class. Parents should be able to follow their child's progress. EduFlow brings those everyday needs into one clear experience."
+          />
+
+          <ul className="home-checklist">
+            {platformPoints.map((point) => (
+              <li key={point}>
+                <span className="home-check">
+                  <Check size={14} strokeWidth={3} />
+                </span>
+                {point}
+              </li>
+            ))}
+          </ul>
+
+          <Link to="/features" className="home-btn home-btn-gold">
+            Explore the Features
+            <ArrowRight size={18} />
+          </Link>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* HOW EDUFLOW WORKS */
+
+function HowItWorks() {
+  return (
+    <section
+      className="home-section home-how"
+      id="how-it-works"
+    >
+      <div className="home-container home-how-grid">
+
+        <div>
+          <SectionHeading
+            eyebrow="A simple journey"
+            title="How"
+            highlight="EduFlow Works"
+            text="From homework to progress — EduFlow connects everyone in the school community."
+          />
+
+          <Link to="/working" className="home-btn home-btn-outline">
+            Learn How It Works
+            <ArrowRight size={18} />
+          </Link>
+        </div>
+
+        <ol className="home-steps">
+          {steps.map((item, index) => {
+            const Icon = item.icon;
+
+            return (
+              <li
+                className={`home-step home-tone-${item.tone}`}
+                key={item.title}
+              >
+                <span className="home-step-visual">
+                  <Icon size={32} />
+
+                  <span className="home-step-num">
+                    {index + 1}
+                  </span>
+                </span>
+
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            );
+          })}
+        </ol>
+
+      </div>
+    </section>
+  );
+}
+
+/* FEATURES */
+
+function Features() {
+  return (
+    <section className="home-section home-features" id="features">
+      <div className="home-container">
+
+        <div className="home-split-heading">
+          <SectionHeading
+            eyebrow="Powerful features"
+            title="Real Features."
+            highlight="Real Impact."
+            text="From attendance to results, EduFlow helps schools manage everything with ease and accuracy."
+          />
+
+          <Link to="/features" className="home-btn home-btn-outline">
+            Explore All Features
+            <ArrowRight size={18} />
+          </Link>
+        </div>
+
+        <div className="home-features-grid">
+          {features.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <Link
+                to={item.href}
+                className={`home-feature home-tone-${item.tone}`}
+                key={item.title}
+              >
+                <span className="home-feature-icon">
+                  <Icon size={28} />
+                </span>
+
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+
+                <span className="home-feature-more">
+                  Learn more
+                  <ArrowUpRight size={15} />
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* A DAY WITH EDUFLOW — NEW FINAL SECTION */
+
+function SchoolDay() {
+  return (
+    <section className="home-section home-day">
+      <div className="home-container home-day-grid">
+
+        <div className="home-day-visual">
+          <Photo
+            className="home-day-photo"
+            src={IMAGES.teacher}
+            alt="Teacher working with students in class"
+          />
+
+          <div className="home-day-caption">
+            <GraduationCap size={20} />
+            <span>Classroom to home, connected.</span>
+          </div>
+        </div>
+
+        <div className="home-day-copy">
+          <span className="home-eyebrow">
+            <Sparkles size={14} />
+            A DAY WITH EDUFLOW
+          </span>
+
+          <h2>
+            School life moves forward.
+            <em> Everyone stays in the loop.</em>
+          </h2>
+
+          <p className="home-day-intro">
+            Here's how the shared experience works across a normal
+            school day — no made-up ratings or statistics, just the
+            features you can explore in our demo.
+          </p>
+
+          <div className="home-day-timeline">
+
+            <div className="home-day-entry">
+              <span className="home-day-number">01</span>
+
+              <div>
+                <strong>Teacher organizes the classroom</strong>
+                <p>
+                  Creates assignments, marks attendance and
+                  updates examination results.
+                </p>
+              </div>
+            </div>
+
+            <div className="home-day-entry">
+              <span className="home-day-number">02</span>
+
+              <div>
+                <strong>Student checks what's next</strong>
+                <p>
+                  Views class homework, timetables, attendance
+                  and results in one place.
+                </p>
+              </div>
+            </div>
+
+            <div className="home-day-entry">
+              <span className="home-day-number">03</span>
+
+              <div>
+                <strong>Parent follows their child's progress</strong>
+                <p>
+                  Can review the linked student's assignments,
+                  attendance, results and fee status.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <div className="home-day-actions">
+            <Link to="/working" className="home-btn home-btn-gold">
+              Understand the Process
+              <ArrowRight size={18} />
+            </Link>
+
+            <Link to="/login" className="home-day-link">
+              Try the Demo
+              <ArrowRight size={17} />
+            </Link>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* MAIN HOME PAGE */
+
+export default function Home() {
   return (
     <>
       <Navbar />
 
       <main className="home-page">
-
-        {/* HERO */}
-
-        <section className="home-hero" id="home">
-          <div className="home-hero-glow" aria-hidden="true"></div>
-          <div className="home-container home-hero-grid">
-            <div className="home-hero-copy">
-              <span className="home-eyebrow">
-                <Sparkles size={14} />
-                A CALMER WAY TO RUN SCHOOL
-              </span>
-
-              <h1>
-                School life,
-                <em> in sync.</em>
-              </h1>
-
-              <p>
-                Bring students, teachers, families, and school teams
-                together with one clear, connected experience.
-              </p>
-
-              <div className="home-hero-actions">
-                <Link to="/contact" className="home-btn home-btn-primary">
-                  Request a Demo
-                  <ArrowRight size={19} />
-                </Link>
-
-                <Link to="/features" className="home-btn home-btn-outline">
-                  Explore Features
-                  <ArrowUpRight size={19} />
-                </Link>
-              </div>
-
-              <div className="home-hero-highlights">
-                <span><Check size={16} /> Built around people</span>
-                <span><Check size={16} /> Everything in clear view</span>
-              </div>
-            </div>
-
-            <div className="home-hero-visual">
-              <div className="home-hero-image-frame">
-                <span className="home-hero-image-accent" aria-hidden="true"></span>
-                <Photo
-                  src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1400&q=85"
-                  alt="Students learning together in a bright classroom"
-                  className="home-hero-photo"
-                />
-                <div className="home-hero-image-caption">
-                  <GraduationCap size={19} />
-                  <span>Room to learn. Space to grow.</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* AUDIENCES */}
-
-        <section className="home-audience" id="solutions">
-          <div className="home-container">
-            <div className="home-section-top">
-              <div>
-                <span className="home-eyebrow">WHY EDUFLOW?</span>
-
-                <h2>
-                  Built for every member of the
-                  <em> school community.</em>
-                </h2>
-              </div>
-
-              <p>
-                Different people, different needs — brought together
-                through one thoughtful digital experience.
-              </p>
-            </div>
-
-            <div className="home-audience-grid">
-              {audiences.map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <article className="home-audience-card" key={item.title}>
-                    <span className="home-audience-icon">
-                      <Icon size={25} />
-                    </span>
-
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
-
-                    <Link to="/features" aria-label={`Explore ${item.title}`}>
-                      <ArrowRight size={18} />
-                    </Link>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* PLATFORM PREVIEW */}
-
-        <section className="home-platform" id="showcase">
-          <div className="home-container home-platform-grid">
-            <div className="home-platform-visual">
-              <DashboardPreview />
-
-              <div className="home-platform-note">
-                <TrendingUp size={19} />
-                <div>
-                  <strong>A clearer overview</strong>
-                  <small>Everything important, thoughtfully arranged.</small>
-                </div>
-              </div>
-
-              <small className="home-sample-note">
-                Illustrative interface with fictional sample data.
-              </small>
-            </div>
-
-            <div className="home-platform-copy">
-              <span className="home-eyebrow">MEET THE PLATFORM</span>
-
-              <h2>
-                Simple. Intuitive.
-                <em> Powerful.</em>
-              </h2>
-
-              <p>
-                A thoughtfully designed dashboard can make school
-                information easier to understand. EduFlow explores
-                how everyday activities can feel organized rather
-                than overwhelming.
-              </p>
-
-              <div className="home-checks">
-                <span><Check size={17} /> Clear navigation</span>
-                <span><Check size={17} /> Organized information</span>
-                <span><Check size={17} /> Role-focused experiences</span>
-              </div>
-
-              <Link to="/features" className="home-btn home-btn-primary">
-                Explore the Platform
-                <ArrowRight size={19} />
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* FEATURES */}
-
-        <section className="home-features" id="features">
-          <div className="home-container">
-            <div className="home-centered-heading">
-              <span className="home-eyebrow">WHAT'S INSIDE</span>
-
-              <h2>
-                Thoughtful features for
-                <em> everyday school life.</em>
-              </h2>
-
-              <p>
-                Explore the proposed modules that bring important
-                school activities into one easy-to-follow experience.
-              </p>
-            </div>
-
-            <div className="home-features-grid">
-              {features.map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <article className="home-feature" key={item.title}>
-                    <div className="home-feature-icon">
-                      <Icon size={25} />
-                    </div>
-
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
-
-                    <Link to="/features">
-                      Learn more <ArrowUpRight size={17} />
-                    </Link>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* HOW IT WORKS */}
-
-        <section className="home-process" id="how-it-works">
-          <div className="home-container">
-            <div className="home-centered-heading">
-              <span className="home-eyebrow">THE EXPERIENCE</span>
-
-              <h2>
-                Getting around should feel
-                <em> effortless.</em>
-              </h2>
-            </div>
-
-            <div className="home-process-grid">
-              <div>
-                <span>01</span>
-                <h3>Choose your role</h3>
-                <p>Explore an experience designed around different school users.</p>
-              </div>
-
-              <div>
-                <span>02</span>
-                <h3>Find what matters</h3>
-                <p>Navigate relevant information through organized screens.</p>
-              </div>
-
-              <div>
-                <span>03</span>
-                <h3>Stay connected</h3>
-                <p>See how everyday school activities can come together.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ */}
-
-        <section className="home-faq">
-          <div className="home-container home-faq-grid">
-            <div>
-              <span className="home-eyebrow">GOOD TO KNOW</span>
-
-              <h2>
-                A few common
-                <em> questions.</em>
-              </h2>
-
-              <p>
-                Want to know more about our project? Here are a few
-                helpful answers.
-              </p>
-
-              <Link to="/contact" className="home-text-link">
-                Contact Us <ArrowUpRight size={18} />
-              </Link>
-            </div>
-
-            <div className="home-faq-list">
-              {faqs.map((item, index) => (
-                <div className="home-faq-item" key={item.question}>
-                  <button
-                    type="button"
-                    aria-expanded={openFaq === index}
-                    onClick={() =>
-                      setOpenFaq(openFaq === index ? null : index)
-                    }
-                  >
-                    {item.question}
-
-                    <ChevronDown
-                      size={19}
-                      className={openFaq === index ? "rotated" : ""}
-                    />
-                  </button>
-
-                  {openFaq === index && <p>{item.answer}</p>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* FINAL CTA */}
-
-        <section className="home-final">
-          <div className="home-container home-final-grid">
-            <div className="home-final-copy">
-              <span>LET'S BUILD A BRIGHTER FUTURE</span>
-
-              <h2>
-                Ready to simplify your
-                <em> school experience?</em>
-              </h2>
-
-              <p>
-                Explore a more thoughtful approach to school management
-                and share your feedback about EduFlow.
-              </p>
-
-              <div className="home-final-actions">
-                <Link to="/contact" className="home-btn home-btn-yellow">
-                  Get in Touch <ArrowRight size={19} />
-                </Link>
-
-                <Link to="/about" className="home-btn home-btn-light-outline">
-                  Learn About Us <ArrowUpRight size={19} />
-                </Link>
-              </div>
-            </div>
-
-            <div className="home-final-visual">
-              <div className="home-final-shape"></div>
-
-              <Photo
-                src="/images/home-community.jpg"
-                alt="Students learning together around a laptop"
-                className="home-final-photo"
-              />
-            </div>
-          </div>
-        </section>
-
+        <Hero />
+        <Roles />
+        <Platform />
+        <HowItWorks />
+        <Features />
+        <SchoolDay />
       </main>
 
       <Footer />
