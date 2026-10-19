@@ -184,7 +184,7 @@
   transition: transform 0.18s ease, visibility 0s linear 0.18s;
 }
 
-@media (min-width: 951px) and (hover: hover) {
+@media (min-width: 1051px) and (hover: hover) {
   .navbar-features-menu::after {
     position: absolute;
     top: 100%;
@@ -411,7 +411,7 @@
 
 /* Tablet and mobile */
 
-@media (max-width: 950px) {
+@media (max-width: 1050px) {
   .navbar {
     height: 74px;
   }
@@ -442,7 +442,12 @@
     display: none;
     flex-direction: column;
     align-items: stretch;
+    justify-content: flex-start;
     gap: 14px;
+    max-height: calc(100vh - 74px);
+    max-height: calc(100dvh - 74px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 18px 22px 24px;
     background: #fff;
     border-bottom: 1px solid #e8edf5;
@@ -698,7 +703,7 @@
   background: #ffe89a;
 }
 
-@media (max-width: 950px) {
+@media (max-width: 1050px) {
   .navbar-feature-dropdown {
     width: auto;
     margin: 5px 0 4px 12px;

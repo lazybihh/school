@@ -50,7 +50,11 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <nav className={`navbar-links ${menuOpen ? "active" : ""}`}>
+        <nav
+          className={`navbar-links ${menuOpen ? "active" : ""}`}
+          id="primary-navigation"
+          aria-label="Primary navigation"
+        >
           <div className="navbar-main-links">
             <Link
               to="/"
@@ -75,7 +79,10 @@ export default function Navbar() {
                 aria-expanded={featuresOpen}
                 aria-haspopup="true"
                 aria-controls="navbar-features-dropdown"
-                onClick={() => setFeaturesOpen(!featuresOpen)}
+                onClick={() => {
+                  setFeaturesOpen(!featuresOpen);
+                  setSolutionsOpen(false);
+                }}
               >
                 Features
                 <ChevronDown size={15} />
@@ -148,7 +155,10 @@ export default function Navbar() {
                 aria-expanded={solutionsOpen}
                 aria-haspopup="true"
                 aria-controls="navbar-solutions-dropdown"
-                onClick={() => setSolutionsOpen(!solutionsOpen)}
+                onClick={() => {
+                  setSolutionsOpen(!solutionsOpen);
+                  setFeaturesOpen(false);
+                }}
               >
                 Solutions
                 <ChevronDown size={15} />
@@ -233,6 +243,7 @@ export default function Navbar() {
           }}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
+          aria-controls="primary-navigation"
         >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>

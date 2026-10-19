@@ -215,8 +215,8 @@ function Hero() {
           </p>
 
           <div className="home-hero-actions">
-            <Link to="/features" className="home-btn home-btn-gold">
-              Explore Features
+            <Link to="/contact" className="home-btn home-btn-gold">
+              Contact us
               <ArrowRight size={18} />
             </Link>
 

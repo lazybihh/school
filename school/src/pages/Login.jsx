@@ -175,7 +175,7 @@ export default function Login() {
 
               <div className="login-collage-photo login-photo-campus">
                 <img
-                  src="/login-school.png"
+                  src="/features-hero.jpeg"
                   alt="School campus"
                 />
               </div>
@@ -196,8 +196,8 @@ export default function Login() {
 
               <div className="login-collage-photo login-photo-family">
                 <img
-                  src="/how-it-works-hero.png"
-                  alt="School community"
+                  src="/home-community.jfif"
+                  alt="Families and students sharing a school community moment"
                 />
               </div>
             </div>
