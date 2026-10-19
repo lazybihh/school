@@ -270,13 +270,13 @@
 
 .solution-hero-floating strong {
   color: var(--navy);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .solution-hero-floating small {
   margin-top: 4px;
   color: #7185a0;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 /* ROLE SHOWCASE */
@@ -552,7 +552,7 @@
 
 .solution-flow-item p {
   margin-top: 5px;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.65;
 }
 
@@ -753,11 +753,11 @@
   }
 
   .solution-hero-floating strong {
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .solution-hero-floating small {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .solution-section-heading h2,
@@ -786,7 +786,7 @@
   }
 
   .solution-role-points li {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .solution-flow-item {
@@ -804,7 +804,7 @@
   }
 
   .solution-flow-item p {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .solution-flow-number {
@@ -827,4 +827,5 @@
     transition: none !important;
     scroll-behavior: auto !important;
   }
+
 }

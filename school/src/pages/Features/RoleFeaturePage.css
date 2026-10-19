@@ -243,7 +243,7 @@
 .role-floating-card small {
   margin-top: 2px;
   color: #64748b;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .role-floating-check {
@@ -312,7 +312,7 @@
 
 .role-summary-card p {
   margin: 5px 0 0;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -359,7 +359,7 @@
 
 .role-closing p {
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 @media (max-width: 1000px) {

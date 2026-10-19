@@ -280,14 +280,14 @@
 
 .features-hero-note strong {
   color: var(--navy);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
 }
 
 .features-hero-note small {
   margin-top: 4px;
   color: #647994;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .features-hero-spark {
@@ -882,7 +882,7 @@
 
   .features-hero-bottom {
     align-items: flex-start;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .features-hero-visual {
@@ -912,11 +912,11 @@
   }
 
   .features-hero-note strong {
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .features-hero-note small {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .features-hero-spark {
@@ -1005,11 +1005,11 @@
   }
 
   .features-image-label strong {
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .features-image-label small {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .features-connection {
@@ -1031,7 +1031,7 @@
   }
 
   .features-connection-step p {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .features-closing {
@@ -1064,4 +1064,5 @@
     transition: none !important;
     scroll-behavior: auto !important;
   }
+
 }

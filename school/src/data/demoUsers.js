@@ -6,6 +6,7 @@ export const demoUsers = [
     email: "student@eduflow.com",
     password: "student123",
     role: "student",
+    recordId: "demo-student-aarav",
     classId: "10-A"
   },
   {
@@ -14,6 +15,7 @@ export const demoUsers = [
     email: "parent@eduflow.com",
     password: "parent123",
     role: "parent",
+    recordId: "demo-parent-priya",
     childId: 1
   },
   {
@@ -22,6 +24,7 @@ export const demoUsers = [
     email: "teacher@eduflow.com",
     password: "teacher123",
     role: "teacher",
+    recordId: "demo-teacher-ananya",
     classId: "10-A"
   },
   {

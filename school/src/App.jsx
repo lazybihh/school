@@ -21,32 +21,15 @@ import ParentSolution from "./pages/Solutions/ParentSolution";
 import Working from "./pages/working";
 import ScrollToTop from "./components/ScrollToTop";
 
-import StudentDashboard from "./pages/Dashboard/student";
-
-import ParentDashboard from "./pages/Dashboard/parent";
-import TeacherDashboard from "./pages/Dashboard/teacher";
-import AdminDashboard from "./pages/Dashboard/admin";
-
+import StudentDashboard from "./pages/dashboard/student/StudentDashboard";
+import ParentDashboard from "./pages/dashboard/parent/ParentDashboard";
+import TeacherDashboard from "./pages/dashboard/teacher/TeacherDashboard";
+import AdminDashboard from "./pages/dashboard/admin/AdminDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { SchoolProvider } from "./context/SchoolContext";
 
-
-function DashboardRedirect() {
-  const user = JSON.parse(
-    localStorage.getItem("eduflowUser") || "null"
-  );
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return (
-    <Navigate
-      to={`/dashboard/${user.role}`}
-      replace
-    />
-  );
-}
-
+import "./pages/dashboard/admin/Admin.css";
+import "./pages/dashboard/shared/Role.css";
 
 export default function App() {
   return (
@@ -68,25 +51,45 @@ export default function App() {
           <Route path="/solutions/student" element={<StudentSolution />} />
           <Route path="/solutions/parent" element={<ParentSolution />} />
           <Route path="/working" element={<Working />} />
-          <Route path="/dashboard" element={<DashboardRedirect />} />
+          <Route
+            path="/dashboard"
+            element={<ProtectedRoute />}
+          />
 
           <Route
             path="/dashboard/student/*"
-            element={<StudentDashboard />} />
+            element={
+              <ProtectedRoute role="student">
+                <StudentDashboard />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/dashboard/parent/*"
-            element={<ParentDashboard />}
+            element={
+              <ProtectedRoute role="parent">
+                <ParentDashboard />
+              </ProtectedRoute>
+            }
           />
 
           <Route
             path="/dashboard/teacher/*"
-            element={<TeacherDashboard />}
+            element={
+              <ProtectedRoute role="teacher">
+                <TeacherDashboard />
+              </ProtectedRoute>
+            }
           />
 
           <Route
             path="/dashboard/admin/*"
-            element={<AdminDashboard />}
+            element={
+              <ProtectedRoute role="admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
           />
 
           <Route

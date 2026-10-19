@@ -131,7 +131,7 @@
   gap: 8px;
   margin: 25px 0 0;
   color: #7287a5;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -401,13 +401,13 @@
 .hiw-floating-notice strong {
   display: block;
   color: #102b53;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .hiw-floating-notice p {
   margin: 5px 0 0;
   color: #667e9c;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -604,7 +604,7 @@
   max-width: 620px;
   margin: 0;
   color: #e2edff;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.7;
 }
 
@@ -784,7 +784,7 @@
   }
 
   .hiw-hero-caption {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .hiw-hero-layout {
@@ -925,11 +925,11 @@
   }
 
   .hiw-floating-notice strong {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .hiw-floating-notice p {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .hiw-journey {
@@ -999,6 +999,7 @@
   .hiw-page *::after {
     transition: none !important;
   }
+
 }
 
 .hiw-hero-content h1 {

@@ -1,13 +1,15 @@
-# EduFlow homepage
+# EduFlow
 
-Frontend-only React + Vite concept using a yellow, blue and white theme.
+EduFlow is a React + Vite school website with student, teacher, parent, and admin dashboards.
 
 ## Run
+
 1. Install Node.js.
-2. Open this folder in VS Code.
-3. Run `npm install`.
-4. Run `npm run dev`.
+2. Run `npm install` in this folder.
+3. Run `npm run dev`.
 
-The photos are loaded from Unsplash URLs and require an internet connection. Replace the URLs in `src/pages/Home.jsx` with local files in `public/images` when you select your final licensed photos.
+Use the existing Login page to sign in with a demo account listed in `src/data/demoUsers.js`. Dashboard routes check the signed-in role and redirect users who request another role's dashboard to their own. Admin can add school records and create separate demo login accounts in the Login Accounts section; each account is linked to a selected record ID.
 
-This is a frontend prototype: the dashboard is illustrative, figures are sample data, and the contact form does not send information to a server. Navigation links scroll to homepage sections. More pages and actual authentication can be added later.
+Dashboard data and additional demo credentials are stored in this browser's localStorage. The built-in student, teacher and parent demo records are added only when a matching record ID or email is missing; existing records are preserved. This is a frontend demo, not server-backed authentication or authorization. Do not use it with real school data. The contact form does not send information to a server.
+
+The dashboard source snapshot remains in `src/pages/dashboard-source/`; the integrated application runs from the main `src/` tree.

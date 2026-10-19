@@ -1,0 +1,158 @@
+import React from "react";
+
+import { Panel, Stats, Table, NoticeList, ReportForm } from "../shared/UI";
+import {
+  schoolClassId,
+  today,
+  attendanceRate,
+  feeStatus,
+  relevantNotices,
+} from "../shared/school";
+import { ATTENDANCE_STATUS_OPTIONS } from "../shared/schoolOptions";
+
+export default function TeacherAttendance({ view }) {
+  const {
+    s,
+    teacher,
+    assigned,
+    ids,
+    students,
+    assignments,
+    subs,
+    classStudents,
+    classId,
+    setClassId,
+    date,
+    setDate,
+    form,
+    setForm,
+    marks,
+    setMarks,
+    period,
+    setPeriod,
+    setField,
+    name,
+    ownPeriods,
+  } = view;
+
+  return (
+    <>
+      <>
+        <Panel
+          title="Take class attendance"
+          subtitle="Select one of your assigned classes and a date."
+        >
+          <div className="role-form">
+            <label>
+              Class
+              <select
+                value={classId || ids[0] || ""}
+                onChange={(e) => setClassId(e.target.value)}
+              >
+                {assigned.map((schoolClass) => (
+                  <option
+                    key={schoolClass.id}
+                    value={schoolClassId(schoolClass)}
+                  >
+                    {schoolClassId(schoolClass)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Date
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </label>
+          </div>
+
+          <div className="role-actions" style={{ marginTop: 16 }}>
+            <button
+              className="role-secondary"
+              onClick={() =>
+                classStudents.forEach((x) => {
+                  const old = s.attendance.items.find(
+                    (a) =>
+                      a.role === "student" &&
+                      a.personId === x.id &&
+                      a.date === date,
+                  );
+                  old
+                    ? s.attendance.update(old.id, {
+                        status: "Present",
+                        recordedBy: teacher.name,
+                      })
+                    : s.attendance.add({
+                        role: "student",
+                        personId: x.id,
+                        date,
+                        status: "Present",
+                        recordedBy: teacher.name,
+                      });
+                })
+              }
+            >
+              Mark all present
+            </button>
+          </div>
+          <Table
+            headers={["Student", "Roll", "Current", "Mark"]}
+            rows={classStudents.map((x) => {
+              const old = s.attendance.items.find(
+                (a) =>
+                  a.role === "student" &&
+                  a.personId === x.id &&
+                  a.date === date,
+              );
+
+              return [
+                x.name,
+                x.roll,
+                old?.status || "Not marked",
+                <div className="role-actions">
+                  {ATTENDANCE_STATUS_OPTIONS.map((status) => (
+                    <button
+                      key={status}
+                      className="role-secondary"
+                      onClick={() =>
+                        old
+                          ? s.attendance.update(old.id, {
+                              status,
+                              recordedBy: teacher.name,
+                            })
+                          : s.attendance.add({
+                              role: "student",
+                              personId: x.id,
+                              date,
+                              status,
+                              recordedBy: teacher.name,
+                            })
+                      }
+                    >
+                      {status}
+                    </button>
+                  ))}
+                </div>,
+              ];
+            })}
+          />
+        </Panel>
+        <Panel title="Attendance history">
+          <Table
+            headers={["Date", "Student", "Status"]}
+            rows={s.attendance.items
+              .filter(
+                (a) =>
+                  a.role === "student" &&
+                  students.some((x) => x.id === a.personId),
+              )
+              .map((a) => [a.date, name(a.personId), a.status])}
+          />
+        </Panel>
+      </>
+    </>
+  );
+}

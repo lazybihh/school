@@ -220,7 +220,7 @@
 .about-photo-note strong {
   color: #102b53;
   font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -327,7 +327,7 @@
 }
 
 .about-benefit p {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.65;
 }
 
@@ -418,7 +418,7 @@
 }
 
 .about-value p {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.65;
 }
 
@@ -506,7 +506,7 @@
   background: white;
   box-shadow: 0 10px 26px #102b5318;
   color: #102b53;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -592,7 +592,7 @@
 }
 
 .about-connection-roles p {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.65;
 }
 
@@ -778,7 +778,7 @@
   }
 
   .about-benefit p {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .about-hero-actions {
@@ -812,7 +812,7 @@
   }
 
   .about-value p {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .about-value-icon {
@@ -838,7 +838,7 @@
   .about-story-photo-label {
     max-width: 255px;
     padding: 11px;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .about-connection-grid {
@@ -870,7 +870,7 @@
   }
 
   .about-connection-roles p {
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 

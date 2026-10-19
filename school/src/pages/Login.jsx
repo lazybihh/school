@@ -17,6 +17,7 @@ import {
 
 import Navbar from "../components/Navbar";
 import { useSchool } from "../context/SchoolContext";
+import { readAdditionalAccounts } from "../data/demoAccounts";
 import "./Login.css";
 
 const roles = [
@@ -61,9 +62,21 @@ export default function Login() {
     event.preventDefault();
     setMessage("");
 
-    const user = school.users.find(
+    let users;
+
+    try {
+      users = [...school.users, ...readAdditionalAccounts()];
+    } catch (error) {
+      console.error("Unable to load saved demo accounts.", error);
+      setMessage(
+        "Saved demo accounts could not be loaded. Please contact the administrator.",
+      );
+      return;
+    }
+
+    const user = users.find(
       (item) =>
-        item.email.toLowerCase() === email.trim().toLowerCase() &&
+        item.email?.toLowerCase() === email.trim().toLowerCase() &&
         item.password === password
     );
 
@@ -81,6 +94,7 @@ export default function Login() {
 
     const loggedInUser = {
       id: user.id,
+      recordId: user.recordId,
       name: user.name,
       email: user.email,
       role: user.role,

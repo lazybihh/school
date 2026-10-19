@@ -407,13 +407,13 @@
 
 .home-float strong {
   color: var(--ink);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
 }
 
 .home-float small {
   color: #60769b;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .home-float-update {
@@ -1038,11 +1038,11 @@
   }
 
   .home-float strong {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .home-float small {
-    font-size: 9px;
+    font-size: 11px;
   }
 
   .home-float-update {
@@ -1079,11 +1079,11 @@
   }
 
   .home-platform-photo-note strong {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .home-platform-photo-note small {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .home-how-grid {
@@ -1118,7 +1118,7 @@
   }
 
   .home-feature p {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .home-day-photo {
