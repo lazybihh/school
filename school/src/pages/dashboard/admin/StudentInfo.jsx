@@ -17,7 +17,7 @@ export default function StudentInfo() {
 
   const fields = studentFields.map((field) => {
     if (field.key === "parentId") {
-      return {
+      return { 
         ...field,
         emptyMessage: "Add a parent record before linking a student.",
         options: parents.items.map((parent) => ({
@@ -29,7 +29,7 @@ export default function StudentInfo() {
 
     if (field.key === "classId") {
       const savedStudentClasses = data.items
-        .map((student) => student.classId)
+        .map((student) => student.classId) 
         .filter(Boolean);
 
       const savedSchoolClasses = classes.items.map(
@@ -41,10 +41,10 @@ export default function StudentInfo() {
         options: [
           ...new Set([
             ...CLASS_OPTIONS,
-            ...savedSchoolClasses,
+            ...savedSchoolClasses, 
             ...savedStudentClasses,
-          ]),
-        ],
+          ]), 
+        ], 
       };
     }
 
@@ -53,11 +53,11 @@ export default function StudentInfo() {
 
   return (
     <RecordManager
-      title="Student Information"
+      title="Student Information" 
       description="Register, edit, search and manage enrolled students."
-      data={data}
-      fields={fields}
-      filters={studentFilters}
+      data={data} 
+      fields={fields} 
+      filters={studentFilters} 
       getLabel={(item) => item.name}
     />
   );

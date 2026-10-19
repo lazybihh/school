@@ -7,6 +7,10 @@ import {
   feeStatus,
   relevantNotices,
 } from "../shared/school";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import { FEE_STATUS_OPTIONS } from "../shared/schoolOptions";
 
 export default function StudentFees({ view }) {
   const {
@@ -22,6 +26,15 @@ export default function StudentFees({ view }) {
     answers,
     setAnswers,
   } = view;
+  const feeFilters = [
+    { key: "status", label: "Status", options: FEE_STATUS_OPTIONS, value: feeStatus },
+    { key: "session", label: "Academic year", includeDynamic: true },
+  ];
+  const feeState = useDashboardFilters(
+    fees,
+    feeFilters,
+    ["type", "session", "due", { value: feeStatus }],
+  );
 
   return (
     <>
@@ -41,9 +54,14 @@ export default function StudentFees({ view }) {
           ]}
         />
         <Panel title="Fee records">
+          <DashboardFilters
+            state={feeState}
+            filters={feeFilters}
+            items={fees}
+          />
           <Table
             headers={["Type", "Session", "Total", "Paid", "Due", "Status"]}
-            rows={fees.map((x) => [
+            rows={feeState.filteredItems.map((x) => [
               x.type,
               x.session,
               `₹${x.total}`,

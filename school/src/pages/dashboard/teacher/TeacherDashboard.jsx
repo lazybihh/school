@@ -110,7 +110,10 @@ export default function TeacherDashboard() {
     "Unknown student";
 
   const ownPeriods = s.timetable.items.filter(
-    (t) => teacher?.id != null && String(t.teacherId) === String(teacher.id),
+    (t) =>
+      teacher?.id != null &&
+      String(t.teacherId) === String(teacher.id) &&
+      assignedClassIds.has(String(t.classId)),
   );
   const view = {
     s,

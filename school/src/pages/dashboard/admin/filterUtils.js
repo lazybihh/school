@@ -12,7 +12,13 @@ export function applyFilters(
   const filtered = items.filter((item) => {
     const text = (
       searchable.length
-        ? searchable.map((f) => (f.value ? f.value(item) : item[f.key]))
+        ? searchable.map((f) =>
+            typeof f === "string"
+              ? item[f]
+              : f.value
+                ? f.value(item)
+                : item[f.key],
+          )
         : Object.values(item)
     )
       .join(" ")

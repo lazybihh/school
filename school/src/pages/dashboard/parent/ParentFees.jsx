@@ -2,9 +2,22 @@ import React from "react";
 
 import { Empty, Panel, Stats, Table } from "../shared/UI";
 import { feeStatus } from "../shared/school";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import { FEE_STATUS_OPTIONS } from "../shared/schoolOptions";
 
 export default function ParentFees({ view }) {
   const { child, fees } = view;
+  const feeFilters = [
+    { key: "status", label: "Status", options: FEE_STATUS_OPTIONS, value: feeStatus },
+    { key: "session", label: "Academic year", includeDynamic: true },
+  ];
+  const feeState = useDashboardFilters(
+    fees,
+    feeFilters,
+    ["type", "session", "due", { value: feeStatus }],
+  );
 
   if (!child) {
     return <Empty>No child is linked to this parent yet.</Empty>;
@@ -27,9 +40,14 @@ export default function ParentFees({ view }) {
         ]}
       />
       <Panel title="Fee records">
+        <DashboardFilters
+          state={feeState}
+          filters={feeFilters}
+          items={fees}
+        />
         <Table
           headers={["Type", "Session", "Total", "Paid", "Due", "Status"]}
-          rows={fees.map((x) => [
+          rows={feeState.filteredItems.map((x) => [
             x.type,
             x.session,
             `₹${x.total}`,

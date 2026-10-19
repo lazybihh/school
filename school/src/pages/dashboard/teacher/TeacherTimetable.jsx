@@ -9,6 +9,10 @@ import {
   relevantNotices,
 } from "../shared/school";
 import { DAY_OPTIONS, SUBJECT_OPTIONS } from "../shared/schoolOptions";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import { SECTION_OPTIONS } from "../shared/schoolOptions";
 
 export default function TeacherTimetable({ view }) {
   const {
@@ -41,14 +45,39 @@ export default function TeacherTimetable({ view }) {
       ...s.timetable.items.map((timeSlot) => timeSlot.subject).filter(Boolean),
     ]),
   ];
+  const timetableFilters = [
+    { key: "day", label: "Day", options: DAY_OPTIONS },
+    {
+      key: "classId",
+      label: "Class",
+      options: ids,
+    },
+    {
+      key: "section",
+      label: "Section",
+      options: SECTION_OPTIONS,
+      value: (period) => String(period.classId || "").split("-")[1],
+    },
+    { key: "subject", label: "Subject", includeDynamic: true },
+  ];
+  const timetableState = useDashboardFilters(
+    ownPeriods,
+    timetableFilters,
+    ["day", "start", "end", "classId", "subject"],
+  );
 
   return (
     <>
       <>
         <Panel title="My weekly timetable">
+          <DashboardFilters
+            state={timetableState}
+            filters={timetableFilters}
+            items={ownPeriods}
+          />
           <Table
             headers={["Day", "Time", "Class", "Subject"]}
-            rows={ownPeriods.map((t) => [
+            rows={timetableState.filteredItems.map((t) => [
               t.day,
               `${t.start}–${t.end}`,
               t.classId,

@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
 import { Panel, Table } from "../shared/UI";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import {
+  SECTION_OPTIONS,
+  SUBMISSION_STATUS_OPTIONS,
+} from "../shared/schoolOptions";
 
 export default function TeacherSubmissions({ view }) {
   const { s, assignments, subs, name } = view;
@@ -17,6 +24,76 @@ export default function TeacherSubmissions({ view }) {
           String(item.id) === String(selectedSubmission.assignmentId),
       )
     : null;
+  const submissionFilters = [
+    {
+      key: "assignmentId",
+      label: "Assignment",
+      includeDynamic: true,
+      value: (submission) =>
+        assignments.find(
+          (item) => String(item.id) === String(submission.assignmentId),
+        )?.title,
+    },
+    {
+      key: "classId",
+      label: "Class",
+      options: [
+        ...new Set(assignments.map((assignment) => assignment.classId)),
+      ],
+      value: (submission) =>
+        assignments.find(
+          (item) => String(item.id) === String(submission.assignmentId),
+        )?.classId,
+    },
+    {
+      key: "section",
+      label: "Section",
+      options: SECTION_OPTIONS,
+      value: (submission) =>
+        String(
+          assignments.find(
+            (item) => String(item.id) === String(submission.assignmentId),
+          )?.classId || "",
+        ).split("-")[1],
+    },
+    {
+      key: "subject",
+      label: "Subject",
+      includeDynamic: true,
+      value: (submission) =>
+        assignments.find(
+          (item) => String(item.id) === String(submission.assignmentId),
+        )?.subject,
+    },
+    {
+      key: "studentId",
+      label: "Student",
+      includeDynamic: true,
+      value: (submission) => name(submission.studentId),
+    },
+    {
+      key: "status",
+      label: "Status",
+      options: SUBMISSION_STATUS_OPTIONS,
+    },
+    { key: "date", label: "Submission date", type: "date" },
+  ];
+  const submissionState = useDashboardFilters(
+    subs,
+    submissionFilters,
+    [
+      "content",
+      "date",
+      "status",
+      { value: (submission) => name(submission.studentId) },
+      {
+        value: (submission) =>
+          assignments.find(
+            (item) => String(item.id) === String(submission.assignmentId),
+          )?.title,
+      },
+    ],
+  );
 
   function openSubmission(submission) {
     setSelectedId(submission.id);
@@ -44,9 +121,14 @@ export default function TeacherSubmissions({ view }) {
   return (
     <>
       <Panel title="Review student submissions">
+        <DashboardFilters
+          state={submissionState}
+          filters={submissionFilters}
+          items={subs}
+        />
         <Table
           headers={["Student", "Assignment", "Submitted", "Status", "Review"]}
-          rows={subs.map((submission) => {
+          rows={submissionState.filteredItems.map((submission) => {
             const relatedAssignment = assignments.find(
               (item) =>
                 String(item.id) === String(submission.assignmentId),

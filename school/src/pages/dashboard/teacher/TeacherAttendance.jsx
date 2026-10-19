@@ -9,6 +9,12 @@ import {
   relevantNotices,
 } from "../shared/school";
 import { ATTENDANCE_STATUS_OPTIONS } from "../shared/schoolOptions";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import {
+  SECTION_OPTIONS,
+} from "../shared/schoolOptions";
 
 export default function TeacherAttendance({ view }) {
   const {
@@ -34,6 +40,58 @@ export default function TeacherAttendance({ view }) {
     name,
     ownPeriods,
   } = view;
+  const history = s.attendance.items.filter(
+    (record) =>
+      record.role === "student" &&
+      students.some((student) => String(student.id) === String(record.personId)),
+  );
+  const historyFilters = [
+    {
+      key: "classId",
+      label: "Class",
+      options: [...new Set(students.map((student) => student.classId))],
+      value: (record) =>
+        students.find((student) => String(student.id) === String(record.personId))
+          ?.classId,
+    },
+    {
+      key: "section",
+      label: "Section",
+      options: SECTION_OPTIONS,
+      value: (record) =>
+        String(
+          students.find((student) => String(student.id) === String(record.personId))
+            ?.classId || "",
+        ).split("-")[1],
+    },
+    {
+      key: "studentId",
+      label: "Student",
+      includeDynamic: true,
+      value: (record) => name(record.personId),
+    },
+    {
+      key: "status",
+      label: "Status",
+      options: ATTENDANCE_STATUS_OPTIONS,
+    },
+    {
+      key: "date",
+      label: "Date",
+      type: "date",
+    },
+    {
+      key: "year",
+      label: "Year",
+      includeDynamic: true,
+      value: (record) => record.date?.slice(0, 4),
+    },
+  ];
+  const historyState = useDashboardFilters(
+    history,
+    historyFilters,
+    ["date", "status", "recordedBy", { value: (record) => name(record.personId) }],
+  );
 
   return (
     <>
@@ -141,15 +199,18 @@ export default function TeacherAttendance({ view }) {
           />
         </Panel>
         <Panel title="Attendance history">
+          <DashboardFilters
+            state={historyState}
+            filters={historyFilters}
+            items={history}
+          />
           <Table
             headers={["Date", "Student", "Status"]}
-            rows={s.attendance.items
-              .filter(
-                (a) =>
-                  a.role === "student" &&
-                  students.some((x) => x.id === a.personId),
-              )
-              .map((a) => [a.date, name(a.personId), a.status])}
+            rows={historyState.filteredItems.map((a) => [
+              a.date,
+              name(a.personId),
+              a.status,
+            ])}
           />
         </Panel>
       </>

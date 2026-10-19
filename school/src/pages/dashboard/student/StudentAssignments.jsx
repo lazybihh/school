@@ -7,6 +7,10 @@ import {
   feeStatus,
   relevantNotices,
 } from "../shared/school";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import { SUBMISSION_STATUS_OPTIONS } from "../shared/schoolOptions";
 
 export default function StudentAssignments({ view }) {
   const {
@@ -22,6 +26,29 @@ export default function StudentAssignments({ view }) {
     answers,
     setAnswers,
   } = view;
+  const assignmentStatus = (assignment) =>
+    submission(assignment.id)?.status || "Pending";
+  const assignmentFilters = [
+    { key: "subject", label: "Subject", includeDynamic: true },
+    {
+      key: "status",
+      label: "Status",
+      options: SUBMISSION_STATUS_OPTIONS,
+      value: assignmentStatus,
+    },
+    { key: "due", label: "Due date", type: "date" },
+  ];
+  const assignmentState = useDashboardFilters(
+    a,
+    assignmentFilters,
+    [
+      "title",
+      "subject",
+      "description",
+      "due",
+      { value: assignmentStatus },
+    ],
+  );
 
   return (
     <>
@@ -29,8 +56,13 @@ export default function StudentAssignments({ view }) {
         title="My homework"
         subtitle="Submit a text answer. Files are not stored in localStorage."
       >
-        {a.length ? (
-          a.map((x) => {
+        <DashboardFilters
+          state={assignmentState}
+          filters={assignmentFilters}
+          items={a}
+        />
+        {assignmentState.filteredItems.length ? (
+          assignmentState.filteredItems.map((x) => {
             const sub = submission(x.id);
 
             return (
@@ -129,7 +161,9 @@ export default function StudentAssignments({ view }) {
             );
           })
         ) : (
-          <p className="role-empty">No assignments for your class yet.</p>
+          a.length === 0 && (
+            <p className="role-empty">No assignments for your class yet.</p>
+          )
         )}
       </Panel>
     </>

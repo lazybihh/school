@@ -390,6 +390,148 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
+.role-layout .filter-panel {
+  margin: 0 0 18px;
+  padding: 17px;
+  border: 1px solid #e7ecf4;
+  border-radius: 14px;
+  background: #fcfdff;
+  box-shadow: none;
+}
+.role-layout .filter-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.role-layout .filter-topline h2 {
+  margin: 4px 0;
+  color: #123d7c;
+  font-size: 17px;
+}
+.role-layout .filter-topline p {
+  margin: 0;
+  color: #78869a;
+  font-size: 13px;
+}
+.role-layout .filter-total {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #eff4fc;
+  color: #174b98;
+  font-size: 12px;
+  font-weight: 700;
+}
+.role-layout .filter-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.role-layout .filter-search {
+  display: flex;
+  align-items: center;
+  flex: 1 1 210px;
+  min-height: 42px;
+  gap: 8px;
+  padding: 0 10px;
+  border: 1px solid #dce4f0;
+  border-radius: 9px;
+  color: #78869a;
+}
+.role-layout .filter-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  border: 0;
+  outline: 0;
+  color: #172b4d;
+  font: inherit;
+}
+.role-layout .filter-toggle {
+  min-height: 42px;
+}
+.role-layout .filter-sort {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #536783;
+  font-size: 13px;
+}
+.role-layout .filter-sort select,
+.role-layout .filter-control select,
+.role-layout .filter-control input {
+  min-height: 42px;
+  padding: 9px 10px;
+  border: 1px solid #dce4f0;
+  border-radius: 9px;
+  background: white;
+  color: #172b4d;
+  font: inherit;
+}
+.role-layout .filter-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #174b98;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.role-layout .filter-reset:hover {
+  background: #eff4fc;
+}
+.role-layout .filter-expanded {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e7ecf4;
+}
+.role-layout .filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 12px;
+}
+.role-layout .filter-control {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+.role-layout .filter-control span {
+  color: #536783;
+  font-size: 13px;
+  font-weight: 650;
+}
+.role-layout .filter-control select,
+.role-layout .filter-control input {
+  width: 100%;
+}
+.role-layout .filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+.role-layout .filter-chips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border: 1px solid #dce4f0;
+  border-radius: 999px;
+  background: #eff4fc;
+  color: #174b98;
+  font-size: 12px;
+  cursor: pointer;
+}
+.role-layout .filter-panel + .role-empty + .role-table-wrap {
+  display: none;
+}
 @media (max-width: 900px) {
   .role-side {
     position: fixed;
@@ -443,6 +585,18 @@
   }
   .role-top h2 {
     font-size: 18px;
+  }
+  .role-layout .filter-topline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .role-layout .filter-toolbar > *,
+  .role-layout .filter-sort,
+  .role-layout .filter-sort select {
+    width: 100%;
+  }
+  .role-layout .filter-sort {
+    justify-content: space-between;
   }
   .submission-modal-backdrop {
     padding: 10px;

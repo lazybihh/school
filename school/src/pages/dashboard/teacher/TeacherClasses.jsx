@@ -15,6 +15,10 @@ import {
   relevantNotices,
 } from "../shared/school";
 import { schoolClassId } from "../shared/school";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import { SECTION_OPTIONS } from "../shared/schoolOptions";
 
 export default function TeacherClasses({ view }) {
   const {
@@ -40,14 +44,54 @@ export default function TeacherClasses({ view }) {
     name,
     ownPeriods,
   } = view;
+  const classFilters = [
+    {
+      key: "classId",
+      label: "Class",
+      options: ids,
+      value: schoolClassId,
+    },
+    {
+      key: "section",
+      label: "Section",
+      options: SECTION_OPTIONS,
+      value: (schoolClass) =>
+        String(schoolClassId(schoolClass)).split("-")[1] || "",
+    },
+  ];
+  const classFilterState = useDashboardFilters(
+    assigned,
+    classFilters,
+    [
+      "id",
+      "grade",
+      "section",
+      "classId",
+      {
+        value: (schoolClass) =>
+          students
+            .filter(
+              (student) =>
+                String(student.classId) === String(schoolClassId(schoolClass)),
+            )
+            .map((student) => student.name)
+            .join(" "),
+      },
+    ],
+  );
 
   return (
     <>
       <Panel title="My assigned classes">
+        <DashboardFilters
+          state={classFilterState}
+          filters={classFilters}
+          items={assigned}
+        />
         {assigned.length ? (
           <Table
             headers={["Class", "Students", "Class teacher", "Student names"]}
-            rows={assigned.map((c) => [
+            rows={classFilterState.filteredItems.map((c) => [
               schoolClassId(c),
               students.filter((x) => x.classId === schoolClassId(c)).length,
               String(c.teacherId) === String(teacher.id) ? "Yes" : "Assigned",
@@ -58,7 +102,11 @@ export default function TeacherClasses({ view }) {
             ])}
           />
         ) : (
-          <Empty>No classes have been assigned yet.</Empty>
+          <Empty>
+            {assigned.length
+              ? "No assigned classes match these filters."
+              : "No classes have been assigned yet."}
+          </Empty>
         )}
       </Panel>
     </>

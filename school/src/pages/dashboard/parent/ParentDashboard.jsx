@@ -129,11 +129,21 @@ export default function ParentDashboard() {
           )}
           {page === "Overview" && <ParentOverview view={view} />}
           {page === "My Children" && <ParentChildren view={view} />}
-          {page === "Attendance" && <ParentAttendance view={view} />}
-          {page === "Academics" && <ParentAcademics view={view} />}
-          {page === "Assignments" && <ParentAssignments view={view} />}
-          {page === "Timetable" && <ParentTimetable view={view} />}
-          {page === "Fees" && <ParentFees view={view} />}
+          {page === "Attendance" && (
+            <ParentAttendance key={child?.id || "no-child"} view={view} />
+          )}
+          {page === "Academics" && (
+            <ParentAcademics key={child?.id || "no-child"} view={view} />
+          )}
+          {page === "Assignments" && (
+            <ParentAssignments key={child?.id || "no-child"} view={view} />
+          )}
+          {page === "Timetable" && (
+            <ParentTimetable key={child?.id || "no-child"} view={view} />
+          )}
+          {page === "Fees" && (
+            <ParentFees key={child?.id || "no-child"} view={view} />
+          )}
           {page === "Announcements" && <ParentAnnouncements view={view} />}
           {page === "Reports" && <ParentReports view={view} />}
           {page === "Profile" && <ParentProfile view={view} />}

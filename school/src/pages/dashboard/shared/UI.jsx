@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Menu, GraduationCap, LogOut, ArrowLeft, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "./DashboardFilters";
+import {
+  REPORT_CATEGORY_OPTIONS,
+  REPORT_STATUS_OPTIONS,
+} from "./schoolOptions";
 
 export function Layout({
   role,
@@ -149,7 +156,10 @@ export function Table({ headers, rows }) {
   );
 }
 
-export function NoticeList({ items }) {
+export function NoticeList({
+  items,
+  emptyMessage = "No records available yet.",
+}) {
   return items.length ? (
     items.map((n) => (
       <article className="role-list" key={n.id}>
@@ -161,7 +171,7 @@ export function NoticeList({ items }) {
       </article>
     ))
   ) : (
-    <Empty />
+    <Empty>{emptyMessage}</Empty>
   );
 }
 
@@ -177,9 +187,22 @@ export function ReportForm({ data, role, user }) {
       ? []
       : data.items.filter(
           (r) =>
-            r.submitterId === user.id ||
-            (r.author === user.name && r.role === role),
+            (r.submitterId != null &&
+              String(r.submitterId) === String(user.id)) ||
+            (r.submitterId == null &&
+              r.author === user.name &&
+              r.role === role),
         );
+  const reportFilters = [
+    { key: "category", label: "Category", options: REPORT_CATEGORY_OPTIONS },
+    { key: "status", label: "Status", options: REPORT_STATUS_OPTIONS },
+    { key: "year", label: "Year", includeDynamic: true, value: (report) => report.date?.slice(0, 4) },
+  ];
+  const reportState = useDashboardFilters(
+    own,
+    reportFilters,
+    ["title", "category", "description", "date", "status", "response"],
+  );
 
   if (user?.id == null) {
     return (
@@ -248,16 +271,27 @@ export function ReportForm({ data, role, user }) {
         </form>
       </Panel>
       <Panel title="My submitted reports">
-        <Table
-          headers={["Title", "Date", "Category", "Status", "Admin response"]}
-          rows={own.map((r) => [
-            r.title,
-            r.date,
-            r.category,
-            r.status,
-            r.response || "Awaiting response",
-          ])}
+        <DashboardFilters
+          state={reportState}
+          filters={reportFilters}
+          items={own}
         />
+        {reportState.filteredItems.length ? (
+          <Table
+            headers={["Title", "Date", "Category", "Status", "Admin response"]}
+            rows={reportState.filteredItems.map((r) => [
+              r.title,
+              r.date,
+              r.category,
+              r.status,
+              r.response || "Awaiting response",
+            ])}
+          />
+        ) : own.length === 0 ? (
+          <Empty>
+            You have not submitted any reports yet.
+          </Empty>
+        ) : null}
       </Panel>
     </>
   );

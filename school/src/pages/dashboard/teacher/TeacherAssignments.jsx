@@ -9,6 +9,13 @@ import {
   relevantNotices,
 } from "../shared/school";
 import { SUBJECT_OPTIONS } from "../shared/schoolOptions";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import {
+  SECTION_OPTIONS,
+  SUBMISSION_STATUS_OPTIONS,
+} from "../shared/schoolOptions";
 
 export default function TeacherAssignments({ view }) {
   const {
@@ -41,6 +48,61 @@ export default function TeacherAssignments({ view }) {
       ...assignments.map((assignment) => assignment.subject).filter(Boolean),
     ]),
   ];
+  const assignmentFilters = [
+    {
+      key: "classId",
+      label: "Class",
+      options: ids,
+    },
+    {
+      key: "section",
+      label: "Section",
+      options: SECTION_OPTIONS,
+      value: (assignment) => String(assignment.classId || "").split("-")[1],
+    },
+    {
+      key: "subject",
+      label: "Subject",
+      includeDynamic: true,
+    },
+    {
+      key: "due",
+      label: "Due date",
+      type: "date",
+    },
+    {
+      key: "status",
+      label: "Submission status",
+      options: SUBMISSION_STATUS_OPTIONS,
+      value: (assignment) =>
+        subs
+          .filter(
+            (submission) =>
+              String(submission.assignmentId) === String(assignment.id),
+          )
+          .at(-1)?.status || "Pending",
+    },
+  ];
+  const assignmentState = useDashboardFilters(
+    assignments,
+    assignmentFilters,
+    [
+      "title",
+      "subject",
+      "description",
+      "classId",
+      "due",
+      {
+        value: (assignment) =>
+          subs
+            .filter(
+              (submission) =>
+                String(submission.assignmentId) === String(assignment.id),
+            )
+            .at(-1)?.status || "Pending",
+      },
+    ],
+  );
 
   return (
     <>
@@ -123,9 +185,14 @@ export default function TeacherAssignments({ view }) {
           </form>
         </Panel>
         <Panel title="My assignments">
+          <DashboardFilters
+            state={assignmentState}
+            filters={assignmentFilters}
+            items={assignments}
+          />
           <Table
             headers={["Title", "Class", "Subject", "Due", "Manage"]}
-            rows={assignments.map((a) => [
+            rows={assignmentState.filteredItems.map((a) => [
               a.title,
               a.classId,
               a.subject,

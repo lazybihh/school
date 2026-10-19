@@ -4,9 +4,36 @@ import React from "react";
 
 import { Empty, Panel, Stats, Table } from "../shared/UI";
 import { attendanceRate } from "../shared/school";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import {
+  ATTENDANCE_STATUS_OPTIONS,
+  MONTH_OPTIONS,
+} from "../shared/schoolOptions";
 
 export default function ParentAttendance({ view }) {
   const { s, child, attendance } = view;
+  const attendanceFilters = [
+    {
+      key: "month",
+      label: "Month",
+      options: MONTH_OPTIONS,
+      value: (record) => record.date?.slice(5, 7),
+    },
+    {
+      key: "year",
+      label: "Year",
+      includeDynamic: true,
+      value: (record) => record.date?.slice(0, 4),
+    },
+    { key: "status", label: "Status", options: ATTENDANCE_STATUS_OPTIONS },
+  ];
+  const attendanceState = useDashboardFilters(
+    attendance,
+    attendanceFilters,
+    ["date", "status", "recordedBy"],
+  );
 
   if (!child) {
     return <Empty>No child is linked to this parent yet.</Empty>;
@@ -24,11 +51,14 @@ export default function ParentAttendance({ view }) {
         ]}
       />
       <Panel title={`${child.name}'s attendance`}>
+        <DashboardFilters
+          state={attendanceState}
+          filters={attendanceFilters}
+          items={attendance}
+        />
         <Table
           headers={["Date", "Status"]}
-          rows={[...attendance]
-            .sort((a, b) => b.date.localeCompare(a.date))
-            .map((x) => [x.date, x.status])}
+          rows={attendanceState.filteredItems.map((x) => [x.date, x.status])}
         />
       </Panel>
     </>

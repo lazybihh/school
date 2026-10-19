@@ -18,6 +18,10 @@ import {
   ACADEMIC_SESSION_OPTIONS,
   SUBJECT_OPTIONS,
 } from "../shared/schoolOptions";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import { SECTION_OPTIONS } from "../shared/schoolOptions";
 
 export default function TeacherResults({ view }) {
   const {
@@ -44,19 +48,85 @@ export default function TeacherResults({ view }) {
     ownPeriods,
   } = view;
 
+  const teacherResults = s.results.items.filter(
+    (result) =>
+      teacher.id != null &&
+      String(result.teacherId) === String(teacher.id) &&
+      students.some((student) => String(student.id) === String(result.studentId)),
+  );
   const subjects = [
     ...new Set([
       ...SUBJECT_OPTIONS,
-      ...s.results.items.map((result) => result.subject).filter(Boolean),
+      ...teacherResults.map((result) => result.subject).filter(Boolean),
     ]),
   ];
 
   const sessions = [
     ...new Set([
       ...ACADEMIC_SESSION_OPTIONS,
-      ...s.results.items.map((result) => result.session).filter(Boolean),
+      ...teacherResults.map((result) => result.session).filter(Boolean),
     ]),
   ];
+  const resultFilters = [
+    {
+      key: "classId",
+      label: "Class",
+      options: [...new Set(students.map((student) => student.classId))],
+      value: (result) =>
+        students.find(
+          (student) => String(student.id) === String(result.studentId),
+        )?.classId,
+    },
+    {
+      key: "section",
+      label: "Section",
+      options: SECTION_OPTIONS,
+      value: (result) =>
+        String(
+          students.find(
+            (student) => String(student.id) === String(result.studentId),
+          )?.classId || "",
+        ).split("-")[1],
+    },
+    {
+      key: "studentId",
+      label: "Student",
+      includeDynamic: true,
+      value: (result) => name(result.studentId),
+    },
+    {
+      key: "subject",
+      label: "Subject",
+      includeDynamic: true,
+    },
+    {
+      key: "exam",
+      label: "Exam",
+      includeDynamic: true,
+    },
+    {
+      key: "session",
+      label: "Academic year",
+      options: sessions,
+    },
+  ];
+  const resultState = useDashboardFilters(
+    teacherResults,
+    resultFilters,
+    [
+      "subject",
+      "exam",
+      "session",
+      "remarks",
+      {
+        value: (result) =>
+          students.find(
+            (student) => String(student.id) === String(result.studentId),
+          )?.classId,
+      },
+      { value: (result) => name(result.studentId) },
+    ],
+  );
 
   return (
     <>
@@ -154,15 +224,14 @@ export default function TeacherResults({ view }) {
           </form>
         </Panel>
         <Panel title="Published results">
+          <DashboardFilters
+            state={resultState}
+            filters={resultFilters}
+            items={teacherResults}
+          />
           <Table
             headers={["Student", "Subject", "Exam", "Score"]}
-            rows={s.results.items
-              .filter(
-                (r) =>
-                  teacher.id != null &&
-                  String(r.teacherId) === String(teacher.id),
-              )
-              .map((r) => [
+            rows={resultState.filteredItems.map((r) => [
                 name(r.studentId),
                 r.subject,
                 r.exam,

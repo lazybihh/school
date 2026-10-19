@@ -7,6 +7,10 @@ import {
   feeStatus,
   relevantNotices,
 } from "../shared/school";
+import DashboardFilters, {
+  useDashboardFilters,
+} from "../shared/DashboardFilters";
+import { DAY_OPTIONS } from "../shared/schoolOptions";
 
 export default function StudentTimetable({ view }) {
   const {
@@ -22,13 +26,27 @@ export default function StudentTimetable({ view }) {
     answers,
     setAnswers,
   } = view;
+  const timetableFilters = [
+    { key: "day", label: "Day", options: DAY_OPTIONS },
+    { key: "subject", label: "Subject", includeDynamic: true },
+  ];
+  const timetableState = useDashboardFilters(
+    periods,
+    timetableFilters,
+    ["day", "start", "end", "subject", { value: (period) => teacher(period.teacherId) }],
+  );
 
   return (
     <>
       <Panel title="Weekly timetable">
+        <DashboardFilters
+          state={timetableState}
+          filters={timetableFilters}
+          items={periods}
+        />
         <Table
           headers={["Day", "Time", "Subject", "Teacher"]}
-          rows={[...periods]
+          rows={timetableState.filteredItems
             .sort(
               (a, b) =>
                 [
