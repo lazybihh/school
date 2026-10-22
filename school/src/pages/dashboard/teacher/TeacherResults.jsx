@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Empty,
@@ -16,7 +16,6 @@ import {
 } from "../shared/school";
 import {
   ACADEMIC_SESSION_OPTIONS,
-  SUBJECT_OPTIONS,
 } from "../shared/schoolOptions";
 import DashboardFilters, {
   useDashboardFilters,
@@ -24,6 +23,7 @@ import DashboardFilters, {
 import { SECTION_OPTIONS } from "../shared/schoolOptions";
 
 export default function TeacherResults({ view }) {
+  const [saveError, setSaveError] = useState("");
   const {
     s,
     teacher,
@@ -52,14 +52,10 @@ export default function TeacherResults({ view }) {
     (result) =>
       teacher.id != null &&
       String(result.teacherId) === String(teacher.id) &&
-      students.some((student) => String(student.id) === String(result.studentId)),
+      students.some((student) => String(student.id) === String(result.studentId)) &&
+      view.assignedSubjects.includes(String(result.subject)),
   );
-  const subjects = [
-    ...new Set([
-      ...SUBJECT_OPTIONS,
-      ...teacherResults.map((result) => result.subject).filter(Boolean),
-    ]),
-  ];
+  const subjects = view.assignedSubjects;
 
   const sessions = [
     ...new Set([
@@ -127,11 +123,17 @@ export default function TeacherResults({ view }) {
       { value: (result) => name(result.studentId) },
     ],
   );
+  const canEnterMarks = view.can("enterMarks");
+  const canViewResults = view.can("viewResults");
+
+  if (!canEnterMarks && !canViewResults) {
+    return <Empty>Your account does not have permission to view or enter results.</Empty>;
+  }
 
   return (
     <>
       <>
-        <Panel title="Publish examination result">
+        {canEnterMarks && <Panel title="Publish examination result">
           {students.length === 0 && (
             <Empty>No students are assigned to your classes yet.</Empty>
           )}
@@ -139,18 +141,51 @@ export default function TeacherResults({ view }) {
             className="role-form"
             onSubmit={(e) => {
               e.preventDefault();
-              if (teacher.id == null || students.length === 0) return;
+              if (
+                !view.can("enterMarks") ||
+                teacher.id == null ||
+                students.length === 0 ||
+                !students.some((student) => String(student.id) === String(marks.studentId)) ||
+                !view.assignedSubjects.includes(String(marks.subject))
+              ) {
+                setSaveError("Choose a student and subject within your authorised classes.");
+                return;
+              }
+              if (!marks.exam.trim()) {
+                setSaveError("Enter the examination name.");
+                return;
+              }
+              const maximum = Number(marks.total);
+              const achieved = Number(marks.marks);
+              if (
+                !Number.isFinite(maximum) ||
+                maximum <= 0 ||
+                !Number.isFinite(achieved) ||
+                achieved < 0 ||
+                achieved > maximum
+              ) {
+                setSaveError("Marks must be between zero and the maximum marks.");
+                return;
+              }
 
-              const old = s.results.items.find(
-                (r) =>
-                  r.studentId === marks.studentId &&
-                  r.subject === marks.subject &&
-                  r.exam === marks.exam,
-              );
-              old
-                ? s.results.update(old.id, { ...marks, teacherId: teacher.id })
-                : s.results.add({ ...marks, teacherId: teacher.id });
-              setMarks({ ...marks, marks: "", remarks: "" });
+              try {
+                s.results.saveForTeacher(
+                  {
+                    ...marks,
+                    exam: marks.exam.trim(),
+                    studentId: String(marks.studentId),
+                    marks: achieved,
+                    total: maximum,
+                  },
+                  teacher,
+                  students,
+                  view.assignedSubjects,
+                );
+                setMarks({ ...marks, marks: "", remarks: "" });
+                setSaveError("");
+              } catch (error) {
+                setSaveError(error.message || "Unable to save the result.");
+              }
             }}
           >
             <label>
@@ -187,6 +222,7 @@ export default function TeacherResults({ view }) {
                 />
               </label>
             ))}
+            {saveError && <p className="wide attachment-error" role="alert">{saveError}</p>}
             <label>
               Subject
               <select
@@ -222,8 +258,8 @@ export default function TeacherResults({ view }) {
               Save result
             </button>
           </form>
-        </Panel>
-        <Panel title="Published results">
+        </Panel>}
+        {canViewResults && <Panel title="Published results">
           <DashboardFilters
             state={resultState}
             filters={resultFilters}
@@ -238,7 +274,7 @@ export default function TeacherResults({ view }) {
                 `${r.marks}/${r.total}`,
               ])}
           />
-        </Panel>
+        </Panel>}
       </>
     </>
   );

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
-import { Panel, Table } from "../shared/UI";
+import { Empty, Panel, Table } from "../shared/UI";
 import DashboardFilters, {
   useDashboardFilters,
 } from "../shared/DashboardFilters";
+import AttachmentFiles from "../shared/AttachmentFiles";
 import {
   SECTION_OPTIONS,
   SUBMISSION_STATUS_OPTIONS,
@@ -14,56 +15,39 @@ export default function TeacherSubmissions({ view }) {
   const [selectedId, setSelectedId] = useState("");
   const [feedback, setFeedback] = useState("");
   const [marks, setMarks] = useState("");
+  const [reviewError, setReviewError] = useState("");
 
   const selectedSubmission = subs.find(
     (submission) => String(submission.id) === String(selectedId),
   );
   const assignment = selectedSubmission
     ? assignments.find(
-        (item) =>
-          String(item.id) === String(selectedSubmission.assignmentId),
+        (item) => String(item.id) === String(selectedSubmission.assignmentId),
       )
     : null;
-  const submissionFilters = [
+  const relatedAssignment = (submission) =>
+    assignments.find(
+      (item) => String(item.id) === String(submission.assignmentId),
+    );
+  const filters = [
     {
       key: "assignmentId",
       label: "Assignment",
       includeDynamic: true,
-      value: (submission) =>
-        assignments.find(
-          (item) => String(item.id) === String(submission.assignmentId),
-        )?.title,
+      value: (submission) => relatedAssignment(submission)?.title,
     },
     {
       key: "classId",
       label: "Class",
-      options: [
-        ...new Set(assignments.map((assignment) => assignment.classId)),
-      ],
-      value: (submission) =>
-        assignments.find(
-          (item) => String(item.id) === String(submission.assignmentId),
-        )?.classId,
+      includeDynamic: true,
+      value: (submission) => relatedAssignment(submission)?.classId,
     },
     {
       key: "section",
       label: "Section",
       options: SECTION_OPTIONS,
       value: (submission) =>
-        String(
-          assignments.find(
-            (item) => String(item.id) === String(submission.assignmentId),
-          )?.classId || "",
-        ).split("-")[1],
-    },
-    {
-      key: "subject",
-      label: "Subject",
-      includeDynamic: true,
-      value: (submission) =>
-        assignments.find(
-          (item) => String(item.id) === String(submission.assignmentId),
-        )?.subject,
+        String(relatedAssignment(submission)?.classId || "").split("-")[1],
     },
     {
       key: "studentId",
@@ -71,31 +55,39 @@ export default function TeacherSubmissions({ view }) {
       includeDynamic: true,
       value: (submission) => name(submission.studentId),
     },
-    {
-      key: "status",
-      label: "Status",
-      options: SUBMISSION_STATUS_OPTIONS,
-    },
+    { key: "status", label: "Submission status", options: SUBMISSION_STATUS_OPTIONS },
     { key: "date", label: "Submission date", type: "date" },
+    {
+      key: "reviewState",
+      label: "Reviewed",
+      options: ["Reviewed", "Unreviewed"],
+      value: (submission) =>
+        submission.reviewedAt ||
+        ["Checked", "Resubmit"].includes(submission.status)
+          ? "Reviewed"
+          : "Unreviewed",
+    },
   ];
-  const submissionState = useDashboardFilters(
-    subs,
-    submissionFilters,
-    [
-      "content",
-      "date",
-      "status",
-      { value: (submission) => name(submission.studentId) },
-      {
-        value: (submission) =>
-          assignments.find(
-            (item) => String(item.id) === String(submission.assignmentId),
-          )?.title,
-      },
-    ],
-  );
+  const filterState = useDashboardFilters(subs, filters, [
+    "content",
+    "date",
+    "status",
+    { value: (submission) => name(submission.studentId) },
+    { value: (submission) => relatedAssignment(submission)?.title },
+  ]);
+
+  if (!view.can("reviewSubmissions")) {
+    return <Empty>Your account does not have permission to review submissions.</Empty>;
+  }
 
   function openSubmission(submission) {
+    if (
+      !view.can("reviewSubmissions") ||
+      !subs.some((item) => String(item.id) === String(submission.id))
+    ) {
+      setReviewError("You do not have permission to review this submission.");
+      return;
+    }
     setSelectedId(submission.id);
     setFeedback(submission.feedback || "");
     setMarks(
@@ -103,51 +95,98 @@ export default function TeacherSubmissions({ view }) {
         ? ""
         : String(submission.marks),
     );
+    setReviewError("");
   }
 
   function saveReview(status) {
-    if (!selectedSubmission) {
+    if (!view.can("reviewSubmissions")) {
+      setReviewError("You do not have permission to review submissions.");
       return;
     }
+    if (
+      !selectedSubmission ||
+      !assignment ||
+      !subs.some((item) => String(item.id) === String(selectedSubmission.id))
+    ) {
+      setReviewError("This submission is outside your authorised assignments.");
+      return;
+    }
+    const normalizedMarks = marks.trim() === "" ? "" : Number(marks);
+    if (normalizedMarks !== "") {
+      const maximum = Number(assignment.maxMarks);
+      if (!Number.isFinite(maximum) || maximum <= 0) {
+        setReviewError(
+          "Set a valid maximum mark on the assignment before entering marks.",
+        );
+        return;
+      }
+      if (
+        !Number.isFinite(normalizedMarks) ||
+        normalizedMarks < 0 ||
+        normalizedMarks > maximum
+      ) {
+        setReviewError(`Marks must be between 0 and ${maximum}.`);
+        return;
+      }
+    }
 
-    s.submissions.update(selectedSubmission.id, {
-      feedback,
-      marks,
-      status,
-    });
-    setSelectedId("");
+    try {
+      s.submissions.reviewForTeacher(
+        selectedSubmission.id,
+        {
+          feedback: feedback.trim(),
+          marks: normalizedMarks,
+          status,
+          reviewedAt: new Date().toISOString(),
+        },
+        view.teacher,
+        assignments,
+        s.students.items,
+      );
+      setSelectedId("");
+    } catch (error) {
+      setReviewError(error.message || "Unable to save this review.");
+    }
   }
+
+  const latestAttempt =
+    selectedSubmission?.attempts?.[selectedSubmission.attempts.length - 1];
+  const latestFiles =
+    latestAttempt?.attachments ||
+    selectedSubmission?.attachments ||
+    [];
 
   return (
     <>
       <Panel title="Review student submissions">
-        <DashboardFilters
-          state={submissionState}
-          filters={submissionFilters}
-          items={subs}
-        />
-        <Table
-          headers={["Student", "Assignment", "Submitted", "Status", "Review"]}
-          rows={submissionState.filteredItems.map((submission) => {
-            const relatedAssignment = assignments.find(
-              (item) =>
-                String(item.id) === String(submission.assignmentId),
-            );
-
-            return [
-              name(submission.studentId),
-              relatedAssignment?.title || "Assignment unavailable",
-              submission.date,
-              submission.status,
-              <button
-                className="role-secondary"
-                onClick={() => openSubmission(submission)}
-              >
-                View Submission
-              </button>,
-            ];
-          })}
-        />
+        <DashboardFilters state={filterState} filters={filters} items={subs} />
+        {filterState.filteredItems.length ? (
+          <Table
+            headers={["Student", "Assignment", "Class", "Submission date", "Status", "Marks", "Actions"]}
+            rows={filterState.filteredItems.map((submission) => {
+              const item = relatedAssignment(submission);
+              return [
+                name(submission.studentId),
+                item?.title || "Assignment unavailable",
+                item?.classId || "—",
+                submission.date || "—",
+                submission.status || "Submitted",
+                submission.marks === "" || submission.marks == null
+                  ? "—"
+                  : `${submission.marks} / ${item?.maxMarks ?? "—"}`,
+                <button
+                  type="button"
+                  className="role-primary"
+                  onClick={() => openSubmission(submission)}
+                >
+                  View Submission
+                </button>,
+              ];
+            })}
+          />
+        ) : (
+          <p className="role-empty">{subs.length ? "No submissions match the current filters." : "No student submissions have been received yet."}</p>
+        )}
       </Panel>
 
       {selectedSubmission && (
@@ -155,9 +194,7 @@ export default function TeacherSubmissions({ view }) {
           className="submission-modal-backdrop"
           role="presentation"
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              setSelectedId("");
-            }
+            if (event.target === event.currentTarget) setSelectedId("");
           }}
         >
           <section
@@ -169,7 +206,7 @@ export default function TeacherSubmissions({ view }) {
             <header className="submission-modal-header">
               <div>
                 <span className="submission-modal-kicker">
-                  STUDENT SUBMISSION
+                  {latestAttempt ? `LATEST ATTEMPT ${selectedSubmission.attempts.length}` : "STUDENT SUBMISSION"}
                 </span>
                 <h2 id="submission-modal-title">
                   {assignment?.title || "Assignment unavailable"}
@@ -186,35 +223,28 @@ export default function TeacherSubmissions({ view }) {
             </header>
 
             <div className="submission-modal-details">
-              <div>
-                <span>Student</span>
-                <strong>{name(selectedSubmission.studentId)}</strong>
-              </div>
-              <div>
-                <span>Submitted</span>
-                <strong>{selectedSubmission.date || "Not specified"}</strong>
-              </div>
-              <div>
-                <span>Status</span>
-                <strong>{selectedSubmission.status || "Submitted"}</strong>
-              </div>
+              <div><span>Student</span><strong>{name(selectedSubmission.studentId)}</strong></div>
+              <div><span>Class</span><strong>{assignment?.classId || "—"}</strong></div>
+              <div><span>Submitted</span><strong>{selectedSubmission.date || "Not specified"}</strong></div>
+              <div><span>Status</span><strong>{selectedSubmission.status || "Submitted"}</strong></div>
+              <div><span>Review</span><strong>{selectedSubmission.status === "Checked" ? "Reviewed" : "Unreviewed"}</strong></div>
+              <div><span>Attempt</span><strong>{selectedSubmission.attempts?.length || 1}</strong></div>
             </div>
 
-            {assignment?.description && (
+            {assignment && (
               <div className="submission-assignment-description">
                 <h3>Assignment instructions</h3>
-                <p>{assignment.description}</p>
+                <p>{assignment.description || "No instructions provided."}</p>
+                {assignment.submissionInstructions && <p><b>Submission instructions:</b> {assignment.submissionInstructions}</p>}
+                <p><b>Maximum marks:</b> {assignment.maxMarks}</p>
               </div>
             )}
 
             <div className="submission-answer">
-              <h3>Student's answer</h3>
-              <p>{selectedSubmission.content || "No answer text was saved."}</p>
+              <h3>Written answer</h3>
+              <p>{latestAttempt?.content ?? selectedSubmission.content ?? "No written answer was submitted."}</p>
             </div>
-
-            <p className="submission-attachment-note">
-              File attachments are not supported in this browser-only demo.
-            </p>
+            <AttachmentFiles files={latestFiles} title="Submitted files" />
 
             <form
               className="role-form submission-review-form"
@@ -223,7 +253,7 @@ export default function TeacherSubmissions({ view }) {
                 saveReview("Checked");
               }}
             >
-              <h3 className="wide">Teacher review</h3>
+              <h3 className="wide">Teacher feedback and grading</h3>
               <label className="wide">
                 Feedback
                 <textarea
@@ -233,24 +263,21 @@ export default function TeacherSubmissions({ view }) {
                 />
               </label>
               <label>
-                Marks
+                Marks (maximum {assignment?.maxMarks ?? "not set"})
                 <input
                   type="number"
                   min="0"
+                  max={assignment?.maxMarks}
+                  step="any"
                   value={marks}
                   onChange={(event) => setMarks(event.target.value)}
                   placeholder="Optional"
                 />
               </label>
+              {reviewError && <p className="attachment-error wide" role="alert">{reviewError}</p>}
               <div className="submission-review-actions wide">
-                <button className="role-primary" type="submit">
-                  Save review
-                </button>
-                <button
-                  className="role-secondary"
-                  type="button"
-                  onClick={() => saveReview("Resubmit")}
-                >
+                <button className="role-primary" type="submit">Mark as Checked</button>
+                <button className="role-secondary" type="button" onClick={() => saveReview("Resubmit")}>
                   Request resubmission
                 </button>
               </div>

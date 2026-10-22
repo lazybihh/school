@@ -1,12 +1,6 @@
 import React from "react";
 
-import { Panel, Stats, Table, NoticeList, ReportForm } from "../shared/UI";
-import {
-  today,
-  attendanceRate,
-  feeStatus,
-  relevantNotices,
-} from "../shared/school";
+import { Empty, ReportForm } from "../shared/UI";
 
 export default function TeacherReports({ view }) {
   const {
@@ -33,9 +27,9 @@ export default function TeacherReports({ view }) {
     ownPeriods,
   } = view;
 
-  return (
-    <>
-      <ReportForm data={s.reports} role="Teacher" user={teacher} />
-    </>
-  );
+  if (!view.can("viewReports")) {
+    return <Empty>Your account does not have permission to view reports.</Empty>;
+  }
+
+  return <ReportForm data={s.reports} role="Teacher" user={teacher} />;
 }

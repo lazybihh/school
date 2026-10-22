@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Empty,
@@ -19,6 +19,7 @@ import DashboardFilters, {
   useDashboardFilters,
 } from "../shared/DashboardFilters";
 import { SECTION_OPTIONS } from "../shared/schoolOptions";
+import TeacherPersonalTimetable from "./TeacherPersonalTimetable";
 
 export default function TeacherClasses({ view }) {
   const {
@@ -44,6 +45,7 @@ export default function TeacherClasses({ view }) {
     name,
     ownPeriods,
   } = view;
+  const [showTimetable, setShowTimetable] = useState(false);
   const classFilters = [
     {
       key: "classId",
@@ -82,6 +84,19 @@ export default function TeacherClasses({ view }) {
 
   return (
     <>
+      <div className="teacher-classes-heading">
+        <div>
+          <span className="eyebrow">TEACHING WORKSPACE</span>
+          <h1>My Classes</h1>
+        </div>
+        <button
+          type="button"
+          className="role-primary"
+          onClick={() => setShowTimetable(true)}
+        >
+          My Timetable
+        </button>
+      </div>
       <Panel title="My assigned classes">
         <DashboardFilters
           state={classFilterState}
@@ -109,6 +124,16 @@ export default function TeacherClasses({ view }) {
           </Empty>
         )}
       </Panel>
+      {showTimetable && (
+        <TeacherPersonalTimetable
+          teacher={teacher}
+          periods={ownPeriods}
+          allPeriods={s.timetable.items}
+          assignedClasses={assigned}
+          canManage={view.permissions.manageTimetable}
+          onBack={() => setShowTimetable(false)}
+        />
+      )}
     </>
   );
 }

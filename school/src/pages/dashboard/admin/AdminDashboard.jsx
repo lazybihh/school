@@ -10,11 +10,13 @@ import LinkedStudents from "./LinkedStudents";
 import ManageClasses from "./ManageClasses";
 import AttendancePage from "./AttendancePage";
 import Assignments from "./Assignments";
+import AdminSubmissions from "./AdminSubmissions";
 import Fees from "./Fees";
 import Reports from "./Reports";
 import Information from "./Information";
 import AdminAccounts from "./AdminAccounts";
 import AdminResults from "./AdminResults";
+import AdminTimetable from "./AdminTimetable";
 import useSchool from "../shared/useSchool";
 
 const pages = {
@@ -30,7 +32,9 @@ const pages = {
     () => <AttendancePage role="teacher" />,
   ],
   classes: ["Class Management", ManageClasses],
+  timetable: ["Timetable Management", AdminTimetable],
   assignments: ["Assignments & Homework", Assignments],
+  submissions: ["Student Submissions", AdminSubmissions],
   results: ["Marks & Results", AdminResults],
   parents: ["Parent Information", ParentInfo],
   linkedStudents: ["Linked Students", LinkedStudents],

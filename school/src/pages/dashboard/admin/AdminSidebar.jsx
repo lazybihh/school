@@ -4,6 +4,7 @@ import {
   GraduationCap,
   Users,
   School,
+  CalendarDays,
   BookOpen,
   UserRound,
   Wallet,
@@ -37,7 +38,9 @@ const menu = [
     ],
   },
   { title: "Classes", icon: School, page: "classes" },
+  { title: "Timetable", icon: CalendarDays, page: "timetable" },
   { title: "Assignments", icon: BookOpen, page: "assignments" },
+  { title: "Submissions", icon: FileText, page: "submissions" },
   { title: "Marks & Results", icon: Award, page: "results" },
   {
     title: "Parents",

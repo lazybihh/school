@@ -181,6 +181,7 @@ export function ReportForm({ data, role, user }) {
     category: "General",
     description: "",
   });
+  const [formError, setFormError] = useState("");
 
   const own =
     user?.id == null
@@ -219,7 +220,7 @@ export function ReportForm({ data, role, user }) {
           className="role-form"
           onSubmit={(e) => {
             e.preventDefault();
-            data.add({
+            const report = {
               ...form,
               role,
               author: user.name,
@@ -227,8 +228,15 @@ export function ReportForm({ data, role, user }) {
               date: new Date().toLocaleDateString("en-CA"),
               status: "Pending",
               response: "",
-            });
-            setForm({ title: "", category: "General", description: "" });
+            };
+            try {
+              if (role === "Teacher") data.addForTeacher(report, user);
+              else data.add(report);
+              setForm({ title: "", category: "General", description: "" });
+              setFormError("");
+            } catch (error) {
+              setFormError(error.message || "Unable to submit this report.");
+            }
           }}
         >
           <label>
@@ -267,6 +275,7 @@ export function ReportForm({ data, role, user }) {
               }
             />
           </label>
+          {formError && <p className="wide attachment-error" role="alert">{formError}</p>}
           <button className="role-primary">Submit report</button>
         </form>
       </Panel>

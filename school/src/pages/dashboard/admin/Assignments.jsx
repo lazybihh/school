@@ -40,8 +40,21 @@ export default function Assignments() {
     },
     { key: "due", label: "Due Date", type: "date", required: true },
     {
+      key: "maxMarks",
+      label: "Maximum Marks",
+      type: "number",
+      min: 1,
+      table: false,
+    },
+    {
       key: "description",
       label: "Description",
+      type: "textarea",
+      table: false,
+    },
+    {
+      key: "submissionInstructions",
+      label: "Submission Instructions",
       type: "textarea",
       table: false,
     },

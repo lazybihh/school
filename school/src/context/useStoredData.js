@@ -79,7 +79,10 @@ export default function useStoredData(key, initial = [], mergeInitial = false) {
     setStored((current) => ({
       ...current,
       error: "",
-      items: [...current.items, { ...item, id: crypto.randomUUID() }],
+      items: [
+        ...current.items,
+        { ...item, id: item.id || crypto.randomUUID() },
+      ],
     }));
   }
 

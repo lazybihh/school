@@ -87,12 +87,12 @@ export default function StudentDashboard() {
           )
         : [],
     submission = (id) =>
-      s.submissions.items.find(
+      s.submissions.items.filter(
         (x) =>
           hasStudent &&
           String(x.studentId) === String(student.id) &&
           String(x.assignmentId) === String(id),
-      );
+      ).at(-1);
   const view = {
     s,
     student,

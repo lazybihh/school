@@ -31,6 +31,131 @@ export const teacherClasses = (teacher, classes) => {
   );
 };
 
+export const TEACHER_ROLE_OPTIONS = [
+  {
+    key: "Subject Teacher",
+    description: "Handles coursework and progress for authorised subjects.",
+  },
+  {
+    key: "Class Teacher",
+    description: "Coordinates attendance and responsibilities for assigned classes.",
+  },
+  {
+    key: "Class Coordinator",
+    description: "Supports coordination across assigned classes.",
+  },
+  {
+    key: "Head of Department (HOD)",
+    description: "Provides department-level academic oversight within assigned scope.",
+  },
+  {
+    key: "Senior Teacher",
+    description: "Supports teaching practice and academic review.",
+  },
+];
+
+export const TEACHER_PERMISSION_OPTIONS = [
+  { key: "viewAssignedStudents", label: "View assigned students" },
+  { key: "manageAttendance", label: "Manage attendance" },
+  { key: "createAssignments", label: "Create assignments" },
+  { key: "editOwnAssignments", label: "Edit own assignments" },
+  { key: "reviewSubmissions", label: "Review submissions" },
+  { key: "enterMarks", label: "Enter or update marks" },
+  { key: "viewResults", label: "View results" },
+  { key: "manageAnnouncements", label: "Manage announcements" },
+  { key: "viewReports", label: "View reports" },
+  { key: "manageTimetable", label: "Manage authorised timetable entries" },
+  { key: "viewAllocatedClasses", label: "View allocated classes" },
+];
+
+const ROLE_PERMISSION_DEFAULTS = {
+  "Subject Teacher": [
+    "viewAssignedStudents",
+    "createAssignments",
+    "editOwnAssignments",
+    "reviewSubmissions",
+    "enterMarks",
+    "viewResults",
+    "manageTimetable",
+    "viewAllocatedClasses",
+  ],
+  "Class Teacher": [
+    "viewAssignedStudents",
+    "manageAttendance",
+    "viewResults",
+    "viewReports",
+    "viewAllocatedClasses",
+  ],
+  "Class Coordinator": [
+    "viewAssignedStudents",
+    "manageAttendance",
+    "viewReports",
+    "viewAllocatedClasses",
+  ],
+  "Head of Department (HOD)": [
+    "viewAssignedStudents",
+    "reviewSubmissions",
+    "enterMarks",
+    "viewResults",
+    "viewReports",
+    "manageAnnouncements",
+    "viewAllocatedClasses",
+  ],
+  "Senior Teacher": [
+    "viewAssignedStudents",
+    "reviewSubmissions",
+    "enterMarks",
+    "viewResults",
+    "viewReports",
+    "viewAllocatedClasses",
+  ],
+};
+
+const LEGACY_SEEDED_ROLES = {
+  "demo-teacher-ananya": ["Subject Teacher", "Class Teacher"],
+  "demo-teacher-rohan": ["Subject Teacher", "Senior Teacher"],
+  "demo-teacher-meera": ["Subject Teacher", "Class Coordinator"],
+  "demo-teacher-kabir": ["Subject Teacher", "Head of Department (HOD)"],
+  "demo-teacher-sana": ["Subject Teacher", "Class Teacher"],
+};
+
+export function getTeacherRoles(teacher) {
+  return Array.isArray(teacher?.roles)
+    ? teacher.roles
+    : LEGACY_SEEDED_ROLES[teacher?.id] || ["Subject Teacher"];
+}
+
+export function getTeacherSubjects(teacher) {
+  const subjects = Array.isArray(teacher?.subjects)
+    ? teacher.subjects
+    : String(teacher?.subject || "").split(",");
+  return [...new Set(subjects.map((subject) => String(subject).trim()).filter(Boolean))];
+}
+
+export function getTeacherPermissions(teacher) {
+  const roleDefaults = getTeacherRoles(teacher).flatMap(
+    (role) => ROLE_PERMISSION_DEFAULTS[role] || [],
+  );
+  const effective = Object.fromEntries(
+    TEACHER_PERMISSION_OPTIONS.map(({ key }) => [
+      key,
+      roleDefaults.includes(key),
+    ]),
+  );
+
+  Object.entries(teacher?.permissionOverrides || {}).forEach(([key, value]) => {
+    if (Object.hasOwn(effective, key) && typeof value === "boolean") {
+      effective[key] = value;
+    }
+  });
+
+  return effective;
+}
+
+export function teacherHasPermission(teacher, permission) {
+  return Boolean(getTeacherPermissions(teacher)[permission]);
+}
+
 export const feeStatus = (f) =>
   Number(f.paid) >= Number(f.total)
     ? "Paid"

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Panel, Stats, Table, NoticeList, ReportForm } from "../shared/UI";
+import { Empty, Panel, Stats, Table, NoticeList, ReportForm } from "../shared/UI";
 import {
   schoolClassId,
   today,
@@ -40,6 +40,25 @@ export default function TeacherAttendance({ view }) {
     name,
     ownPeriods,
   } = view;
+  const [saveError, setSaveError] = useState("");
+  if (!view.can("manageAttendance")) {
+    return <Empty>Your account does not have permission to manage attendance.</Empty>;
+  }
+
+  function saveAttendance(student, status) {
+    if (!view.can("manageAttendance")) return;
+    try {
+      s.attendance.saveForTeacher(
+        { student, date, status },
+        teacher,
+        students,
+      );
+      setSaveError("");
+    } catch (error) {
+      setSaveError(error.message || "Unable to update attendance.");
+    }
+  }
+
   const history = s.attendance.items.filter(
     (record) =>
       record.role === "student" &&
@@ -130,32 +149,12 @@ export default function TeacherAttendance({ view }) {
           <div className="role-actions" style={{ marginTop: 16 }}>
             <button
               className="role-secondary"
-              onClick={() =>
-                classStudents.forEach((x) => {
-                  const old = s.attendance.items.find(
-                    (a) =>
-                      a.role === "student" &&
-                      a.personId === x.id &&
-                      a.date === date,
-                  );
-                  old
-                    ? s.attendance.update(old.id, {
-                        status: "Present",
-                        recordedBy: teacher.name,
-                      })
-                    : s.attendance.add({
-                        role: "student",
-                        personId: x.id,
-                        date,
-                        status: "Present",
-                        recordedBy: teacher.name,
-                      });
-                })
-              }
+              onClick={() => classStudents.forEach((student) => saveAttendance(student, "Present"))}
             >
               Mark all present
             </button>
           </div>
+          {saveError && <p className="attachment-error" role="alert">{saveError}</p>}
           <Table
             headers={["Student", "Roll", "Current", "Mark"]}
             rows={classStudents.map((x) => {
@@ -175,20 +174,7 @@ export default function TeacherAttendance({ view }) {
                     <button
                       key={status}
                       className="role-secondary"
-                      onClick={() =>
-                        old
-                          ? s.attendance.update(old.id, {
-                              status,
-                              recordedBy: teacher.name,
-                            })
-                          : s.attendance.add({
-                              role: "student",
-                              personId: x.id,
-                              date,
-                              status,
-                              recordedBy: teacher.name,
-                            })
-                      }
+                      onClick={() => saveAttendance(x, status)}
                     >
                       {status}
                     </button>
