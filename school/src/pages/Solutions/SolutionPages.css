@@ -60,7 +60,7 @@
   margin: 0;
   color: var(--text);
   font-size: 16px;
-  line-height: 1.75;
+  line-height: 1.7;
 }
 
 .sp-page em {
@@ -184,13 +184,13 @@
 .sp-hero h1 {
   max-width: 650px;
   margin: 19px 0;
-  font-size: clamp(39px, 4.4vw, 59px);
-  line-height: 1.1;
+  font-size: clamp(38px, 4.2vw, 56px);
+  line-height: 1.12;
 }
 
 .sp-intro {
   max-width: 560px;
-  font-size: 17px !important;
+  font-size: 16px !important;
 }
 
 .sp-actions {
@@ -548,7 +548,7 @@
   }
 
   .sp-hero h1 {
-    font-size: clamp(36px, 4.6vw, 48px);
+    font-size: clamp(36px, 4.4vw, 48px);
   }
 
   .sp-visual {
@@ -600,7 +600,7 @@
   }
 
   .sp-hero h1 {
-    font-size: clamp(36px, 7vw, 49px);
+    font-size: clamp(36px, 6.5vw, 46px);
   }
 
   .sp-visual {

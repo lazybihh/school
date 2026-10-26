@@ -1,627 +1,504 @@
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import {
   ArrowRight,
   ArrowUpRight,
-  Award,
   Bell,
-  BookOpen,
   CalendarDays,
-  Check,
-  ClipboardCheck,
+  ChevronLeft,
+  ChevronRight,
   ClipboardList,
-  Clock,
-  GraduationCap,
-  Megaphone,
-  Play,
-  Sparkles,
-  Users,
+  Images,
+  MapPin,
+  Newspaper,
+  School,
+  Users
 } from "lucide-react";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import LocalImage from "../components/LocalImage";
+import { PageBannerTags } from "../components/PageBanner";
 import "./Home.css";
 
-const IMAGES = {
-  hero: "/features-students.jpeg",
-  heroTeacher: "/feature-attendance.jfif",
-  heroCommunity: "/home-community.jfif",
-  student: "/features-students.jpeg",
-  teacher: "/feature-attendance.jfif",
-  parents: "/home-community.jfif",
-  campus: "/features-hero.jpeg",
-};
+/*
+  All images are LOCAL.
+  Put your approved VEDA photographs in public/images.
+  No external image URLs are used.
+*/
 
-const roles = [
+const slides = [
   {
-    icon: GraduationCap,
-    tone: "blue",
-    title: "For Students",
-    text: "Access your timetable, assignments, results and notices — all in one place.",
-    link: "Explore Student Dashboard",
-    href: "/solutions/student",
-    image: IMAGES.student,
-    alt: "Students studying together with laptops",
+    image: "/images/banner1.png",
+    alt: "VEDA International School campus at sunset",
+    tag: "WELCOME TO VEDA",
+    caption: "A Place to Learn. A Future to Build."
   },
   {
-    icon: BookOpen,
-    tone: "amber",
-    title: "For Teachers",
-    text: "Manage classes, track attendance, create assignments and share updates with ease.",
-    link: "Explore Teacher Dashboard",
-    href: "/solutions/teacher",
-    image: IMAGES.teacher,
-    alt: "Teacher guiding students in a classroom",
+    image: "/images/banner2.png",
+    alt: "VEDA students learning together in the library",
+    tag: "DISCOVER THE JOY OF LEARNING",
+    caption: "Curious Minds. Bright Possibilities."
   },
   {
-    icon: Users,
-    tone: "green",
-    title: "For Parents",
-    text: "Stay connected with your child's attendance, performance, fees and announcements.",
-    link: "Explore Parent Dashboard",
-    href: "/solutions/parent",
-    image: IMAGES.parents,
-    alt: "Parents with their child at home",
-  },
+    image: "/images/banner3.png",
+    alt: "VEDA students running on the school athletics track",
+    tag: "LEARNING BEYOND BOOKS",
+    caption: "Every Interest. Every Opportunity."
+  }
 ];
 
-const platformPoints = [
-  "Quick access to classes, assignments and results",
-  "Shared updates and announcements",
-  "A connected view of school and home",
-  "A smooth experience on both desktop and mobile",
+/*
+  These are navigation examples, not dated official notices.
+  Replace them with approved announcements when available.
+*/
+
+const notices = [
+  {
+    category: "ADMISSIONS",
+    title: "Admission Information",
+    description: "Find information about joining VEDA International School.",
+    link: "/admissions"
+  },
+  {
+    category: "SCHOOL NEWS",
+    title: "School News & Announcements",
+    description: "Visit the news page for school-related information.",
+    link: "/blog-news"
+  },
+  {
+    category: "SCHOOL ACTIVITIES",
+    title: "Explore Our School Gallery",
+    description: "Discover moments and activities from school life.",
+    link: "/gallery"
+  },
+  {
+    category: "ADMISSION ENQUIRY",
+    title: "Send Us Your Enquiry",
+    description: "Have questions about admission? Submit an enquiry to the school.",
+    link: "/admissions#enquiry"
+  },
+  {
+    category: "CONTACT",
+    title: "Contact & Location",
+    description: "Find the school address, contact details and map.",
+    link: "/contact"
+  }
 ];
 
-const steps = [
-  {
-    icon: ClipboardCheck,
-    tone: "blue",
-    title: "Teacher Posts",
-    text: "The teacher adds homework, attendance or marks for the class.",
-  },
-  {
-    icon: Bell,
-    tone: "amber",
-    title: "Students Receive",
-    text: "Students can view shared assignments, timetables and notices in their dashboard.",
-  },
-  {
-    icon: Users,
-    tone: "green",
-    title: "Parents Stay Informed",
-    text: "Parents can track progress, attendance, fees and important notices.",
-  },
-];
-
-const features = [
-  {
-    icon: CalendarDays,
-    tone: "blue",
-    title: "Attendance",
-    text: "Track daily attendance easily.",
-    href: "/features#module-02",
-  },
+const importantLinks = [
   {
     icon: ClipboardList,
-    tone: "amber",
-    title: "Assignments",
-    text: "Keep tasks organized and on time.",
-    href: "/features#module-04",
+    title: "Admissions",
+    description: "Admission information",
+    link: "/admissions"
   },
   {
-    icon: Award,
-    tone: "green",
-    title: "Results",
-    text: "Record and view examination marks.",
-    href: "/features#module-04",
+    icon: School,
+    title: "About VEDA",
+    description: "Our school and vision",
+    link: "/about"
   },
   {
-    icon: Clock,
-    tone: "violet",
-    title: "Timetable",
-    text: "Manage class schedules and periods.",
-    href: "/features#module-06",
+    icon: Newspaper,
+    title: "Blog & News",
+    description: "School updates",
+    link: "/blog-news"
   },
   {
-    icon: Megaphone,
-    tone: "rose",
-    title: "Notices",
-    text: "Share important updates with everyone.",
-    href: "/features#module-05",
+    icon: Images,
+    title: "Photo Gallery",
+    description: "Moments at VEDA",
+    link: "/gallery"
   },
+  {
+    icon: Users,
+    title: "School Portal",
+    description: "Access your dashboard",
+    link: "/login"
+  },
+  {
+    icon: MapPin,
+    title: "Contact Us",
+    description: "Reach our school",
+    link: "/contact"
+  }
 ];
 
-function Photo({ src, alt = "", className = "", priority = false }) {
-  const [failed, setFailed] = useState(false);
-
-  return (
-    <div className={`home-photo ${className}`}>
-      {failed ? (
-        <div className="home-photo-fallback" aria-hidden="true">
-          <GraduationCap size={36} />
-        </div>
-      ) : (
-        <img
-          src={src}
-          alt={alt}
-          loading={priority ? "eager" : "lazy"}
-          decoding="async"
-          onError={() => setFailed(true)}
-        />
-      )}
-    </div>
+function Home() {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
-}
 
-function SectionHeading({
-  eyebrow,
-  title,
-  highlight,
-  text,
-  center = false,
-}) {
-  return (
-    <div
-      className={`home-heading ${
-        center ? "home-heading-center" : ""
-      }`}
-    >
-      <span className="home-eyebrow">{eyebrow}</span>
+  useEffect(() => {
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateMotionPreference = () => {
+      setReducedMotion(motionPreference.matches);
+    };
 
-      <h2>
-        {title} <em>{highlight}</em>
-      </h2>
+    motionPreference.addEventListener("change", updateMotionPreference);
+    return () => {
+      motionPreference.removeEventListener("change", updateMotionPreference);
+    };
+  }, []);
 
-      {text && <p>{text}</p>}
-    </div>
-  );
-}
+  useEffect(() => {
+    if (paused || reducedMotion) {
+      return;
+    }
 
-/* HERO */
+    const timer = setInterval(() => {
+      setActive((previous) => (previous + 1) % slides.length);
+    }, 3000);
 
-function Hero() {
-  return (
-    <section className="home-hero" id="home">
-      <div className="home-container home-hero-grid">
+    return () => clearInterval(timer);
+  }, [paused, reducedMotion]);
 
-        <div className="home-hero-copy">
-          <span className="home-eyebrow">
-            <Sparkles size={14} />
-            Modern School Management System
-          </span>
+  const next = () => setActive((previous) => (previous + 1) % slides.length);
 
-          <h1 className="home-hero-title">
-            Smarter School Management for a
+  const previous = () =>
+    setActive((current) => (current - 1 + slides.length) % slides.length);
 
-            <span className="home-gradient-text">
-              Brighter Tomorrow
-
-              <svg
-                className="home-underline"
-                viewBox="0 0 300 14"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path d="M3 10 Q 75 2 150 8 T 297 6" />
-              </svg>
-            </span>
-          </h1>
-
-          <p className="home-hero-text">
-            EduFlow brings students, parents and teachers together
-            in one powerful platform — making school life simpler,
-            more organized and more connected.
-          </p>
-
-          <div className="home-hero-actions">
-            <Link to="/contact" className="home-btn home-btn-gold">
-              Contact us
-              <ArrowRight size={18} />
-            </Link>
-
-            <a href="#how-it-works" className="home-btn home-btn-outline">
-              <span className="home-play">
-                <Play size={11} fill="currentColor" />
-              </span>
-              See How It Works
-            </a>
-          </div>
-        </div>
-
-        <div className="home-hero-visual">
-          <div className="home-hero-shape" aria-hidden="true" />
-
-          <span className="home-script" aria-hidden="true">
-            Better Learning,
-            <br />
-            Brighter Future ♡
-          </span>
-
-          <div className="home-hero-collage">
-            <Photo
-              className="home-hero-photo home-hero-photo-main"
-              src={IMAGES.hero}
-              alt="Students learning together in a bright classroom"
-              priority
-            />
-
-            <Photo
-              className="home-hero-photo home-hero-photo-teacher"
-              src={IMAGES.heroTeacher}
-              alt="Teacher guiding students during a lesson"
-              priority
-            />
-
-            <Photo
-              className="home-hero-photo home-hero-photo-community"
-              src={IMAGES.heroCommunity}
-              alt="Families and students sharing a school community moment"
-              priority
-            />
-          </div>
-
-          <div className="home-float home-float-update" aria-hidden="true">
-            <span className="home-icon-tile home-tone-amber">
-              <Bell size={18} />
-            </span>
-
-            <div>
-              <small>Sample Notice</small>
-              <strong>Parent-Teacher Meeting</strong>
-              <small>School announcement</small>
-            </div>
-          </div>
-
-          <div className="home-float home-float-attendance" aria-hidden="true">
-            <span className="home-icon-tile home-tone-green">
-              <Check size={18} />
-            </span>
-
-            <div>
-              <small>School Records</small>
-              <strong>Attendance</strong>
-              <small>Organized by student</small>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-  );
-}
-
-/* STUDENTS, TEACHERS AND PARENTS */
-
-function Roles() {
-  return (
-    <section className="home-section home-roles" id="solutions">
-      <div className="home-container">
-
-        <div className="home-split-heading">
-          <SectionHeading
-            eyebrow="Built for your school community"
-            title="Three Roles."
-            highlight="One Connected System."
-            text="For students, teachers and parents, EduFlow keeps the school day informed, involved and in sync."
-          />
-
-          <Link to="/solutions" className="home-btn home-btn-outline">
-            Explore Solutions
-            <ArrowRight size={18} />
-          </Link>
-        </div>
-
-        <div className="home-roles-grid">
-          {roles.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <article
-                className={`home-role home-tone-${item.tone}`}
-                key={item.title}
-              >
-                <Photo
-                  className="home-role-photo"
-                  src={item.image}
-                  alt={item.alt}
-                />
-
-                <span className="home-role-icon">
-                  <Icon size={22} />
-                </span>
-
-                <h3>{item.title}</h3>
-
-                <p>{item.text}</p>
-
-                <Link to={item.href} className="home-role-link">
-                  {item.link}
-                  <ArrowRight size={16} />
-                </Link>
-              </article>
-            );
-          })}
-        </div>
-
-      </div>
-    </section>
-  );
-}
-
-/* CONNECTED SCHOOL EXPERIENCE */
-
-function Platform() {
-  return (
-    <section className="home-section home-platform" id="showcase">
-      <div className="home-container home-platform-grid">
-
-        <div className="home-platform-visual">
-          <Photo
-            className="home-platform-photo"
-            src={IMAGES.campus}
-            alt="A welcoming modern school campus"
-          />
-
-          <div className="home-platform-photo-note">
-            <span className="home-icon-tile home-tone-blue">
-              <GraduationCap size={23} />
-            </span>
-
-            <div>
-              <strong>One school community</strong>
-              <small>Information in one connected place</small>
-            </div>
-          </div>
-        </div>
-
-        <div className="home-platform-copy">
-          <SectionHeading
-            eyebrow="A more organized school day"
-            title="The important details,"
-            highlight="without the confusion."
-            text="A timetable should be easy to find. Homework should reach the right class. Parents should be able to follow their child's progress. EduFlow brings those everyday needs into one clear experience."
-          />
-
-          <ul className="home-checklist">
-            {platformPoints.map((point) => (
-              <li key={point}>
-                <span className="home-check">
-                  <Check size={14} strokeWidth={3} />
-                </span>
-                {point}
-              </li>
-            ))}
-          </ul>
-
-          <Link to="/features" className="home-btn home-btn-gold">
-            Explore the Features
-            <ArrowRight size={18} />
-          </Link>
-        </div>
-
-      </div>
-    </section>
-  );
-}
-
-/* HOW EDUFLOW WORKS */
-
-function HowItWorks() {
-  return (
-    <section
-      className="home-section home-how"
-      id="how-it-works"
-    >
-      <div className="home-container home-how-grid">
-
-        <div>
-          <SectionHeading
-            eyebrow="A simple journey"
-            title="How"
-            highlight="EduFlow Works"
-            text="From homework to progress — EduFlow connects everyone in the school community."
-          />
-
-          <Link to="/working" className="home-btn home-btn-outline">
-            Learn How It Works
-            <ArrowRight size={18} />
-          </Link>
-        </div>
-
-        <ol className="home-steps">
-          {steps.map((item, index) => {
-            const Icon = item.icon;
-
-            return (
-              <li
-                className={`home-step home-tone-${item.tone}`}
-                key={item.title}
-              >
-                <span className="home-step-visual">
-                  <Icon size={32} />
-
-                  <span className="home-step-num">
-                    {index + 1}
-                  </span>
-                </span>
-
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </li>
-            );
-          })}
-        </ol>
-
-      </div>
-    </section>
-  );
-}
-
-/* FEATURES */
-
-function Features() {
-  return (
-    <section className="home-section home-features" id="features">
-      <div className="home-container">
-
-        <div className="home-split-heading">
-          <SectionHeading
-            eyebrow="Powerful features"
-            title="Real Features."
-            highlight="Real Impact."
-            text="From attendance to results, EduFlow helps schools manage everything with ease and accuracy."
-          />
-
-          <Link to="/features" className="home-btn home-btn-outline">
-            Explore All Features
-            <ArrowRight size={18} />
-          </Link>
-        </div>
-
-        <div className="home-features-grid">
-          {features.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <Link
-                to={item.href}
-                className={`home-feature home-tone-${item.tone}`}
-                key={item.title}
-              >
-                <span className="home-feature-icon">
-                  <Icon size={28} />
-                </span>
-
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-
-                <span className="home-feature-more">
-                  Learn more
-                  <ArrowUpRight size={15} />
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-
-      </div>
-    </section>
-  );
-}
-
-/* A DAY WITH EDUFLOW — NEW FINAL SECTION */
-
-function SchoolDay() {
-  return (
-    <section className="home-section home-day">
-      <div className="home-container home-day-grid">
-
-        <div className="home-day-visual">
-          <Photo
-            className="home-day-photo"
-            src={IMAGES.teacher}
-            alt="Teacher working with students in class"
-          />
-
-          <div className="home-day-caption">
-            <GraduationCap size={20} />
-            <span>Classroom to home, connected.</span>
-          </div>
-        </div>
-
-        <div className="home-day-copy">
-          <span className="home-eyebrow">
-            <Sparkles size={14} />
-            A DAY WITH EDUFLOW
-          </span>
-
-          <h2>
-            School life moves forward.
-            <em> Everyone stays in the loop.</em>
-          </h2>
-
-          <p className="home-day-intro">
-            Here's how the shared experience works across a normal
-            school day — no made-up ratings or statistics, just the
-            features you can explore in our demo.
-          </p>
-
-          <div className="home-day-timeline">
-
-            <div className="home-day-entry">
-              <span className="home-day-number">01</span>
-
-              <div>
-                <strong>Teacher organizes the classroom</strong>
-                <p>
-                  Creates assignments, marks attendance and
-                  updates examination results.
-                </p>
-              </div>
-            </div>
-
-            <div className="home-day-entry">
-              <span className="home-day-number">02</span>
-
-              <div>
-                <strong>Student checks what's next</strong>
-                <p>
-                  Views class homework, timetables, attendance
-                  and results in one place.
-                </p>
-              </div>
-            </div>
-
-            <div className="home-day-entry">
-              <span className="home-day-number">03</span>
-
-              <div>
-                <strong>Parent follows their child's progress</strong>
-                <p>
-                  Can review the linked student's assignments,
-                  attendance, results and fee status.
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-          <div className="home-day-actions">
-            <Link to="/working" className="home-btn home-btn-gold">
-              Understand the Process
-              <ArrowRight size={18} />
-            </Link>
-
-            <Link to="/login" className="home-day-link">
-              Try the Demo
-              <ArrowRight size={17} />
-            </Link>
-          </div>
-        </div>
-
-      </div>
-    </section>
-  );
-}
-
-/* MAIN HOME PAGE */
-
-export default function Home() {
   return (
     <>
       <Navbar />
 
-      <main className="home-page">
-        <Hero />
-        <Roles />
-        <Platform />
-        <HowItWorks />
-        <Features />
-        <SchoolDay />
-      </main>
+      <main className="veda-home">
 
+        {/* 1. MAIN BANNER: clear photographs, text only as small tags */}
+
+        <section
+          className="vh-hero"
+          aria-label="VEDA school banners"
+          aria-roledescription="carousel"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocusCapture={() => setPaused(true)}
+          onBlurCapture={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) {
+              setPaused(false);
+            }
+          }}
+        >
+          <div className="vh-hero-stage">
+            {slides.map((slide, index) => (
+              <div
+                className={`vh-hero-picture ${active === index ? "active" : ""}`}
+                key={slide.image}
+                aria-hidden={active !== index}
+              >
+                <LocalImage
+                  src={slide.image}
+                  alt={slide.alt}
+                  className="vh-image-holder"
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+              </div>
+            ))}
+
+            <PageBannerTags
+              label={slides[active].tag}
+              caption={slides[active].caption}
+            />
+          </div>
+
+          <div className="vh-hero-controls">
+            <div className="vh-container vh-hero-controls-inner">
+              <div className="vh-hero-indicators">
+                {slides.map((slide, index) => (
+                  <button
+                    key={slide.image}
+                    type="button"
+                    className={active === index ? "active" : ""}
+                    onClick={() => setActive(index)}
+                    aria-label={`Show slide ${index + 1}`}
+                    aria-current={active === index ? "true" : undefined}
+                  >
+                    0{index + 1}
+                  </button>
+                ))}
+              </div>
+
+              <div className="vh-hero-arrows">
+                <button type="button" onClick={previous} aria-label="Previous slide">
+                  <ChevronLeft size={19} />
+                </button>
+                <button type="button" onClick={next} aria-label="Next slide">
+                  <ChevronRight size={19} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 2. SCHOOL HIGHLIGHTS: principal's message */}
+
+        <section className="vh-highlights">
+          <div className="vh-container">
+
+            <div className="vh-section-heading">
+              <div>
+                <div className="vh-eyebrow">
+                  <span />
+                  DISCOVER OUR SCHOOL
+                </div>
+
+                <h2>
+                  An Experience Beyond
+                  <br />
+                  <em>the Classroom.</em>
+                </h2>
+              </div>
+
+              <div className="vh-section-aside">
+                <p>
+                  School life is made meaningful by the people,
+                  experiences and opportunities that shape each
+                  student's journey.
+                </p>
+
+                <Link to="/about" className="vh-text-link">
+                  Get to Know VEDA <ArrowUpRight size={17} />
+                </Link>
+              </div>
+            </div>
+
+            <div className="vh-school-story">
+              <LocalImage
+                src="/images/veda-principal.jpg"
+                alt="Principal of VEDA International School"
+                className="vh-principal-photo"
+                loading="lazy"
+              />
+
+              <div className="vh-school-story-content">
+                <div className="vh-eyebrow">
+                  <span />
+                  A MESSAGE FROM THE PRINCIPAL
+                </div>
+
+                <h3>
+                  Education Begins with
+                  <br />
+                  <em>Purpose & Care.</em>
+                </h3>
+
+                <p>
+                  At VEDA, we aim to create an environment where
+                  learning inspires curiosity, values guide
+                  decisions and students are encouraged to
+                  develop their individual potential.
+                </p>
+
+                <div className="vh-principal-signature">
+                  <span className="vh-signature-line" />
+                  <div>
+                    <strong>Principal's Message</strong>
+                    <small>VEDA International School</small>
+                  </div>
+                </div>
+
+                <Link to="/about" className="vh-text-link">
+                  Read More About Our School
+                  <ArrowUpRight size={17} />
+                </Link>
+              </div>
+
+              <div className="vh-story-mark" aria-hidden="true">“</div>
+            </div>
+
+            <div className="vh-teacher-strip">
+              <div className="vh-teacher-strip-icon">
+                <Users size={26} strokeWidth={1.6} />
+              </div>
+
+              <div>
+                <h3>Meet the People Behind Every Lesson</h3>
+                <p>
+                  Learn more about our educators and the school community.
+                </p>
+              </div>
+
+              <Link to="/about" className="vh-text-link">
+                Explore Our School <ArrowUpRight size={17} />
+              </Link>
+            </div>
+
+          </div>
+        </section>
+
+        {/* 3. LATEST NOTICES: auto-scrolling, pauses on hover */}
+
+        <section className="vh-notices">
+          <div className="vh-container vh-notices-layout">
+            <div className="vh-notices-main">
+              <div className="vh-eyebrow">
+                <span />
+                STAY INFORMED
+              </div>
+
+              <div className="vh-notices-title">
+                <h2>Latest <em>Notices.</em></h2>
+                <Link to="/blog-news" className="vh-text-link">
+                  View All <ArrowUpRight size={17} />
+                </Link>
+              </div>
+
+              <p className="vh-notices-intro">
+                Important school information, news and activities
+                in one convenient place.
+              </p>
+
+              <div
+                className="vh-notice-viewport"
+                style={{ "--vh-notice-duration": `${notices.length * 6}s` }}
+              >
+                <div className="vh-notice-track">
+                  {[0, 1].map((copy) => (
+                    <div
+                      className="vh-notice-list"
+                      key={copy}
+                      aria-hidden={copy === 1 ? "true" : undefined}
+                    >
+                      {notices.map((notice) => (
+                        <Link
+                          className="vh-notice"
+                          to={notice.link}
+                          key={notice.title}
+                          tabIndex={copy === 1 ? -1 : undefined}
+                        >
+                          <div className="vh-notice-icon">
+                            <Bell size={19} />
+                          </div>
+
+                          <div className="vh-notice-details">
+                            <span>{notice.category}</span>
+                            <h3>{notice.title}</h3>
+                            <p>{notice.description}</p>
+                          </div>
+
+                          <ArrowUpRight size={18} className="vh-notice-arrow" />
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="vh-notices-visual">
+              <LocalImage
+                src="/images/veda-notices.jpg"
+                alt="VEDA school community"
+                className="vh-image-holder"
+                loading="lazy"
+              />
+
+              <div className="vh-notices-caption">
+                <CalendarDays size={21} />
+                <div>
+                  <span>STAY CONNECTED</span>
+                  <strong>What's Happening at VEDA?</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 4. ADMISSION UPDATES */}
+
+        <section className="vh-admissions">
+          <div className="vh-container">
+            <div className="vh-admission-panel">
+              <div className="vh-admission-copy">
+                <div className="vh-eyebrow light">
+                  <span />
+                  YOUR JOURNEY STARTS HERE
+                </div>
+
+                <h2>
+                  Discover Your
+                  <br />
+                  <em>Next Chapter.</em>
+                </h2>
+
+                <p>
+                  Interested in becoming part of the VEDA school
+                  community? Find information about the admission
+                  process and get in touch with our school.
+                </p>
+
+                <div className="vh-admission-actions">
+                  <Link to="/admissions" className="vh-btn gold">
+                    Explore Admissions <ArrowUpRight size={18} />
+                  </Link>
+
+                  <Link to="/contact" className="vh-admission-link">
+                    Contact Us <ArrowRight size={17} />
+                  </Link>
+                </div>
+              </div>
+
+              <LocalImage
+                src="/images/veda-admissions.jpg"
+                alt="VEDA school admission photograph"
+                className="vh-admission-photo"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 5. IMPORTANT LINKS */}
+
+        <section className="vh-important">
+          <div className="vh-container">
+            <div className="vh-section-heading">
+              <div>
+                <div className="vh-eyebrow">
+                  <span />
+                  QUICK ACCESS
+                </div>
+
+                <h2>Important <em>Links.</em></h2>
+              </div>
+
+              <p className="vh-important-intro">
+                Find the information you need and explore
+                more of VEDA International School.
+              </p>
+            </div>
+
+            <div className="vh-links-grid">
+              {importantLinks.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <Link className="vh-link-card" to={item.link} key={item.title}>
+                    <div className="vh-link-icon">
+                      <Icon size={23} strokeWidth={1.7} />
+                    </div>
+
+                    <div className="vh-link-details">
+                      <h3>{item.title}</h3>
+                      <p>{item.description}</p>
+                    </div>
+
+                    <ArrowUpRight size={18} className="vh-link-arrow" />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+      </main>
       <Footer />
     </>
   );
 }
+
+export default Home;

@@ -1,10 +1,8 @@
 import React, { useMemo, useState } from "react";
 import {
-  Check,
   ChevronDown,
   Eye,
   Pencil,
-  Search,
   Shield,
   UserRound,
   X,
@@ -12,16 +10,16 @@ import {
 
 import { useTeacher } from "../../../context/TeacherContext";
 import { useClass } from "../../../context/ClassContext";
+import FilterPanel from "./FilterPanel";
+import { applyFilters } from "./filterUtils";
+import { teacherFilters } from "./moduleFilters";
 import {
-  getTeacherPermissions,
-  getTeacherRoles,
+  getTeacherRole,
   getTeacherSubjects,
-  TEACHER_PERMISSION_OPTIONS,
   TEACHER_ROLE_OPTIONS,
 } from "../shared/school";
 import {
   DEPARTMENT_OPTIONS,
-  SCHOOL_STATUS_OPTIONS,
   SUBJECT_OPTIONS,
 } from "../shared/schoolOptions";
 
@@ -54,45 +52,16 @@ function initials(name) {
     .toUpperCase();
 }
 
-function teacherDraft(teacher, classRecords) {
-  const roles = getTeacherRoles(teacher);
-  return {
-    roles,
-    permissionOverrides: { ...(teacher.permissionOverrides || {}) },
-    classes: values(teacher.classes),
-    subjects: getTeacherSubjects(teacher),
-    classTeacherClasses: Array.isArray(teacher.classTeacherClasses)
-      ? values(teacher.classTeacherClasses)
-      : roles.includes("Class Teacher")
-        ? classRecords
-          .filter(
-            (schoolClass) =>
-              String(schoolClass.teacherId) === String(teacher.id),
-          )
-          .map((schoolClass) =>
-            String(
-              schoolClass.classId ||
-                schoolClass.id ||
-                `${schoolClass.grade}-${schoolClass.section}`,
-            ),
-          )
-        : [],
-  };
-}
-
-function selectedTeacherSubjects(teacher, draft) {
-  return getTeacherPermissions({
-    ...teacher,
-    roles: draft.roles,
-    permissionOverrides: draft.permissionOverrides,
-  });
+function teacherDraft(teacher) {
+  return { role: getTeacherRole(teacher) };
 }
 
 export default function TeacherInfo() {
   const { data: teacherData } = useTeacher();
   const { data: classData } = useClass();
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("All");
+  const [filterValues, setFilterValues] = useState({});
+  const [sort, setSort] = useState("newest");
   const [menuId, setMenuId] = useState("");
   const [drawerTeacher, setDrawerTeacher] = useState(null);
   const [draft, setDraft] = useState(null);
@@ -124,100 +93,39 @@ export default function TeacherInfo() {
         .filter((schoolClass) => schoolClass.id && schoolClass.id !== "undefined"),
     [classData.items],
   );
-  const filteredTeachers = teacherData.items.filter((teacher) => {
-    const matchesStatus = status === "All" || (teacher.status || "Active") === status;
-    const query = search.trim().toLowerCase();
-    const haystack = [
-      teacher.name,
-      teacher.email,
-      teacher.employee,
-      ...getTeacherSubjects(teacher),
-      ...values(teacher.classes),
-      ...getTeacherRoles(teacher),
-    ]
-      .join(" ")
-      .toLowerCase();
-    return matchesStatus && (!query || haystack.includes(query));
-  });
+  const filteredTeachers = applyFilters(
+    teacherData.items,
+    search,
+    teacherFilters,
+    filterValues,
+    sort,
+    [
+      "name",
+      "email",
+      "employee",
+      { key: "subjects", value: getTeacherSubjects },
+      "classes",
+      { key: "role", value: getTeacherRole },
+    ],
+  );
 
   function openRoles(teacher) {
     setDrawerTeacher(teacher);
-    setDraft(teacherDraft(teacher, classData.items));
-    setFormError("");
+    setDraft(teacherDraft(teacher));
     setMenuId("");
   }
 
   function closeRoles() {
     setDrawerTeacher(null);
     setDraft(null);
-    setFormError("");
-  }
-
-  function toggleDraftValue(key, value) {
-    setDraft((current) => ({
-      ...current,
-      [key]: current[key].includes(value)
-        ? current[key].filter((item) => item !== value)
-        : [...current[key], value],
-    }));
   }
 
   function saveRoles(event) {
     event.preventDefault();
     if (!drawerTeacher || !draft) return;
-    if (!draft.classes.length && draft.subjects.length) {
-      setFormError("Assign at least one class before assigning subjects.");
-      return;
-    }
-    if (draft.classTeacherClasses.some((classId) => !draft.classes.includes(classId))) {
-      setFormError("Class Teacher responsibilities must be within assigned classes.");
-      return;
-    }
-    if (
-      draft.classTeacherClasses.length > 0 &&
-      !draft.roles.includes("Class Teacher")
-    ) {
-      setFormError("Assign the Class Teacher role before selecting responsibilities.");
-      return;
-    }
-
-    const anotherClassTeacher = classData.items.find(
-      (schoolClass) =>
-        draft.classTeacherClasses.includes(
-          String(schoolClass.classId || schoolClass.id ||
-            `${schoolClass.grade}-${schoolClass.section}`),
-        ) &&
-        schoolClass.teacherId &&
-        String(schoolClass.teacherId) !== String(drawerTeacher.id),
-    );
-    if (anotherClassTeacher) {
-      setFormError("A selected class already has another assigned Class Teacher.");
-      return;
-    }
-
-    const nextSubject = draft.subjects.join(", ");
     teacherData.update(drawerTeacher.id, {
-      roles: [...new Set(draft.roles)],
-      permissionOverrides: { ...draft.permissionOverrides },
-      classes: [...draft.classes],
-      subjects: [...draft.subjects],
-      subject: nextSubject,
-      classTeacherClasses: [...draft.classTeacherClasses],
-    });
-
-    classData.items.forEach((schoolClass) => {
-      const classId = String(
-        schoolClass.classId || schoolClass.id ||
-          `${schoolClass.grade}-${schoolClass.section}`,
-      );
-      const wasClassTeacher =
-        String(schoolClass.teacherId || "") === String(drawerTeacher.id);
-      const shouldBeClassTeacher = draft.classTeacherClasses.includes(classId);
-      if (wasClassTeacher !== shouldBeClassTeacher) {
-        classData.update(schoolClass.id, {
-          teacherId: shouldBeClassTeacher ? drawerTeacher.id : "",
-        });
-      }
+      role: draft.role,
+      roles: undefined,
     });
     closeRoles();
   }
@@ -232,7 +140,7 @@ export default function TeacherInfo() {
       classes: values(teacher.classes),
       classTeacherClasses: Array.isArray(teacher.classTeacherClasses)
         ? values(teacher.classTeacherClasses)
-        : getTeacherRoles(teacher).includes("Class Teacher")
+        : getTeacherRole(teacher) === "Class Teacher"
           ? classData.items
             .filter(
               (schoolClass) =>
@@ -288,6 +196,8 @@ export default function TeacherInfo() {
     );
     const changes = {
       ...editForm,
+      role: editingTeacher ? getTeacherRole(editingTeacher) : "Subject Teacher",
+      roles: undefined,
       name,
       email,
       subjects: [...editForm.subjects],
@@ -312,11 +222,7 @@ export default function TeacherInfo() {
       });
     }
     else
-      teacherData.add({
-        ...changes,
-        roles: ["Subject Teacher"],
-        permissionOverrides: {},
-      });
+      teacherData.add(changes);
     setEditingTeacher(null);
     setShowTeacherForm(false);
     setFormError("");
@@ -333,17 +239,13 @@ export default function TeacherInfo() {
     setEditForm((current) => ({ ...current, [key]: value }));
   }
 
-  const effectivePermissions = draft && drawerTeacher
-    ? selectedTeacherSubjects(drawerTeacher, draft)
-    : {};
-
   return (
     <section className="teacher-management">
       <header className="teacher-management-heading">
         <div>
           <span className="eyebrow">PEOPLE & ACCESS</span>
           <h1>Teachers</h1>
-          <p>Manage teacher profiles, teaching assignments, roles and permissions.</p>
+          <p>Manage teacher profiles, teaching assignments and roles.</p>
         </div>
         <button
           type="button"
@@ -355,31 +257,19 @@ export default function TeacherInfo() {
       </header>
 
       <section className="teacher-directory-card">
-        <div className="teacher-directory-toolbar">
-          <label className="teacher-search">
-            <Search size={18} />
-            <input
-              aria-label="Search teachers"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search name, email, subject or class"
-            />
-          </label>
-          <div className="teacher-status-filters" aria-label="Filter teachers by status">
-            {["All", ...SCHOOL_STATUS_OPTIONS].map((option) => (
-              <button
-                key={option}
-                type="button"
-                className={status === option ? "active" : ""}
-                aria-pressed={status === option}
-                onClick={() => setStatus(option)}
-              >
-                {option}
-                {option === "All" ? ` (${teacherData.items.length})` : ""}
-              </button>
-            ))}
-          </div>
-        </div>
+        <FilterPanel
+          search={search}
+          setSearch={setSearch}
+          filters={teacherFilters}
+          values={filterValues}
+          setValues={setFilterValues}
+          items={teacherData.items}
+          count={filteredTeachers.length}
+          total={teacherData.items.length}
+          sort={sort}
+          setSort={setSort}
+          searchPlaceholder="Search name, email, subject or class"
+        />
         <div className="teacher-management-table-wrap">
           <table className="teacher-management-table">
             <thead>
@@ -387,7 +277,7 @@ export default function TeacherInfo() {
                 <th>Teacher</th>
                 <th>Subjects</th>
                 <th>Assigned classes</th>
-                <th>Roles</th>
+                <th>Role</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -408,11 +298,9 @@ export default function TeacherInfo() {
                   <td>{values(teacher.classes).join(", ") || "—"}</td>
                   <td>
                     <div className="teacher-role-badges">
-                      {getTeacherRoles(teacher).length
-                        ? getTeacherRoles(teacher).map((role) => (
-                            <span className="teacher-role-badge" key={role}>{role}</span>
-                          ))
-                        : <span className="teacher-role-empty">No roles assigned</span>}
+                      <span className="teacher-role-badge">
+                        {getTeacherRole(teacher)}
+                      </span>
                     </div>
                   </td>
                   <td>
@@ -443,7 +331,7 @@ export default function TeacherInfo() {
                             <Eye size={15} /> View Details
                           </button>
                           <button type="button" onClick={() => openRoles(teacher)}>
-                            <Shield size={15} /> Manage Roles
+                            <Shield size={15} /> Manage Role
                           </button>
                           <button type="button" onClick={() => startEdit(teacher)}>
                             <Pencil size={15} /> Edit Teacher
@@ -477,12 +365,9 @@ export default function TeacherInfo() {
         <div className="teacher-drawer-backdrop" onMouseDown={(event) => {
           if (event.target === event.currentTarget) closeRoles();
         }}>
-          <aside className="teacher-roles-drawer" aria-label={`Manage roles for ${drawerTeacher.name}`}>
+          <aside className="teacher-roles-drawer" aria-label={`Manage role for ${drawerTeacher.name}`}>
             <header className="teacher-drawer-header">
-              <div>
-                <span className="eyebrow">TEACHER ACCESS</span>
-                <h2>Manage Roles</h2>
-              </div>
+              <h2>Manage Role</h2>
               <button type="button" aria-label="Close" onClick={closeRoles}><X /></button>
             </header>
             <form className="teacher-drawer-form" onSubmit={saveRoles}>
@@ -492,143 +377,35 @@ export default function TeacherInfo() {
                   <div>
                     <h3>{drawerTeacher.name}</h3>
                     <p>{drawerTeacher.email}</p>
-                    <div className="teacher-role-badges">
-                      {draft.roles.map((role) => (
-                        <span className="teacher-role-badge" key={role}>{role}</span>
-                      ))}
-                      {!draft.roles.length && <span className="teacher-role-empty">No roles assigned</span>}
-                    </div>
-                    <small className={`teacher-status-badge ${(drawerTeacher.status || "Active").toLowerCase()}`}>
-                      {drawerTeacher.status || "Active"}
-                    </small>
                   </div>
                 </section>
 
                 <section className="teacher-drawer-section">
-                  <div className="teacher-drawer-section-heading">
-                    <div><h3>Assign Roles</h3><p>Choose one or more responsibilities.</p></div>
-                  </div>
+                  <h3>Select Teacher Role</h3>
                   <div className="teacher-role-choice-list">
                     {TEACHER_ROLE_OPTIONS.map((role) => (
-                      <label className="teacher-role-choice" key={role.key}>
+                      <label
+                        className={`teacher-role-choice ${draft.role === role.key ? "selected" : ""}`}
+                        key={role.key}
+                      >
                         <input
-                          type="checkbox"
-                          checked={draft.roles.includes(role.key)}
-                          onChange={() => {
-                            toggleDraftValue("roles", role.key);
-                            if (
-                              role.key === "Class Teacher" &&
-                              draft.roles.includes(role.key)
-                            ) {
-                              setDraft((current) => ({
-                                ...current,
-                                classTeacherClasses: [],
-                              }));
-                            }
-                          }}
+                          type="radio"
+                          name={`teacher-role-${drawerTeacher.id}`}
+                          value={role.key}
+                          required
+                          checked={draft.role === role.key}
+                          onChange={() =>
+                            setDraft((current) => ({
+                              ...current,
+                              role: role.key,
+                            }))
+                          }
                         />
                         <span><strong>{role.key}</strong><small>{role.description}</small></span>
                       </label>
                     ))}
                   </div>
                 </section>
-
-                <section className="teacher-drawer-section">
-                  <h3>Set Permissions</h3>
-                  <p className="teacher-section-help">Defaults are combined across roles. You can override individual permissions for this teacher.</p>
-                  <div className="teacher-permission-list">
-                    {TEACHER_PERMISSION_OPTIONS.map((permission) => (
-                      <label className="teacher-permission-toggle" key={permission.key}>
-                        <span>{permission.label}</span>
-                        <input
-                          type="checkbox"
-                          role="switch"
-                          checked={Boolean(effectivePermissions[permission.key])}
-                          onChange={(event) =>
-                            setDraft((current) => ({
-                              ...current,
-                              permissionOverrides: {
-                                ...current.permissionOverrides,
-                                [permission.key]: event.target.checked,
-                              },
-                            }))
-                          }
-                        />
-                      </label>
-                    ))}
-                  </div>
-                </section>
-
-                <section className="teacher-drawer-section">
-                  <h3>Class & Subject Assignments</h3>
-                  <p className="teacher-section-help">Access remains limited to the classes and subjects selected here.</p>
-                  <h4>Assigned classes</h4>
-                  <div className="teacher-assignment-choices">
-                    {classes.map((schoolClass) => (
-                      <label key={schoolClass.id}>
-                        <input
-                          type="checkbox"
-                          checked={draft.classes.includes(schoolClass.id)}
-                          onChange={() => {
-                            toggleDraftValue("classes", schoolClass.id);
-                            if (draft.classes.includes(schoolClass.id) &&
-                              draft.classTeacherClasses.includes(schoolClass.id)) {
-                              toggleDraftValue("classTeacherClasses", schoolClass.id);
-                            }
-                          }}
-                        />
-                        {schoolClass.label}
-                      </label>
-                    ))}
-                  </div>
-                  <h4>Authorised subjects</h4>
-                  <div className="teacher-assignment-choices">
-                    {subjects.map((subject) => (
-                      <label key={subject}>
-                        <input
-                          type="checkbox"
-                          checked={draft.subjects.includes(subject)}
-                          onChange={() => toggleDraftValue("subjects", subject)}
-                        />
-                        {subject}
-                      </label>
-                    ))}
-                  </div>
-                  {draft.roles.includes("Class Teacher") && (
-                    <>
-                      <h4>Class Teacher responsibilities</h4>
-                      <div className="teacher-assignment-choices">
-                        {classes.filter((schoolClass) => draft.classes.includes(schoolClass.id)).map((schoolClass) => (
-                          <label key={schoolClass.id}>
-                            <input
-                              type="checkbox"
-                              checked={draft.classTeacherClasses.includes(schoolClass.id)}
-                              onChange={() => toggleDraftValue("classTeacherClasses", schoolClass.id)}
-                            />
-                            {schoolClass.label}
-                          </label>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </section>
-
-                <section className="teacher-drawer-section teacher-effective-summary">
-                  <h3>Effective Permissions</h3>
-                  <p>Combined from selected roles and your individual overrides.</p>
-                  <div className="teacher-effective-chips">
-                    {TEACHER_PERMISSION_OPTIONS.filter(({ key }) => effectivePermissions[key]).map(({ key, label }) => (
-                      <span key={key}><Check size={14} />{label}</span>
-                    ))}
-                    {!TEACHER_PERMISSION_OPTIONS.some(({ key }) => effectivePermissions[key]) && (
-                      <small>No permissions enabled.</small>
-                    )}
-                  </div>
-                  <p className="teacher-effective-scope">
-                    Scope: {draft.classes.join(", ") || "No classes"} · {draft.subjects.join(", ") || "No subjects"}
-                  </p>
-                </section>
-                {formError && <p className="teacher-form-error" role="alert">{formError}</p>}
               </div>
               <footer className="teacher-drawer-footer">
                 <button type="button" className="secondary-btn" onClick={closeRoles}>Cancel</button>
@@ -651,7 +428,7 @@ export default function TeacherInfo() {
               <span>Department</span><strong>{detailsTeacher.department || "—"}</strong>
               <span>Subjects</span><strong>{getTeacherSubjects(detailsTeacher).join(", ") || "—"}</strong>
               <span>Classes</span><strong>{values(detailsTeacher.classes).join(", ") || "—"}</strong>
-              <span>Roles</span><strong>{getTeacherRoles(detailsTeacher).join(", ") || "None"}</strong>
+              <span>Role</span><strong>{getTeacherRole(detailsTeacher)}</strong>
               <span>Status</span><strong>{detailsTeacher.status || "Active"}</strong>
             </div>
             <button type="button" className="primary-btn" onClick={() => setDetailsTeacher(null)}>Done</button>

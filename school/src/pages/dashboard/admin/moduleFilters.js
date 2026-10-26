@@ -76,12 +76,15 @@ export const teacherFilters = [
   select("subject", "Subject", {
     options: SUBJECT_OPTIONS,
     match: "contains",
+    value: (item) => item.subjects || item.subject,
     includeDynamic: true,
     optionValues: (item) =>
-      String(item.subject || "")
-        .split(",")
-        .map((subject) => subject.trim())
-        .filter(Boolean),
+      Array.isArray(item.subjects)
+        ? item.subjects
+        : String(item.subject || "")
+            .split(",")
+            .map((subject) => subject.trim())
+            .filter(Boolean),
   }),
   select("classes", "Assigned class", {
     match: "contains",
@@ -97,7 +100,10 @@ export const teacherFilters = [
   }),
   select("qualification", "Qualification", { includeDynamic: true }),
   select("gender", "Gender", { options: GENDER_OPTIONS }),
-  select("status", "Status", { options: SCHOOL_STATUS_OPTIONS }),
+  select("status", "Status", {
+    options: SCHOOL_STATUS_OPTIONS,
+    value: (item) => item.status || "Active",
+  }),
   ...dateRange("joining", "Joining date"),
 ];
 

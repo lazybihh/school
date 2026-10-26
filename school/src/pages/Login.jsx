@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import { useSchool } from "../context/SchoolContext";
 import { readAdditionalAccounts } from "../data/demoAccounts";
 import "./Login.css";
@@ -189,28 +190,28 @@ export default function Login() {
 
               <div className="login-collage-photo login-photo-campus">
                 <img
-                  src="/features-hero.jpeg"
+                  src="/images/veda-campus.jpg"
                   alt="School campus"
                 />
               </div>
 
               <div className="login-collage-photo login-photo-students">
                 <img
-                  src="/features-students.jpeg"
+                  src="/images/highlight-academics.jpg"
                   alt="Students learning together"
                 />
               </div>
 
               <div className="login-collage-photo login-photo-teacher">
                 <img
-                  src="/feature-attendance.jfif"
+                  src="/images/highlight-teachers.jpg"
                   alt="Teacher helping students"
                 />
               </div>
 
               <div className="login-collage-photo login-photo-family">
                 <img
-                  src="/home-community.jfif"
+                  src="/images/veda-activities.jpg"
                   alt="Families and students sharing a school community moment"
                 />
               </div>
@@ -360,6 +361,7 @@ export default function Login() {
 
         </div>
       </main>
+      <Footer />
     </>
   );
 }

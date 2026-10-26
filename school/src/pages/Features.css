@@ -46,7 +46,7 @@
   margin: 0;
   color: var(--text);
   font-size: 16px;
-  line-height: 1.75;
+  line-height: 1.7;
 }
 
 .features-page a {
@@ -177,9 +177,9 @@
 .features-hero-copy h1 {
   max-width: 650px;
   margin: 20px 0 19px;
-  font-size: clamp(39px, 4.5vw, 60px);
+  font-size: clamp(38px, 4.2vw, 56px);
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.12;
 }
 
 .features-hero-copy h1 em {
@@ -188,8 +188,8 @@
 
 .features-hero-copy > p {
   max-width: 535px;
-  font-size: 17px;
-  line-height: 1.8;
+  font-size: 16px;
+  line-height: 1.7;
 }
 
 .features-hero-actions {

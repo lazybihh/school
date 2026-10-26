@@ -1,4 +1,6 @@
+
 import React from "react";
+
 import {
   BrowserRouter,
   Routes,
@@ -6,55 +8,76 @@ import {
   Navigate
 } from "react-router-dom";
 
+// VEDA WEBSITE PAGES
+
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Features from "./pages/Features";
-import TeacherFeatures from "./pages/Features/TeacherFeatures";
-import StudentFeatures from "./pages/Features/StudentFeatures";
-import ParentFeatures from "./pages/Features/ParentFeatures";
+import Admissions from "./pages/Admissions";
+import Blog from "./pages/Blog";
+import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
-import Solutions from "./pages/Solutions";
-import TeacherSolution from "./pages/Solutions/TeacherSolution";
-import StudentSolution from "./pages/Solutions/StudentSolution";
-import ParentSolution from "./pages/Solutions/ParentSolution";
-import Working from "./pages/working";
+import { PrivacyPolicy, TermsConditions } from "./pages/Legal";
+
+// SHARED COMPONENTS
+
 import ScrollToTop from "./components/ScrollToTop";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+// DASHBOARDS
 
 import StudentDashboard from "./pages/dashboard/student/StudentDashboard";
 import ParentDashboard from "./pages/dashboard/parent/ParentDashboard";
 import TeacherDashboard from "./pages/dashboard/teacher/TeacherDashboard";
 import AdminDashboard from "./pages/dashboard/admin/AdminDashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
+
+// SHARED CONTEXT
+
 import { SchoolProvider } from "./context/SchoolContext";
+
+// DASHBOARD STYLES
 
 import "./pages/dashboard/admin/Admin.css";
 import "./pages/dashboard/shared/Role.css";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <SchoolProvider>
         <ScrollToTop />
 
         <Routes>
+
+          {/* VEDA PUBLIC WEBSITE */}
+
           <Route path="/" element={<Home />} />
+
           <Route path="/about" element={<About />} />
-          <Route path="/features" element={<Features />} />
-          <Route path="/features/teacher" element={<TeacherFeatures />} />
-          <Route path="/features/student" element={<StudentFeatures />} />
-          <Route path="/features/parent" element={<ParentFeatures />} />
+
+          <Route path="/admissions" element={<Admissions />} />
+
+          <Route path="/blog-news" element={<Blog />} />
+
+          <Route path="/gallery" element={<Gallery />} />
+
           <Route path="/contact" element={<Contact />} />
+
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+
+          <Route path="/terms" element={<TermsConditions />} />
+
           <Route path="/login" element={<Login />} />
-          <Route path="/solutions" element={<Solutions />} />
-          <Route path="/solutions/teacher" element={<TeacherSolution />} />
-          <Route path="/solutions/student" element={<StudentSolution />} />
-          <Route path="/solutions/parent" element={<ParentSolution />} />
-          <Route path="/working" element={<Working />} />
+
+
+          {/* DASHBOARD REDIRECT */}
+
           <Route
             path="/dashboard"
             element={<ProtectedRoute />}
           />
+
+
+          {/* STUDENT DASHBOARD */}
 
           <Route
             path="/dashboard/student/*"
@@ -65,6 +88,9 @@ export default function App() {
             }
           />
 
+
+          {/* PARENT DASHBOARD */}
+
           <Route
             path="/dashboard/parent/*"
             element={
@@ -73,6 +99,9 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+
+          {/* TEACHER DASHBOARD */}
 
           <Route
             path="/dashboard/teacher/*"
@@ -83,6 +112,9 @@ export default function App() {
             }
           />
 
+
+          {/* ADMIN DASHBOARD */}
+
           <Route
             path="/dashboard/admin/*"
             element={
@@ -92,11 +124,16 @@ export default function App() {
             }
           />
 
+
+          {/* UNKNOWN ROUTES */}
+
           <Route
             path="*"
             element={<Navigate to="/" replace />}
           />
+
         </Routes>
+
       </SchoolProvider>
     </BrowserRouter>
   );

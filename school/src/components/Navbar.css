@@ -1,735 +1,365 @@
 
-.navbar {
+/* ===================================
+   VEDA INTERNATIONAL SCHOOL NAVBAR
+=================================== */
+
+.veda-header {
+  width: 100%;
   position: sticky;
   top: 0;
   z-index: 1000;
-  width: 100%;
-  height: 76px;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid #e8edf5;
-  transition: box-shadow 0.25s ease;
+  background: #ffffff;
+  font-family: "Inter", sans-serif;
 }
 
-.navbar:hover {
-  box-shadow: 0 5px 24px rgba(22, 55, 105, 0.05);
+/* TOP BAR */
+
+.veda-topbar {
+  background: #082b55;
+  color: #ffffff;
+  font-size: 12px;
 }
 
-.navbar-container {
-  height: 100%;
+.veda-topbar-inner {
+  max-width: 1440px;
+  margin: auto;
+  padding: 9px 5%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.veda-motto {
+  letter-spacing: 0.3px;
+  font-weight: 500;
+}
+
+.veda-motto span {
+  color: #e5b545;
+  margin: 0 7px;
+}
+
+.veda-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.veda-topbar-right span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* MAIN NAVBAR */
+
+.veda-navbar {
+  position: relative;
+  background: #ffffff;
+  border-bottom: 1px solid #edf0f5;
+  box-shadow: 0 5px 18px rgba(8, 43, 85, 0.045);
+}
+
+.veda-navbar-inner {
+  max-width: 1440px;
+  min-height: 108px;
+  margin: auto;
+  padding: 10px 5%;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 25px;
 }
 
-/* Logo */
+/* BRAND */
 
-.navbar-logo {
-  display: inline-flex;
+.veda-brand {
+  display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  text-decoration: none;
   flex-shrink: 0;
-  text-decoration: none;
+  border-radius: 8px;
 }
 
-.logo-icon {
-  width: 46px;
-  height: 46px;
+.veda-logo {
+  width: 82px;
+  height: 82px;
+  object-fit: contain;
+}
+
+.veda-brand-text {
+  display: flex;
+  flex-direction: column;
+  color: #082b55;
+}
+
+.veda-brand-name {
+  font-family: Georgia, serif;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.veda-brand-subtitle {
+  font-family: Georgia, serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  margin-top: 4px;
+}
+
+.veda-brand-location {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  margin-top: 3px;
+  color: #b88623;
+}
+
+/* NAVIGATION LINKS */
+
+.veda-nav-links {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--blue);
-  background: #fff0a8;
-  border: 1px solid #f6e58d;
-  border-radius: 14px;
-  transition: transform 0.25s ease, background 0.25s ease;
+  gap: 27px;
 }
 
-.navbar-logo:hover .logo-icon {
-  transform: translateY(-2px);
-  background: #ffe779;
-}
-
-.logo-text {
-  color: #10234b;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 27px;
-  font-weight: 800;
-  letter-spacing: -1.2px;
-  white-space: nowrap;
-}
-
-.logo-text span {
-  color: var(--blue);
-}
-
-.logo-text i {
-  color: #f5c928;
-  font-style: normal;
-}
-
-/* Navigation layout */
-
-.navbar-links {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 21px;
-  flex: 1;
-  min-width: 0;
-}
-
-.navbar-main-links {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 21px;
-}
-
-.navbar-main-links > a {
+.veda-nav-links > a:not(.veda-login-btn) {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: 46px;
-  color: #40516f;
-  font-size: 17px;
-  font-weight: 600;
+  color: #17345a;
   text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
   white-space: nowrap;
-  transition: color 0.2s ease;
+
+  transition: color 0.25s ease;
 }
 
-.navbar-main-links > a:hover,
-.navbar-main-links > a.nav-active {
-  color: var(--blue);
+.veda-nav-links > a:not(.veda-login-btn):hover,
+.veda-nav-links > a.active {
+  color: #bb8520;
 }
 
-.navbar-main-links > a.nav-active::after {
+.veda-nav-links > a:not(.veda-login-btn)::after {
   content: "";
   position: absolute;
   left: 0;
-  right: 0;
-  bottom: -2px;
-  height: 3px;
-  background: var(--blue);
-  border-radius: 5px;
+  bottom: -9px;
+  width: 0;
+  height: 2px;
+  background: #d9a329;
+  transition: width 0.25s ease;
 }
 
-.navbar-features-menu {
-  position: relative;
-  display: flex;
-  align-items: center;
+.veda-nav-links > a:not(.veda-login-btn):hover::after,
+.veda-nav-links > a.active::after {
+  width: 100%;
 }
 
-.navbar-features-trigger {
-  position: relative;
+/* LOGIN BUTTON */
+
+.veda-login-btn {
   display: inline-flex;
-  align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-height: 46px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: #40516f;
-  font: inherit;
-  font-size: 17px;
-  font-weight: 600;
-  white-space: nowrap;
-  transition: color 0.2s ease;
-}
-
-.navbar-features-trigger:hover,
-.navbar-features-trigger.nav-active,
-.navbar-features-menu.open .navbar-features-trigger {
-  color: var(--blue);
-}
-
-.navbar-features-trigger.nav-active::after {
-  position: absolute;
-  right: 0;
-  bottom: -2px;
-  left: 0;
-  height: 3px;
-  border-radius: 5px;
-  background: var(--blue);
-  content: "";
-}
-
-.navbar-features-trigger svg {
-  transition: transform 0.2s ease;
-}
-
-.navbar-features-menu.open .navbar-features-trigger svg {
-  transform: rotate(180deg);
-}
-
-.navbar-features-dropdown {
-  position: absolute;
-  z-index: 1010;
-  top: calc(100% + 10px);
-  left: 50%;
-  display: grid;
-  width: 290px;
-  padding: 12px;
-  border: 1px solid #e8edf5;
-  border-radius: 17px;
-  background: #fff;
-  box-shadow: 0 20px 48px rgba(19, 47, 87, 0.17);
-  pointer-events: none;
-  visibility: hidden;
-  transform: translate(-50%, 8px);
-  transition: transform 0.18s ease, visibility 0s linear 0.18s;
-}
-
-@media (min-width: 1051px) and (hover: hover) {
-  .navbar-features-menu::after {
-    position: absolute;
-    top: 100%;
-    right: -12px;
-    left: -12px;
-    height: 10px;
-    content: "";
-  }
-
-  .navbar-features-menu:hover .navbar-features-dropdown,
-  .navbar-features-menu:focus-within .navbar-features-dropdown {
-    pointer-events: auto;
-    visibility: visible;
-    transform: translate(-50%, 0);
-    transition-delay: 0s;
-  }
-}
-
-.navbar-features-menu.open .navbar-features-dropdown {
-  pointer-events: auto;
-  visibility: visible;
-  transform: translate(-50%, 0);
-  transition-delay: 0s;
-}
-
-.navbar-dropdown-heading {
-  padding: 8px 10px 9px;
-  color: #9aa7ba;
-  font-size: 12px;
-  font-weight: 850;
-  letter-spacing: 1.15px;
-}
-
-.navbar-features-dropdown > a {
-  display: flex;
   align-items: center;
-  gap: 11px;
-  min-height: 46px;
-  padding: 6px 8px;
-  border-radius: 10px;
-  text-decoration: none;
-  transition: background 0.18s ease, transform 0.18s ease;
-}
+  gap: 13px;
 
-.navbar-features-dropdown > a:hover,
-.navbar-features-dropdown > a:focus-visible {
-  background: #f5f8fe;
-  transform: translateX(2px);
-}
+  padding: 13px 24px;
+  border-radius: 30px;
 
-.navbar-dropdown-icon {
-  display: grid;
-  place-items: center;
-  flex: 0 0 32px;
-  width: 32px;
-  height: 32px;
-  border-radius: 11px;
-}
+  background: #e8b746;
+  color: #082b55;
 
-.navbar-dropdown-icon.all,
-.navbar-dropdown-icon.teacher {
-  color: #2458e6;
-  background: #eaf0ff;
-}
-
-.navbar-dropdown-icon.student {
-  color: #6753c7;
-  background: #eeeaff;
-}
-
-.navbar-dropdown-icon.parent {
-  color: #11876d;
-  background: #e5f7f1;
-}
-
-.navbar-features-dropdown > a > span:last-child {
-  display: grid;
-  gap: 3px;
-}
-
-.navbar-features-dropdown strong {
-  color: #193251;
-  font-size: 14px;
-  font-weight: 750;
-}
-
-.navbar-features-dropdown small {
-  color: #8290a4;
-  font-size: 12px;
-}
-
-.navbar-solutions-menu .navbar-features-dropdown {
-  width: 272px;
-  padding: 9px;
-}
-
-/* Login and Request Demo */
-
-.navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.navbar-login {
-  min-height: 44px;
-  padding: 0 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: #17478e;
-  background: #edf4ff;
-  border: 1px solid transparent;
-  border-radius: 28px;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 650;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.navbar-login:hover,
-.navbar-login.nav-active {
-  background: #e1edff;
-  border-color: #d4e4ff;
-}
-
-.navbar-btn {
-  min-height: 44px;
-  padding: 0 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: #fff !important;
-  background: var(--blue);
-  border: 1px solid var(--blue);
-  border-radius: 28px;
-  box-shadow: 0 5px 14px rgba(23, 78, 166, 0.15);
-  font-family: inherit;
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
-  visibility: visible;
-  opacity: 1;
-  transition: background 0.2s ease, transform 0.2s ease,
-    box-shadow 0.2s ease;
+
+  box-shadow: 0 5px 15px rgba(217, 163, 41, 0.15);
+  transition: all 0.25s ease;
 }
 
-.navbar-btn:hover {
-  color: #fff !important;
-  background: #123b7a;
-  border-color: #123b7a;
+.veda-login-btn:hover {
+  background: #082b55;
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(23, 78, 166, 0.2);
 }
 
-.navbar-btn svg {
-  display: block;
-  flex-shrink: 0;
-  color: #fff;
-  transition: transform 0.2s ease;
+.veda-navbar a:focus-visible,
+.veda-navbar button:focus-visible,
+.veda-brand:focus-visible {
+  outline: 3px solid #e8b746;
+  outline-offset: 4px;
 }
 
-.navbar-btn:hover svg {
-  transform: translate(3px, -3px);
-}
+/* MOBILE MENU BUTTON */
 
-/* Mobile menu toggle */
-
-.navbar-toggle {
+.veda-mobile-toggle {
   display: none;
-  width: 44px;
-  height: 44px;
   align-items: center;
   justify-content: center;
-  color: var(--blue);
-  background: #edf4ff;
-  border: 1px solid #e0eafa;
-  border-radius: 13px;
+
+  width: 43px;
+  height: 43px;
+
+  border: 1px solid #e5eaf1;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #082b55;
+
   cursor: pointer;
-  transition: background 0.2s ease;
 }
 
-.navbar-toggle:hover {
-  background: #fff0a8;
-}
-
-/* Laptop screens */
+/* RESPONSIVE */
 
 @media (max-width: 1200px) {
-  .navbar-container {
-    gap: 16px;
-  }
 
-  .navbar-links {
-    gap: 16px;
-  }
-
-  .navbar-main-links {
+  .veda-nav-links {
     gap: 17px;
   }
 
-  .navbar-main-links > a {
-    font-size: 15px;
-  }
-
-  .logo-text {
-    font-size: 25px;
-  }
-
-  .navbar-login {
-    padding: 0 13px;
-  }
-
-  .navbar-btn {
-    padding: 0 16px;
-  }
-}
-
-/* Tablet and mobile */
-
-@media (max-width: 1050px) {
-  .navbar {
-    height: 74px;
-  }
-
-  .navbar-container {
-    gap: 12px;
-  }
-
-  .logo-icon {
-    width: 44px;
-    height: 44px;
-  }
-
-  .logo-text {
-    font-size: 25px;
-  }
-
-  .navbar-toggle {
-    display: flex;
-    flex-shrink: 0;
-  }
-
-  .navbar-links {
-    position: absolute;
-    top: 74px;
-    left: 0;
-    right: 0;
-    display: none;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 14px;
-    max-height: calc(100vh - 74px);
-    max-height: calc(100dvh - 74px);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding: 18px 22px 24px;
-    background: #fff;
-    border-bottom: 1px solid #e8edf5;
-    box-shadow: 0 18px 30px rgba(20, 45, 85, 0.1);
-  }
-
-  .navbar-links.active {
-    display: flex;
-    animation: navbarDrop 0.22s ease;
-  }
-
-  .navbar-main-links {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 4px;
-    width: 100%;
-  }
-
-  .navbar-main-links > a {
-    min-height: 46px;
-    padding: 0 14px;
-    border-radius: 12px;
-    font-size: 17px;
-  }
-
-  .navbar-features-menu {
-    display: block;
-    width: 100%;
-  }
-
-  .navbar-features-trigger {
-    justify-content: space-between;
-    width: 100%;
-    min-height: 46px;
-    padding: 0 14px;
-    border-radius: 12px;
-    font-size: 17px;
-  }
-
-  .navbar-features-trigger:hover,
-  .navbar-features-trigger.nav-active,
-  .navbar-features-menu.open .navbar-features-trigger {
-    background: #edf4ff;
-  }
-
-  .navbar-features-trigger.nav-active::after {
-    display: none;
-  }
-
-  .navbar-features-dropdown {
-    position: static;
-    display: none;
-    width: auto;
-    margin: 5px 0 4px 12px;
-    padding: 9px;
-    border: 0;
-    border-left: 2px solid #e6edfa;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    opacity: 1;
-    pointer-events: auto;
-    visibility: visible;
-    transform: none;
-    transition: none;
-  }
-
-  .navbar-features-menu.open .navbar-features-dropdown {
-    display: grid;
-  }
-
-  .navbar-features-dropdown > a {
-    min-height: 44px;
-  }
-
-  .navbar-solutions-menu .navbar-features-dropdown {
-    width: auto;
-  }
-
-  .navbar-main-links > a:hover,
-  .navbar-main-links > a.nav-active {
-    background: #edf4ff;
-  }
-
-  .navbar-main-links > a.nav-active::after {
-    display: none;
-  }
-
-  .navbar-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 9px;
-    width: 100%;
-    padding-top: 14px;
-    border-top: 1px solid #edf0f5;
-  }
-
-  .navbar-login,
-  .navbar-btn {
-    width: 100%;
-    min-height: 46px;
-    box-sizing: border-box;
-    border-radius: 12px;
+  .veda-nav-links > a:not(.veda-login-btn) {
     font-size: 14px;
   }
 
-  .navbar-login {
-    justify-content: flex-start;
-    padding: 0 14px;
-  }
-}
-
-/* Mobile animation */
-
-@keyframes navbarDrop {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
+  .veda-brand-name {
+    font-size: 33px;
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .veda-logo {
+    width: 72px;
+    height: 72px;
   }
-}
 
-/* Reduced motion accessibility */
-
-@media (prefers-reduced-motion: reduce) {
-  .navbar *,
-  .navbar *::before,
-  .navbar *::after {
-    animation: none !important;
-    transition: none !important;
+  .veda-brand-subtitle {
+    font-size: 12px;
   }
-}
 
-/* Features menu: compact brand panel with clear audience routes */
-.navbar-feature-dropdown {
-  width: 350px;
-  padding: 10px;
-  overflow: hidden;
-  border: 1px solid #dfe8f6;
-  border-radius: 17px;
-  background: #fff;
-  box-shadow: 0 18px 42px rgba(16, 43, 83, 0.18);
-}
-
-.navbar-feature-dropdown-heading {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 13px 14px;
-  border-radius: 12px;
-  background: linear-gradient(120deg, #102b53, #174ea6);
-}
-
-.navbar-feature-dropdown-mark {
-  display: grid;
-  flex: 0 0 34px;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border-radius: 10px;
-  color: #102b53;
-  background: #ffc83d;
-}
-
-.navbar-feature-dropdown-heading > span:last-child,
-.navbar-feature-dropdown-links a > span:nth-child(2) {
-  display: grid;
-  gap: 3px;
-}
-
-.navbar-feature-dropdown-heading small {
-  color: #dbe8fb;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.1px;
-}
-
-.navbar-feature-dropdown-heading strong {
-  color: #fff;
-  font-size: 14px;
-  font-weight: 750;
-}
-
-.navbar-feature-dropdown-links {
-  display: grid;
-  gap: 3px;
-  padding-top: 7px;
-}
-
-.navbar-feature-dropdown-links > a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 44px;
-  padding: 5px 8px;
-  border-radius: 10px;
-  text-decoration: none;
-  transition: background 0.18s ease, transform 0.18s ease;
-}
-
-.navbar-feature-dropdown-links > a:hover,
-.navbar-feature-dropdown-links > a:focus-visible {
-  background: #f1f6ff;
-  transform: translateX(2px);
-}
-
-.navbar-feature-link-icon {
-  display: grid;
-  flex: 0 0 31px;
-  width: 31px;
-  height: 31px;
-  place-items: center;
-  border-radius: 9px;
-  color: #2458e6;
-  background: #eaf1ff;
-}
-
-.navbar-feature-dropdown-links strong {
-  color: #102b53;
-  font-size: 14px;
-  font-weight: 750;
-}
-
-.navbar-feature-dropdown-links small {
-  color: #71839b;
-  font-size: 12px;
-}
-
-.navbar-feature-dropdown-links > a > svg {
-  flex-shrink: 0;
-  margin-left: auto;
-  color: #8193ad;
-}
-
-.navbar-feature-dropdown-links .navbar-feature-overview {
-  margin-bottom: 2px;
-  background: #fff7dc;
-}
-
-.navbar-feature-dropdown-links .navbar-feature-overview:hover,
-.navbar-feature-dropdown-links .navbar-feature-overview:focus-visible {
-  background: #fff0bf;
-}
-
-.navbar-feature-overview .navbar-feature-link-icon {
-  color: #174ea6;
-  background: #ffe89a;
+  .veda-brand-location {
+    font-size: 10px;
+  }
 }
 
 @media (max-width: 1050px) {
-  .navbar-feature-dropdown {
-    width: auto;
-    margin: 5px 0 4px 12px;
-    padding: 8px;
-    border: 1px solid #e4ebf5;
-    border-left: 3px solid #2458e6;
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 7px 18px rgba(16, 43, 83, 0.06);
+
+  .veda-navbar-inner {
+    min-height: 96px;
   }
 
-  .navbar-features-menu.open .navbar-feature-dropdown {
-    left: auto;
-    transform: none;
-    transition: none;
+  .veda-mobile-toggle {
+    display: flex;
   }
 
-  .navbar-feature-dropdown-heading {
-    padding: 10px 11px;
+  .veda-nav-links {
+    display: none;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+
+    padding: 24px 5%;
+    background: #ffffff;
+    border-top: 1px solid #edf0f5;
+    box-shadow: 0 15px 25px rgba(8, 43, 85, 0.08);
+
+    flex-direction: column;
+    align-items: stretch;
+    gap: 23px;
   }
 
-  .navbar-feature-dropdown-links {
-    gap: 2px;
+  .veda-nav-links.veda-nav-open {
+    display: flex;
   }
 
-  .navbar-feature-dropdown-links > a {
-    min-height: 42px;
+  .veda-nav-links > a:not(.veda-login-btn) {
+    width: fit-content;
+    font-size: 16px;
+  }
+
+  .veda-login-btn {
+    width: fit-content;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .veda-topbar-inner {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .veda-topbar-right {
+    display: none;
+  }
+
+  .veda-motto {
+    font-size: 10px;
+  }
+
+  .veda-navbar-inner {
+    padding: 10px 5%;
+    min-height: 84px;
+  }
+
+  .veda-logo {
+    width: 62px;
+    height: 62px;
+  }
+
+  .veda-brand-name {
+    font-size: 29px;
+  }
+
+  .veda-brand-subtitle {
+    font-size: 10px;
+  }
+
+  .veda-brand-location {
+    font-size: 9px;
+  }
+}
+
+.veda-header .veda-topbar,
+.veda-header .veda-motto {
+  font-size: 13px;
+}
+
+.veda-header .veda-nav-links > a:not(.veda-login-btn),
+.veda-header .veda-login-btn {
+  font-size: 17px;
+}
+
+.veda-header .veda-nav-links > .veda-login-btn {
+  font-size: 16px;
+}
+
+.veda-header .veda-brand-subtitle,
+.veda-header .veda-brand-location {
+  font-size: 12px;
+}
+
+@media (max-width: 1200px) {
+  .veda-header .veda-nav-links > a:not(.veda-login-btn) {
+    font-size: 16px;
+  }
+
+  .veda-header .veda-nav-links > .veda-login-btn {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .veda-header .veda-nav-links > a:not(.veda-login-btn) {
+    font-size: 17px;
+  }
+
+  .veda-header .veda-nav-links > .veda-login-btn {
+    font-size: 16px;
   }
 }

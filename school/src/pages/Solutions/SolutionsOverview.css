@@ -38,7 +38,7 @@
   margin: 0;
   color: var(--muted);
   font-size: 16px;
-  line-height: 1.75;
+  line-height: 1.7;
 }
 
 .solution-overview em {
@@ -132,9 +132,9 @@
 .solution-hero-copy h1 {
   max-width: 640px;
   margin: 20px 0;
-  font-size: clamp(40px, 4.5vw, 61px);
+  font-size: clamp(38px, 4.2vw, 56px);
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.12;
 }
 
 .solution-hero-copy h1 em {
@@ -143,7 +143,7 @@
 
 .solution-hero-copy > p {
   max-width: 550px;
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .solution-hero-actions {
