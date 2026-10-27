@@ -1,0 +1,617 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+/* =========================================
+   VEDA INTERNATIONAL SCHOOL
+   FACULTY PAGE
+========================================= */
+
+.veda-faculty {
+  --fc-navy: #082b55;
+  --fc-deep: #061c36;
+  --fc-gold: #e8b648;
+  --fc-ivory: #fcf8f0;
+  --fc-text: #183454;
+  --fc-muted: #68788c;
+  --fc-border: #e3e8ee;
+
+  width: 100%;
+  background: #ffffff;
+  color: var(--fc-text);
+  overflow: hidden;
+  font-family: "Inter", Arial, sans-serif;
+}
+
+.veda-faculty * {
+  box-sizing: border-box;
+}
+
+.fc-container {
+  width: calc(100% - 80px);
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* =========================================
+   SECTIONS
+========================================= */
+
+.fc-section {
+  padding: 68px 0 76px;
+  background: #ffffff;
+}
+
+.fc-section-tint {
+  background: var(--fc-ivory);
+}
+
+.fc-heading {
+  margin-bottom: 28px;
+}
+
+.fc-eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #b78324;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.fc-heading h1,
+.fc-heading h2 {
+  margin: 0 0 14px;
+  color: var(--fc-navy);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(30px, 3vw, 43px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.fc-lead {
+  max-width: 720px;
+  margin: 0;
+  color: var(--fc-muted);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* =========================================
+   SEARCH AND SORT
+========================================= */
+
+.fc-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 210px;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.fc-search,
+.fc-sort {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  height: 52px;
+  padding: 0 17px;
+  border: 1px solid var(--fc-border);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--fc-muted);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.fc-search:hover,
+.fc-sort:hover {
+  border-color: #bdc9d8;
+}
+
+.fc-search:focus-within,
+.fc-sort:focus-within {
+  border-color: var(--fc-navy);
+  box-shadow: 0 0 0 3px rgba(8, 43, 85, 0.08);
+}
+
+.fc-search input,
+.fc-sort select {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--fc-navy);
+  font: inherit;
+  font-size: 14px;
+}
+
+.fc-search input {
+  padding-left: 12px;
+}
+
+.fc-search input::placeholder {
+  color: #8995a3;
+}
+
+.fc-sort select {
+  cursor: pointer;
+}
+
+/* =========================================
+   FILTERS
+========================================= */
+
+.fc-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 22px;
+}
+
+.fc-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 17px;
+  border: 1px solid #dce4ed;
+  border-radius: 30px;
+  background: #ffffff;
+  color: var(--fc-navy);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fc-filter:hover {
+  border-color: var(--fc-gold);
+  background: #fff8e8;
+  color: #9a6919;
+}
+
+.fc-filter.is-active {
+  border-color: var(--fc-navy);
+  background: var(--fc-navy);
+  color: #ffffff;
+}
+
+.fc-filter.is-active:hover {
+  background: #123e70;
+}
+
+.fc-count {
+  margin: 0 0 16px;
+  color: var(--fc-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================================
+   FACULTY CAROUSEL
+========================================= */
+
+.fc-slider {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.fc-track {
+  display: flex;
+  width: 100%;
+  gap: 14px;
+  padding: 8px 0 19px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: #c5ced9 transparent;
+}
+
+.fc-track::-webkit-scrollbar {
+  height: 5px;
+}
+
+.fc-track::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.fc-track::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #c5ced9;
+}
+
+/* =========================================
+   FACULTY CARDS
+========================================= */
+
+.fc-card {
+  display: flex;
+  flex: 0 0 calc((100% - 42px) / 4);
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #edf0f3;
+  border-radius: 13px;
+  background: #ffffff;
+  box-shadow: 0 5px 18px rgba(6, 28, 54, 0.045);
+  scroll-snap-align: start;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.fc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 13px 28px rgba(6, 28, 54, 0.1);
+}
+
+/* FIXED: balanced portrait area */
+
+.fc-photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 270px;
+  min-height: 270px;
+  flex: 0 0 270px;
+  overflow: hidden;
+  background: #eeece9;
+  border-bottom: 3px solid var(--fc-gold);
+}
+
+.fc-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 24%;
+  transition: transform 0.35s ease;
+}
+
+.fc-card:hover .fc-photo img {
+  transform: scale(1.025);
+}
+
+.fc-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #e8edf4, #d7e0eb);
+  color: var(--fc-navy);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 52px;
+  font-weight: 700;
+}
+
+/* =========================================
+   CARD INFORMATION
+========================================= */
+
+.fc-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  padding: 17px 16px 20px;
+}
+
+.fc-name {
+  margin: 0 0 12px;
+  color: var(--fc-navy);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: break-word;
+}
+
+.fc-role {
+  margin: 0;
+  padding-left: 10px;
+  border-left: 3px solid var(--fc-gold);
+  color: var(--fc-muted);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+/* =========================================
+   CAROUSEL ARROWS
+========================================= */
+
+.fc-arrow {
+  position: absolute;
+  top: 123px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid #dce4ed;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--fc-navy);
+  box-shadow: 0 4px 14px rgba(6, 28, 54, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fc-arrow-left {
+  left: -20px;
+}
+
+.fc-arrow-right {
+  right: -20px;
+}
+
+.fc-arrow:hover:not(:disabled) {
+  border-color: var(--fc-navy);
+  background: var(--fc-navy);
+  color: var(--fc-gold);
+  transform: scale(1.07);
+}
+
+.fc-arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.fc-empty {
+  width: 100%;
+  padding: 48px 20px;
+  border: 1px dashed #d9e1eb;
+  border-radius: 13px;
+  background: #fafbfd;
+  color: var(--fc-muted);
+  text-align: center;
+  font-size: 15px;
+}
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.fc-stats {
+  margin-bottom: 48px;
+  padding: 47px 0;
+  background: #f8f4eb;
+  border-top: 1px solid #eee6d7;
+  border-bottom: 1px solid #eee6d7;
+}
+
+.fc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+}
+
+.fc-stat {
+  padding: 8px 22px;
+  text-align: center;
+}
+
+.fc-stat + .fc-stat {
+  border-left: 1px solid #e2d9c8;
+}
+
+.fc-stat strong {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--fc-navy);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(27px, 3vw, 38px);
+  line-height: 1.2;
+}
+
+.fc-stat span {
+  display: block;
+  color: #6c7480;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+  .fc-container {
+    width: calc(100% - 60px);
+  }
+
+  .fc-card {
+    flex-basis: calc((100% - 28px) / 3);
+  }
+
+  .fc-photo {
+    height: 260px;
+    min-height: 260px;
+    flex-basis: 260px;
+  }
+
+  .fc-arrow {
+    top: 118px;
+  }
+}
+
+@media (max-width: 800px) {
+  .fc-container {
+    width: calc(100% - 44px);
+  }
+
+  .fc-section {
+    padding: 54px 0 60px;
+  }
+
+  .fc-card {
+    flex-basis: calc((100% - 14px) / 2);
+  }
+
+  .fc-photo {
+    height: 265px;
+    min-height: 265px;
+    flex-basis: 265px;
+  }
+
+  .fc-arrow {
+    top: 120px;
+  }
+
+  .fc-tools {
+    grid-template-columns: minmax(0, 1fr) 175px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .fc-container {
+    width: calc(100% - 32px);
+  }
+
+  .fc-section {
+    padding: 43px 0 52px;
+  }
+
+  .fc-heading {
+    margin-bottom: 23px;
+  }
+
+  .fc-heading h1,
+  .fc-heading h2 {
+    font-size: 30px;
+  }
+
+  .fc-lead {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .fc-tools {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .fc-search,
+  .fc-sort {
+    height: 48px;
+  }
+
+  .fc-filters {
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-right: -16px;
+    padding: 2px 16px 9px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .fc-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fc-filter {
+    flex-shrink: 0;
+    min-height: 36px;
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+
+  .fc-track {
+    gap: 12px;
+  }
+
+  .fc-card {
+    flex-basis: 86%;
+  }
+
+  .fc-photo {
+    height: 285px;
+    min-height: 285px;
+    flex-basis: 285px;
+  }
+
+  .fc-photo img {
+    object-position: center 22%;
+  }
+
+  .fc-info {
+    padding: 16px;
+  }
+
+  .fc-name {
+    font-size: 19px;
+  }
+
+  .fc-arrow {
+    top: 132px;
+    width: 35px;
+    height: 35px;
+  }
+
+  .fc-arrow-left {
+    left: -10px;
+  }
+
+  .fc-arrow-right {
+    right: -10px;
+  }
+
+  .fc-stats {
+    margin-bottom: 30px;
+    padding: 30px 0;
+  }
+
+  .fc-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .fc-stat {
+    padding: 19px 12px;
+  }
+
+  .fc-stat + .fc-stat {
+    border-left: 0;
+    border-top: 1px solid #e2d9c8;
+  }
+}
+
+@media (max-width: 380px) {
+  .fc-card {
+    flex-basis: 90%;
+  }
+
+  .fc-photo {
+    height: 260px;
+    min-height: 260px;
+    flex-basis: 260px;
+  }
+
+  .fc-arrow {
+    top: 119px;
+  }
+}
