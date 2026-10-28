@@ -1,282 +1,164 @@
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
+  ArrowRight,
   ArrowUpRight,
   CalendarDays,
-  ChevronRight,
-  School
+  Clock3,
+  BookOpen,
+  Sparkles
 } from "lucide-react";
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PageBanner from "../components/PageBanner";
 import "./Blog.css";
 
-const categories = ["All", "School News", "Announcements", "Updates"];
+/*
+  BLOG DATA
+  Kept here to maintain your four-file requirement.
+  These are sample articles, not verified school news.
+*/
 
-const newsItems = [
+export const blogs = [
   {
+    id: 1,
+    slug: "young-minds-big-dreams",
+    category: "Student Life",
+    date: "October 12, 2026",
+    readTime: "3 min read",
+    featured: true,
+    image: "/veda_blog_7_cropped/blog-1.jpg",
+    title: "Small Steps, Big Dreams: Building a Brighter Future",
+    description:
+      "Every great journey begins with curiosity. From discovering new ideas in the classroom to building friendships and exploring individual talents, school life creates countless opportunities to learn and grow. Discover how meaningful everyday experiences inspire confidence, creativity and a lifelong love for learning.",
+    content: [
+      "Every meaningful learning journey begins with curiosity. When students are encouraged to explore ideas, ask questions and share their perspectives, the classroom becomes a place of discovery.",
+      "At VEDA International School, we believe that education should encourage creativity, collaboration and confidence. Through engaging learning experiences, children can develop important skills that extend beyond textbooks.",
+      "Small achievements, new friendships and everyday discoveries all contribute to a brighter future. Each step forward is an opportunity to learn, grow and discover new possibilities."
+    ]
+  },
+  {
+    id: 2,
+    slug: "celebration-of-talent",
+    category: "Events",
+    date: "October 8, 2026",
+    readTime: "2 min read",
+    image: "/veda_blog_7_cropped/blog-2.jpg",
+    title: "A Celebration of Talent and Unity",
+    description:
+      "Celebrating creativity, confidence and the joy of coming together through memorable school experiences.",
+    content: [
+      "School celebrations provide students with opportunities to express themselves, discover their interests and appreciate the talents of others.",
+      "Whether through music, dance, art or collaborative activities, these experiences encourage confidence, teamwork and a sense of belonging.",
+      "Every celebration reminds us that learning also happens through shared experiences and the joy of participating together."
+    ]
+  },
+  {
+    id: 3,
+    slug: "learning-beyond-classrooms",
+    category: "Student Life",
+    date: "October 5, 2026",
+    readTime: "3 min read",
+    image: "/veda_blog_7_cropped/blog-3.jpg",
+    title: "Learning Beyond the Classroom",
+    description:
+      "How exploration, practical activities and teamwork connect everyday lessons with the wider world.",
+    content: [
+      "Learning becomes more meaningful when students can connect classroom knowledge with practical experiences.",
+      "Creative activities, group projects and opportunities for exploration help children develop problem-solving abilities and communication skills.",
+      "By encouraging students to learn through experience, schools can nurture curiosity and help them become more confident learners."
+    ]
+  },
+  {
+    id: 4,
+    slug: "champions-on-the-field",
+    category: "Achievements",
+    date: "September 28, 2026",
+    readTime: "2 min read",
+    image: "/veda_blog_7_cropped/blog-4.jpg",
+    title: "Champions on and Off the Field",
+    description:
+      "Discovering the value of determination, sportsmanship and teamwork through sporting experiences.",
+    content: [
+      "Sports and physical activities play an important role in developing confidence, discipline and teamwork.",
+      "Participating in games teaches students to appreciate effort, support their teammates and approach challenges with determination.",
+      "The true value of sports extends beyond winning. It lies in building character, resilience and a positive attitude."
+    ]
+  },
+  {
+    id: 5,
+    slug: "inspiring-young-minds",
     category: "School News",
-    title: "A Message from Our Principal",
-    description: "Read the principal's thoughts on learning, values and care at VEDA.",
-    image: "/images/veda-principal.jpg",
-    date: "",
-    link: "/about"
+    date: "September 20, 2026",
+    readTime: "3 min read",
+    image: "/veda_blog_7_cropped/blog-5.jpg",
+    title: "Inspiring Young Minds Through New Experiences",
+    description:
+      "Meaningful learning experiences help children discover their interests, abilities and confidence.",
+    content: [
+      "A supportive learning environment encourages students to explore their potential and develop a lifelong interest in education.",
+      "New experiences can introduce children to different perspectives and help them discover skills and interests they may not have recognised before.",
+      "Through encouragement and thoughtful guidance, every learner can gain the confidence to embrace new opportunities."
+    ]
   },
   {
+    id: 6,
+    slug: "creative-learning",
+    category: "Student Life",
+    date: "September 15, 2026",
+    readTime: "2 min read",
+    image: "/veda_blog_7_cropped/blog-6.jpg",
+    title: "Where Creativity Meets Learning",
+    description:
+      "Exploring how imagination, artistic expression and hands-on activities make education more engaging.",
+    content: [
+      "Creativity allows students to express ideas, experiment with possibilities and approach familiar subjects in new ways.",
+      "Artistic activities, imaginative projects and collaborative exercises can make learning more engaging while supporting communication and critical thinking.",
+      "When creativity becomes part of everyday education, children gain more opportunities to discover and develop their individual strengths."
+    ]
+  },
+  {
+    id: 7,
+    slug: "school-announcements",
     category: "Announcements",
-    title: "Admission Information",
-    description: "Find the admission process, eligibility and required documents.",
-    image: "/images/veda-admissions.jpg",
-    date: "",
-    link: "/admissions"
-  },
-  {
-    category: "Updates",
-    title: "Moments from School Life",
-    description: "Photographs of events, celebrations and activities at school.",
-    image: "/images/veda-activities.jpg",
-    date: "",
-    link: "/gallery"
-  },
-  {
-    category: "School News",
-    title: "Our Campus and Classrooms",
-    description: "See the campus and the learning spaces our students use.",
-    image: "/images/veda-campus.jpg",
-    date: "",
-    link: "/gallery"
-  },
-  {
-    category: "Announcements",
-    title: "Contact the School Office",
-    description: "Find the address, phone number, email and map to reach us.",
-    image: "/images/highlight-teachers.jpg",
-    date: "",
-    link: "/contact"
-  },
-  {
-    category: "Updates",
-    title: "Send an Admission Enquiry",
-    description: "Have a question about admission? Send an enquiry to the school.",
-    image: "/images/veda-notices.jpg",
-    date: "",
-    link: "/admissions#enquiry"
+    date: "September 10, 2026",
+    readTime: "2 min read",
+    image: "/veda_blog_7_cropped/blog-7.jpg",
+    title: "Important Updates from Our School",
+    description:
+      "A dedicated space for useful school communications, upcoming activities and community information.",
+    content: [
+      "Clear communication helps students, parents and educators stay connected with the school community.",
+      "This section can be used to share upcoming activities, important notices and other useful information.",
+      "Please refer to official school communications for confirmed dates, schedules and announcements."
+    ]
   }
 ];
 
-const articles = [
-  {
-    label: "STUDY HABITS",
-    title: "Building a Daily Study Routine",
-    description:
-      "A fixed time and a quiet place make homework easier. Short, regular sessions work better than one long one.",
-    image: "/images/highlight-academics.jpg"
-  },
-  {
-    label: "CREATIVITY",
-    title: "Why Play and Creativity Matter",
-    description:
-      "Art, sport and free play help children express ideas, work with others and stay curious about learning.",
-    image: "/images/highlight-activities.jpg"
-  },
-  {
-    label: "READING",
-    title: "Reading Together at Home",
-    description:
-      "Reading aloud for a few minutes each day builds vocabulary, focus and a lasting love of books.",
-    image: "/images/highlight-facilities.jpg"
-  },
-  {
-    label: "HEALTHY HABITS",
-    title: "Making Time for Active Play",
-    description:
-      "Outdoor games and regular movement support healthy routines, confidence and teamwork.",
-    image: "/images/veda-activities.jpg"
-  },
-  {
-    label: "CREATIVE LEARNING",
-    title: "Learning Through Everyday Activities",
-    description:
-      "Cooking, drawing and simple household projects can help children practise useful skills through hands-on discovery.",
-    image: "/images/highlight-activities.jpg"
-  }
+const categories = [
+  "All Stories",
+  "School News",
+  "Events",
+  "Achievements",
+  "Student Life",
+  "Announcements"
 ];
 
-const featuredStory = {
-  label: "FEATURED",
-  title: "Learning at VEDA International School",
-  description:
-    "More than a place of learning, VEDA is a community that aims to inspire curiosity, nurture values and encourage every student to grow with confidence.",
-  image: "/images/veda-classroom.jpg",
-  link: "/about"
-};
+function Blog() {
+  const [activeCategory, setActiveCategory] = useState("All Stories");
 
-function LocalImage({ src, alt, className = "", ...props }) {
-  const [failed, setFailed] = useState(false);
+  const featuredBlog = blogs.find((item) => item.featured);
 
-  useEffect(() => {
-    setFailed(false);
-  }, [src]);
+  const regularBlogs = blogs.filter((item) => !item.featured);
 
-  return (
-    <div className={`bn-image-holder ${className}`}>
-      {!failed ? (
-        <img src={src} alt={alt} onError={() => setFailed(true)} {...props} />
-      ) : (
-        <div className="bn-image-placeholder" role="img" aria-label={alt}>
-          <School size={26} strokeWidth={1.4} />
-          <span>VEDA</span>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function NewsTicker({ items }) {
-  const shouldScroll = items.length > 3;
-  const copies = shouldScroll ? [0, 1] : [0];
-
-  return (
-    <div
-      className={`bn-ticker ${shouldScroll ? "is-scrolling" : ""}`}
-      style={{ "--bn-duration": `${items.length * 6}s` }}
-    >
-      <div className="bn-ticker-track">
-        {copies.map((copy) => (
-          <div
-            className="bn-ticker-list"
-            key={copy}
-            aria-hidden={copy === 1 ? "true" : undefined}
-          >
-            {items.map((item) => (
-              <Link
-                className="bn-news-item"
-                to={item.link}
-                key={item.title}
-                tabIndex={copy === 1 ? -1 : undefined}
-              >
-                <LocalImage
-                  src={item.image}
-                  alt={item.title}
-                  className="bn-news-thumb"
-                  loading="lazy"
-                />
-
-                <div className="bn-news-text">
-                  <div className="bn-news-meta">
-                    <span>{item.category.toUpperCase()}</span>
-                    {item.date && (
-                      <span className="bn-news-date">
-                        <CalendarDays size={12} />
-                        {item.date}
-                      </span>
-                    )}
-                  </div>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-
-                <ArrowUpRight size={18} className="bn-news-arrow" />
-              </Link>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function BlogNews() {
-  const [filter, setFilter] = useState("All");
-  const [showAllArticles, setShowAllArticles] = useState(false);
-  const articlesGridRef = useRef(null);
-  const articlesPausedRef = useRef(false);
-  const dragStateRef = useRef({
-    isDown: false,
-    startX: 0,
-    scrollLeft: 0
-  });
-
-  // Automatic infinite scrolling, using the duplicated article set.
-  useEffect(() => {
-    const viewport = articlesGridRef.current;
-    if (!viewport) return undefined;
-
-    let frameId;
-    let previousTime = 0;
-    const speed = 24;
-
-    const tick = (time) => {
-      if (!previousTime) previousTime = time;
-      const elapsed = Math.min(time - previousTime, 40);
-      previousTime = time;
-
-      const firstSet = viewport.querySelector(".bn-articles-set");
-      const loopWidth = firstSet?.getBoundingClientRect().width || 0;
-      const reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-
-      if (
-        !showAllArticles &&
-        !reducedMotion &&
-        !articlesPausedRef.current &&
-        !dragStateRef.current.isDown &&
-        loopWidth > 0
-      ) {
-        viewport.scrollLeft += (speed * elapsed) / 1000;
-
-        if (viewport.scrollLeft >= loopWidth) {
-          viewport.scrollLeft -= loopWidth;
-        }
-      }
-
-      frameId = window.requestAnimationFrame(tick);
-    };
-
-    frameId = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(frameId);
-  }, [showAllArticles]);
-
-  const moveArticles = (direction) => {
-    const viewport = articlesGridRef.current;
-    if (!viewport) return;
-
-    const firstSet = viewport.querySelector(".bn-articles-set");
-    const loopWidth = firstSet?.getBoundingClientRect().width || 0;
-    const step = Math.max(260, viewport.clientWidth * 0.8);
-
-    if (direction < 0 && viewport.scrollLeft <= 2 && loopWidth > 0) {
-      viewport.scrollLeft = loopWidth;
-    }
-
-    viewport.scrollBy({
-      left: direction * step,
-      behavior: "smooth"
-    });
-  };
-
-  const visibleNews =
-    filter === "All"
-      ? newsItems
-      : newsItems.filter((item) => item.category === filter);
-
-  const renderArticleCard = (article) => (
-    <article className="bn-article-card" key={article.title}>
-      <LocalImage
-        src={article.image}
-        alt={article.title}
-        className="bn-article-photo"
-        loading="lazy"
-      />
-      <div className="bn-article-body">
-        <span>{article.label}</span>
-        <h3>{article.title}</h3>
-        <p>{article.description}</p>
-      </div>
-    </article>
-  );
+  const filteredBlogs =
+    activeCategory === "All Stories"
+      ? regularBlogs
+      : regularBlogs.filter(
+          (item) => item.category === activeCategory
+        );
 
   return (
     <>
@@ -286,189 +168,268 @@ function BlogNews() {
         <PageBanner
           image="/images/hero.png"
           alt="VEDA International School campus and students"
-          breadcrumb={[{ label: "Home", to: "/" }, { label: "Blog & News" }]}
+          label="THE VEDA JOURNAL"
+          caption="Stories that inspire"
+          breadcrumb={[{ label: "Home", to: "/" }, { label: "Blog" }]}
         />
 
-        <section className="bn-news">
-          <div className="bn-container bn-news-layout">
-            <div className="bn-news-main">
-              <div className="bn-eyebrow">
-                <span />
-                STAY INFORMED
+        {/* PAGE INTRODUCTION */}
+
+        <section className="vb-intro">
+          <div className="vb-container vb-intro-inner">
+
+            <div className="vb-intro-copy">
+              <span className="vb-kicker">
+                <span className="vb-kicker-line" />
+                THE VEDA JOURNAL
+              </span>
+
+              <h1>
+                Stories that <em>inspire.</em>
+                
+                Moments that matter.
+              </h1>
+
+              {/* <p>
+                A closer look at the experiences, ideas and
+                everyday moments that bring our learning
+                community together.
+              </p> */}
+            </div>
+          </div>
+        </section>
+
+        {/* FEATURED EDITORIAL STORY */}
+
+        <section className="vb-featured-section">
+          <div className="vb-container">
+
+            <div className="vb-section-top">
+              <span>01 / EDITOR'S PICK</span>
+              <div />
+              <span>FEATURED JOURNAL</span>
+            </div>
+
+            <article className="vb-featured">
+
+              <Link
+                className="vb-featured-photo"
+                to={`/blog/${featuredBlog.slug}`}
+                aria-label={`Read ${featuredBlog.title}`}
+              >
+                <img
+                  src={featuredBlog.image}
+                  alt={featuredBlog.title}
+                />
+
+                <span className="vb-photo-corner">
+                  <Sparkles size={15} />
+                  Featured Story
+                </span>
+              </Link>
+
+              <div className="vb-featured-panel">
+
+                <div className="vb-featured-meta">
+                  <span className="vb-category">
+                    {featuredBlog.category}
+                  </span>
+
+                  <span className="vb-date">
+                    <CalendarDays size={15} />
+                    {featuredBlog.date}
+                  </span>
+                </div>
+
+                <h2>{featuredBlog.title}</h2>
+
+                <div className="vb-gold-rule" />
+
+                <p>{featuredBlog.description}</p>
+
+                <div className="vb-featured-actions">
+
+                  <Link
+                    to={`/blog/${featuredBlog.slug}`}
+                    className="vb-primary-link"
+                  >
+                    Explore This Story
+                    <ArrowUpRight size={18} />
+                  </Link>
+
+                  <span className="vb-read-time">
+                    <Clock3 size={15} />
+                    {featuredBlog.readTime}
+                  </span>
+
+                </div>
               </div>
 
-              <h2>
-                Latest News <em>& Updates.</em>
-              </h2>
+            </article>
 
-              <p className="bn-intro">
-                School news, announcements and updates in one place.
-              </p>
+          </div>
+        </section>
 
-              <div className="bn-filters" role="group" aria-label="Filter news">
+        {/* ALL ARTICLES */}
+
+        <section className="vb-journal-section">
+          <div className="vb-container">
+
+            <div className="vb-journal-heading">
+              <div>
+                <span className="vb-kicker">
+                  <span className="vb-kicker-line" />
+                  EXPLORE THE JOURNAL
+                </span>
+
+                <h2>Latest from VEDA<span>.</span></h2>
+
+                {/* <p>
+                  Discover new perspectives, shared experiences
+                  and stories from our school community.
+                </p> */}
+              </div>
+
+              <div className="vb-journal-count">
+                <strong>
+                  {String(filteredBlogs.length).padStart(2, "0")}
+                </strong>
+                <span>STORIES</span>
+              </div>
+            </div>
+
+            {/* CATEGORY FILTERS */}
+
+            <div className="vb-filter-bar">
+              <div className="vb-filters" aria-label="Blog categories">
                 {categories.map((category) => (
                   <button
                     key={category}
                     type="button"
-                    className={filter === category ? "active" : ""}
-                    onClick={() => setFilter(category)}
-                    aria-pressed={filter === category}
+                    className={`vb-filter ${
+                      activeCategory === category ? "active" : ""
+                    }`}
+                    onClick={() => setActiveCategory(category)}
+                    aria-pressed={activeCategory === category}
                   >
                     {category}
                   </button>
                 ))}
               </div>
-
-              <NewsTicker items={visibleNews} key={filter} />
             </div>
 
-            <article className="bn-featured">
-              <LocalImage
-                src={featuredStory.image}
-                alt={featuredStory.title}
-                className="bn-featured-photo"
-                loading="lazy"
-              />
+            {/* ARTICLE GRID */}
 
-              <div className="bn-featured-body">
-                <span className="bn-featured-label">{featuredStory.label}</span>
-                <h3>{featuredStory.title}</h3>
-                <p>{featuredStory.description}</p>
-                <Link to={featuredStory.link} className="bn-text-link">
-                  Know More About VEDA <ArrowUpRight size={16} />
-                </Link>
-              </div>
-            </article>
-          </div>
-        </section>
+            {filteredBlogs.length > 0 ? (
+              <div className="vb-grid">
 
-        <section className="bn-articles">
-          <div className="bn-container">
-            <div className="bn-section-heading">
-              <div>
-                <div className="bn-eyebrow">
-                  <span />
-                  READ & LEARN
-                </div>
-                <h2>
-                  Educational <em>Articles.</em>
-                </h2>
-              </div>
+                {filteredBlogs.map((blog, index) => (
+                  <article className="vb-card" key={blog.id}>
 
-              <div className="bn-articles-heading-actions">
-                <p className="bn-intro">
-                  Simple ideas for parents and students to support learning at home.
-                </p>
-                <button
-                  className="bn-text-link bn-see-all"
-                  type="button"
-                  onClick={() => setShowAllArticles((current) => !current)}
-                  aria-expanded={showAllArticles}
-                >
-                  {showAllArticles ? "Show Carousel" : "See All Articles"}
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </button>
-              </div>
-            </div>
+                    <Link
+                      to={`/blog/${blog.slug}`}
+                      className="vb-card-photo"
+                      aria-label={`Read ${blog.title}`}
+                    >
+                      <img
+                        src={blog.image}
+                        alt={blog.title}
+                        loading="lazy"
+                      />
 
-            {showAllArticles ? (
-              <div className="bn-articles-all">
-                {articles.map(renderArticleCard)}
+                      <span className="vb-card-number">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </Link>
+
+                    <div className="vb-card-body">
+
+                      <div className="vb-card-topline">
+                        <span className="vb-category">
+                          {blog.category}
+                        </span>
+
+                        <span className="vb-date">
+                          {blog.date}
+                        </span>
+                      </div>
+
+                      <h3>
+                        <Link to={`/blog/${blog.slug}`}>
+                          {blog.title}
+                        </Link>
+                      </h3>
+
+                      <p>{blog.description}</p>
+
+                      <div className="vb-card-bottom">
+
+                        <span className="vb-read-time">
+                          <Clock3 size={14} />
+                          {blog.readTime}
+                        </span>
+
+                        <Link
+                          to={`/blog/${blog.slug}`}
+                          className="vb-card-arrow"
+                          aria-label={`Read ${blog.title}`}
+                        >
+                          <ArrowUpRight size={19} />
+                        </Link>
+
+                      </div>
+
+                    </div>
+
+                  </article>
+                ))}
+
               </div>
             ) : (
-              <div className="bn-articles-carousel">
-                <button
-                  className="bn-articles-arrow bn-articles-prev"
-                  type="button"
-                  aria-label="Previous educational articles"
-                  onClick={() => moveArticles(-1)}
-                >
-                  <ChevronRight size={22} aria-hidden="true" />
-                </button>
-
-                <div
-                  className="bn-articles-grid"
-                  role="region"
-                  aria-label="Educational articles"
-                  tabIndex={0}
-                  ref={articlesGridRef}
-                  onMouseEnter={() => {
-                    articlesPausedRef.current = true;
-                  }}
-                  onMouseLeave={() => {
-                    dragStateRef.current.isDown = false;
-                    articlesPausedRef.current = false;
-                  }}
-                  onFocus={() => {
-                    articlesPausedRef.current = true;
-                  }}
-                  onBlur={(event) => {
-                    if (!event.currentTarget.contains(event.relatedTarget)) {
-                      articlesPausedRef.current = false;
-                    }
-                  }}
-                  onMouseDown={(event) => {
-                    if (event.button !== 0) return;
-                    dragStateRef.current = {
-                      isDown: true,
-                      startX: event.clientX,
-                      scrollLeft: event.currentTarget.scrollLeft
-                    };
-                    articlesPausedRef.current = true;
-                  }}
-                  onMouseMove={(event) => {
-                    if (!dragStateRef.current.isDown) return;
-                    event.preventDefault();
-                    const distance =
-                      event.clientX - dragStateRef.current.startX;
-                    event.currentTarget.scrollLeft =
-                      dragStateRef.current.scrollLeft - distance;
-                  }}
-                  onMouseUp={() => {
-                    dragStateRef.current.isDown = false;
-                  }}
-                >
-                  <div className="bn-articles-track">
-                    {[0, 1].map((copy) => (
-                      <div
-                        className="bn-articles-set"
-                        key={copy}
-                        aria-hidden={copy === 1 ? "true" : undefined}
-                      >
-                        {articles.map(renderArticleCard)}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              <div className="vb-empty">
+                <BookOpen size={34} strokeWidth={1.4} />
+                <h3>No stories in this category yet.</h3>
+                <p>Explore another category to discover more articles.</p>
 
                 <button
-                  className="bn-articles-arrow bn-articles-next"
                   type="button"
-                  aria-label="Next educational articles"
-                  onClick={() => moveArticles(1)}
+                  onClick={() => setActiveCategory("All Stories")}
                 >
-                  <ChevronRight size={22} aria-hidden="true" />
+                  View All Stories
+                  <ArrowRight size={17} />
                 </button>
               </div>
             )}
 
-            <div className="bn-cta">
-              <div>
-                <h3>Have a question for the school?</h3>
-                <p>Get in touch with us or see more of school life.</p>
-              </div>
-
-              <div className="bn-cta-actions">
-                <Link to="/contact" className="bn-btn">
-                  Contact Us <ArrowUpRight size={16} />
-                </Link>
-                <Link to="/gallery" className="bn-cta-link">
-                  View Gallery
-                </Link>
-              </div>
-            </div>
           </div>
         </section>
+
+        {/* CLOSING STRIP */}
+
+        <section className="vb-closing">
+          <div className="vb-container vb-closing-inner">
+
+            <div>
+              <span className="vb-closing-label">
+                BEYOND THE CLASSROOM
+              </span>
+
+              <h2>There's always more to discover.</h2>
+
+              <p>
+                Explore the values and vision behind VEDA
+                International School.
+              </p>
+            </div>
+
+            <Link to="/about" className="vb-closing-link">
+              Discover Our School
+              <ArrowUpRight size={18} />
+            </Link>
+
+          </div>
+        </section>
+
       </main>
 
       <Footer />
@@ -476,4 +437,4 @@ function BlogNews() {
   );
 }
 
-export default BlogNews;
+export default Blog;

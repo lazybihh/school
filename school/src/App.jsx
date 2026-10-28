@@ -17,6 +17,8 @@ import Faculty from "./pages/Faculty";
 import Facilities from "./pages/Facilities";
 import Admissions from "./pages/Admissions";
 import Blog from "./pages/Blog";
+import BlogDetail from "./pages/Blogdetail";
+import News from "./pages/News";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
@@ -65,7 +67,11 @@ export default function App() {
 
           <Route path="/admissions" element={<Admissions />} />
 
-          <Route path="/blog-news" element={<Blog />} />
+          <Route path="/blog" element={<Blog />} />
+
+          <Route path="/blog/:slug" element={<BlogDetail />} />
+
+          <Route path="/blog-news" element={<News />} />
 
           <Route path="/gallery" element={<Gallery />} />
 

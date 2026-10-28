@@ -188,6 +188,10 @@
 }
 
 .vh-hero-picture img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   object-position: center 40%;
 }
 
@@ -840,7 +844,67 @@
   }
 
   .vh-hero-stage {
-    height: clamp(260px, 72vw, 380px);
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-height: none;
+  }
+
+  .vh-hero-picture img {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .vh-hero-stage > .page-banner-tags,
+  .vh-hero-stage > .page-banner-tag {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .vh-hero-stage .page-banner-tag {
+    pointer-events: auto;
+  }
+
+  .vh-hero .page-banner-tag {
+    max-width: 47%;
+    padding: 5px 7px;
+    gap: 4px;
+    font-size: 8px;
+    line-height: 1.25;
+  }
+
+  .vh-hero .page-banner-tag svg {
+    width: 11px;
+    height: 11px;
+    flex: 0 0 auto;
+  }
+
+  .vh-hero .page-banner-tag-school {
+    top: 8px;
+    left: 8px;
+  }
+
+  .vh-hero .page-banner-tag-location {
+    display: flex;
+    top: 8px;
+    right: 8px;
+    bottom: auto;
+    max-width: 44%;
+  }
+
+  .vh-hero-controls-inner {
+    min-height: 30px;
+  }
+
+  .vh-hero-indicators button {
+    width: 30px;
+    height: 30px;
+    font-size: 10px;
+  }
+
+  .vh-hero-arrows button {
+    width: 24px;
+    height: 24px;
   }
 
   .vh-highlights,
@@ -864,7 +928,30 @@
   }
 
   .vh-links-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .vh-link-card {
+    min-width: 0;
+    gap: 7px;
+    padding: 10px 7px;
+    overflow-wrap: anywhere;
+  }
+
+  .vh-link-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .vh-link-details h3 {
+    font-size: 11px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .vh-link-details p {
+    font-size: 10px;
   }
 
   .vh-teacher-strip {
@@ -903,7 +990,43 @@
   }
 
   .vh-admission-panel {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  }
+
+  .vh-admission-copy {
+    min-width: 0;
+    padding: 18px 14px;
+  }
+
+  .vh-admission-copy h2 {
+    font-size: clamp(22px, 5vw, 30px);
+  }
+
+  .vh-admission-copy > p {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .vh-admission-photo {
+    min-width: 0;
+    min-height: 250px;
+    height: 100%;
+  }
+
+  .vh-admission-actions {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .vh-admission-actions .vh-btn {
+    min-height: 38px;
+    padding-inline: 10px;
+    font-size: 10px;
+    white-space: normal;
+  }
+
+  .vh-admission-link {
+    font-size: 11px;
   }
 
   .vh-admission-copy {
@@ -930,17 +1053,45 @@
 
 @media (max-width: 380px) {
   .vh-container {
-    width: calc(100% - 30px);
+    width: calc(100% - 24px);
   }
 
   .vh-btn {
-    min-height: 46px;
-    padding-inline: 15px;
-    font-size: 12px;
+    min-height: 42px;
+    padding-inline: 10px;
+    font-size: 11px;
   }
 
   .vh-notice-details p {
     font-size: 11px;
+  }
+
+  .vh-apply-steps {
+    gap: 5px;
+  }
+
+  .vh-apply-step {
+    padding: 11px 5px;
+  }
+
+  .vh-apply-step h3 {
+    font-size: 10px;
+  }
+
+  .vh-apply-step p {
+    font-size: 9px;
+  }
+
+  .vh-links-grid {
+    gap: 6px;
+  }
+
+  .vh-link-card {
+    padding: 8px 5px;
+  }
+
+  .vh-link-details h3 {
+    font-size: 10px;
   }
 }
 
@@ -1332,9 +1483,8 @@
 
 @media (max-width: 1100px) {
   .vh-apply-steps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-
 }
 
 /* Smaller laptops: slightly shorter strip */
@@ -1363,26 +1513,35 @@
   }
 
   .vh-apply-steps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
   }
 
   .vh-apply-step {
-    min-height: 160px;
-    padding: 18px 15px 19px;
+    min-width: 0;
+    min-height: 0;
+    padding: 13px 8px 14px;
   }
 
   .vh-apply-label {
-    font-size: 10px;
-    letter-spacing: 1px;
+    font-size: 8px;
+    letter-spacing: 0.5px;
   }
 
   .vh-apply-step h3 {
-    font-size: 17px;
+    font-size: 12px;
+    overflow-wrap: anywhere;
   }
 
   .vh-apply-step p {
-    font-size: 13px;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .vh-apply-ghost {
+    top: 6px;
+    right: 7px;
+    font-size: 38px;
   }
 
   .vh-apply-actions {
@@ -1395,8 +1554,39 @@
     justify-content: center;
   }
 
+  .vh-gallery-row {
+    gap: 12px;
+    padding: 4px 2px 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .vh-gallery-row::-webkit-scrollbar {
+    display: none;
+  }
+
   .vh-gallery-tile {
+    flex: 0 0 88%;
+    min-width: 0;
     height: 230px;
+    scroll-snap-align: start;
+  }
+
+  .vh-gallery-caption {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .vh-gallery-caption small {
+    font-size: 11px;
+  }
+
+  .vh-gallery-caption strong {
+    font-size: 16px;
   }
 }
 
@@ -1411,277 +1601,559 @@
     transform: none;
   }
 }
-
 /* =========================================
-   RESPONSIVE POLISH (CSS only)
-   Selectors start with "main.veda-home" so they win over the
-   font-size block above, whatever order the files load in.
+   VEDA HOME: RESPONSIVE + BANNER CLEAN-UP
+   Import this LAST in Home.jsx:
+
+     import "./Home.css";
+     import "./HomeSections.css";      (your second css file)
+     import "./HomeResponsive.css";    (this file)
+
+   Every rule starts with ".veda-home" so it safely wins
+   over the old media queries. Breakpoints used:
+   1100 laptop-small | 900 tablet | 700 large phone | 480 phone | 360 tiny
 ========================================= */
 
-/* ---------- HERO BANNER: keep the picture's wide shape ----------
-   On screens up to 1100px the banner height follows its width, so the
-   photo is no longer cropped into a box. If the picture looks cut off at
-   the sides, change 16 / 9 to match your banner (for example 3 / 2). */
+
+/* =========================================
+   1. BANNER
+   - full photo shown on tablet and phone (nothing cropped)
+   - thin strip under the photo with slide bars + small arrows
+   - if your photos are NOT 16:9, change --banner-ratio below
+     (width / height of the photo, e.g. 2 / 1 or 21 / 9)
+========================================= */
+
+.veda-home .vh-hero {
+  --banner-ratio: 12 / 5;
+  background: #e9edf2;
+}
+
+.veda-home .vh-hero-stage,
+.veda-home .vh-hero-picture .vh-image-holder {
+  background: #e9edf2;
+}
+
+.veda-home .vh-hero-picture img {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* The thin strip (sits under the photo, not on it) */
+.veda-home .vh-hero-controls {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  z-index: 3;
+  background: linear-gradient(90deg, #061c36, #0b2d50 74%, #103454);
+  pointer-events: auto;
+}
+
+.veda-home .vh-hero-controls-inner {
+  min-height: 26px;
+}
+
+.veda-home .vh-hero-indicators {
+  gap: 4px;
+}
+
+.veda-home .vh-hero-indicators button {
+  width: 30px;
+  height: 26px;
+  font-size: 0;
+}
+
+.veda-home .vh-hero-indicators button::before {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  left: 4px;
+  height: 3px;
+  margin-top: -1.5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.35);
+  content: "";
+  transition: background-color 200ms ease;
+}
+
+.veda-home .vh-hero-indicators button.active::before {
+  background: var(--gold);
+}
+
+.veda-home .vh-hero-indicators button.active::after {
+  display: none;
+}
+
+.veda-home .vh-hero-arrows {
+  gap: 6px;
+}
+
+.veda-home .vh-hero-arrows button {
+  width: 20px;
+  height: 20px;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.veda-home .vh-hero-arrows svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Tablet and phone: show the WHOLE photo */
 @media (max-width: 1100px) {
-  main.veda-home .vh-hero-stage {
+  .veda-home .vh-hero-stage {
     height: auto;
-    max-height: 560px;
-    aspect-ratio: 16 / 9;
-  }
-
-  main.veda-home .vh-hero-picture img {
-    object-position: center center;
-  }
-}
-
-/* ---------- HERO TAGS: both tags stay visible on every screen ---------- */
-@media (max-width: 900px) {
-  main.veda-home .vh-hero .page-banner-tag {
-    padding: 8px 11px;
-    font-size: 10px;
-    letter-spacing: 0.8px;
-  }
-
-  main.veda-home .vh-hero .page-banner-tag-school {
-    top: 14px;
-    left: 14px;
-  }
-
-  main.veda-home .vh-hero .page-banner-tag-location {
-    top: 14px;
-    right: 14px;
-    display: flex;
-  }
-}
-
-/* Phones: school tag top-left, location tag bottom-right, both small */
-@media (max-width: 600px) {
-  main.veda-home .vh-hero .page-banner-tag {
-    gap: 6px;
-    padding: 6px 9px;
-    font-size: 8.5px;
-    letter-spacing: 0.55px;
-  }
-
-  main.veda-home .vh-hero .page-banner-tag svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  main.veda-home .vh-hero .page-banner-tag-school {
-    top: 10px;
-    left: 10px;
-    border-left-width: 2px;
-  }
-
-  main.veda-home .vh-hero .page-banner-tag-location {
-    top: auto;
-    right: 10px;
-    bottom: 10px;
-    display: flex;
-    border-right-width: 2px;
-  }
-}
-
-/* ---------- Tablet: 601px to 1100px ---------- */
-@media (min-width: 601px) and (max-width: 1100px) {
-  main.veda-home .vh-highlights,
-  main.veda-home .vh-notices,
-  main.veda-home .vh-admissions,
-  main.veda-home .vh-important,
-  main.veda-home .vh-apply,
-  main.veda-home .vh-gallery {
-    padding-block: 44px;
-  }
-}
-
-/* Gallery swipe row on tablets: slightly taller photos */
-@media (min-width: 601px) and (max-width: 900px) {
-  main.veda-home .vh-gallery-tile {
-    height: 280px;
-  }
-}
-
-/* ---------- Large phones and portrait tablets: up to 720px ---------- */
-@media (max-width: 720px) {
-  main.veda-home h2 {
-    font-size: clamp(30px, 7.4vw, 40px);
-    line-height: 1.18;
-  }
-
-  main.veda-home .vh-school-story-content h3 {
-    font-size: clamp(24px, 6.4vw, 30px);
-  }
-
-  /* Principal card stacks: photo on top */
-  main.veda-home .vh-school-story {
-    grid-template-columns: 1fr;
-  }
-
-  main.veda-home .vh-principal-photo {
-    height: 300px;
-    min-height: 300px;
-  }
-
-  main.veda-home .vh-school-story-content {
-    padding: 28px 24px;
-  }
-
-  /* Admission panel stacks: photo below the text */
-  main.veda-home .vh-admission-panel {
-    grid-template-columns: 1fr;
-  }
-
-  main.veda-home .vh-admission-copy {
-    padding: 32px 28px;
-  }
-
-  main.veda-home .vh-admission-photo {
-    height: 260px;
-    min-height: 260px;
-  }
-
-  main.veda-home .vh-admission-photo::after {
-    background: linear-gradient(0deg, transparent 50%, var(--deep-navy));
-  }
-}
-
-/* ---------- Phones: up to 600px ---------- */
-@media (max-width: 600px) {
-  main.veda-home .vh-hero-stage {
-    height: clamp(240px, 60vw, 360px);
     max-height: none;
-    aspect-ratio: auto;
+    aspect-ratio: var(--banner-ratio);
   }
 
-  main.veda-home .vh-principal-photo {
-    height: 260px;
-    min-height: 260px;
+  /* cover: a tiny ratio mismatch trims a sliver, never leaves grey bars */
+  .veda-home .vh-hero-picture img {
+    object-fit: cover;
+  }
+}
+
+/* Phones: no tags on the photo, strip stays thin */
+@media (max-width: 768px) {
+  .veda-home .vh-hero-stage [class*="page-banner"] {
+    display: none !important;
   }
 
-  main.veda-home .vh-admission-photo {
-    height: 220px;
-    min-height: 220px;
+  .veda-home .vh-hero-controls-inner {
+    min-height: 24px;
   }
 
-  main.veda-home .vh-admission-copy {
-    padding: 28px 22px;
+  .veda-home .vh-hero-indicators button {
+    height: 24px;
+  }
+}
+
+
+/* =========================================
+   2. SHARED: headings, spacing
+========================================= */
+
+@media (max-width: 900px) {
+  .veda-home .vh-container {
+    width: calc(100% - 48px);
   }
 
-  main.veda-home .vh-btn,
-  main.veda-home .vh-text-link,
-  main.veda-home .vh-admission-link {
-    font-size: 14px;
+  .veda-home .vh-highlights,
+  .veda-home .vh-notices,
+  .veda-home .vh-admissions,
+  .veda-home .vh-important,
+  .veda-home .vh-apply,
+  .veda-home .vh-gallery {
+    padding: 44px 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-home h2 {
+    font-size: clamp(28px, 7.4vw, 34px);
+    letter-spacing: -0.5px;
   }
 
-  main.veda-home .vh-section-aside p,
-  main.veda-home .vh-school-story-content > p,
-  main.veda-home .vh-admission-copy > p,
-  main.veda-home .vh-important-intro,
-  main.veda-home .vh-apply-side p {
+  .veda-home .vh-container {
+    width: calc(100% - 36px);
+  }
+
+  .veda-home .vh-highlights,
+  .veda-home .vh-notices,
+  .veda-home .vh-admissions,
+  .veda-home .vh-important,
+  .veda-home .vh-apply,
+  .veda-home .vh-gallery {
+    padding: 38px 0;
+  }
+
+  .veda-home .vh-section-heading {
+    margin-bottom: 22px;
+  }
+
+  .veda-home .vh-section-aside p,
+  .veda-home .vh-important-intro,
+  .veda-home .vh-apply-side p,
+  .veda-home .vh-school-story-content > p,
+  .veda-home .vh-admission-copy > p {
     font-size: 15px;
     line-height: 1.7;
   }
+}
 
-  main.veda-home .vh-admission-actions {
-    width: 100%;
-  }
-
-  main.veda-home .vh-admission-actions .vh-btn {
-    width: 100%;
+@media (max-width: 360px) {
+  .veda-home .vh-container {
+    width: calc(100% - 28px);
   }
 }
 
-/* ---------- Small phones: up to 480px ---------- */
-@media (max-width: 480px) {
-  /* Admission steps: one comfortable column */
-  main.veda-home .vh-apply-steps {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
 
-  main.veda-home .vh-apply-step {
+/* =========================================
+   3. PRINCIPAL MESSAGE + TEACHER STRIP
+========================================= */
+
+@media (max-width: 700px) {
+  .veda-home .vh-school-story {
     min-height: 0;
-    padding: 20px 20px 22px;
+    grid-template-columns: 1fr;
   }
 
-  main.veda-home .vh-apply-ghost {
-    top: 10px;
-    right: 18px;
-    font-size: 60px;
+  .veda-home .vh-principal-photo {
+    height: 270px;
+    min-height: 270px;
+  }
+
+  .veda-home .vh-principal-photo img {
+    object-position: center 22%;
+  }
+
+  .veda-home .vh-school-story-content {
+    padding: 24px 20px 26px;
+  }
+
+  .veda-home .vh-school-story-content h3 {
+    font-size: clamp(25px, 6.8vw, 30px);
+  }
+
+  .veda-home .vh-story-mark {
+    top: auto;
+    right: 16px;
+    bottom: -34px;
+    font-size: 120px;
+  }
+
+  .veda-home .vh-teacher-strip {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .veda-home .vh-teacher-strip > div:nth-child(2) {
+    min-width: 0;
+    flex: 1 1 200px;
+  }
+
+  .veda-home .vh-teacher-strip > .vh-text-link {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
 
-@media (max-width: 380px) {
-  main.veda-home .vh-btn {
-    font-size: 13px;
-    white-space: normal;
-    text-align: center;
+
+/* =========================================
+   4. LATEST NOTICES
+========================================= */
+
+@media (max-width: 900px) {
+  .veda-home .vh-notices-layout {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .veda-home .vh-notices-visual {
+    min-height: 300px;
   }
 }
 
-/* ---------- Touch-friendly tap sizes ---------- */
-@media (max-width: 768px), (pointer: coarse) {
-  main.veda-home .vh-hero-controls-inner {
-    min-height: 48px;
+@media (max-width: 700px) {
+  .veda-home .vh-notices-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 
-  main.veda-home .vh-hero-indicators button {
-    width: 44px;
-    height: 44px;
-    font-size: 13px;
+  .veda-home .vh-notice-viewport {
+    height: 360px;
   }
 
-  main.veda-home .vh-hero-arrows button {
+  .veda-home .vh-notice {
+    min-height: 0;
+    gap: 12px;
+    padding: 14px 13px;
+  }
+
+  .veda-home .vh-notice-icon {
     width: 40px;
     height: 40px;
   }
 
-  main.veda-home .vh-text-link {
-    min-height: 44px;
+  .veda-home .vh-notice-details h3 {
+    font-size: 15px;
+  }
+
+  .veda-home .vh-notice-details p {
+    font-size: 13px;
+  }
+
+  .veda-home .vh-notices-visual {
+    min-height: 260px;
+    border-radius: 13px 44px 13px 13px;
+  }
+
+  .veda-home .vh-notices-caption {
+    right: 18px;
+    bottom: 18px;
+    left: 18px;
+  }
+
+  .veda-home .vh-notices-caption strong {
+    font-size: 19px;
   }
 }
 
-/* Touch laptops/tablets wider than 900px can't hover:
-   show every gallery caption instead of hiding it */
-@media (hover: none) and (min-width: 901px) {
-  main.veda-home .vh-gallery-row {
-    height: auto;
+
+/* =========================================
+   5. ADMISSION INFORMATION (4 steps)
+   Desktop: 4 across | Tablet and phone: 2 x 2
+   Tiny phones: 1 column
+========================================= */
+
+.veda-home .vh-apply-step h3,
+.veda-home .vh-apply-step p {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+@media (max-width: 900px) {
+  .veda-home .vh-apply-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .veda-home .vh-apply-side {
+    max-width: 100%;
+  }
+
+  .veda-home .vh-apply-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .veda-home .vh-apply-step {
+    min-height: 150px;
+    padding: 20px 19px 21px;
+  }
+
+  .veda-home .vh-apply-label {
+    font-size: 12px;
+    letter-spacing: 1.4px;
+  }
+
+  .veda-home .vh-apply-step h3 {
+    font-size: 20px;
+  }
+
+  .veda-home .vh-apply-step p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .veda-home .vh-apply-ghost {
+    top: 8px;
+    right: 14px;
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-home .vh-apply-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    text-align: center;
+  }
+
+  .veda-home .vh-apply-actions .vh-text-link {
+    justify-content: center;
+  }
+
+  .veda-home .vh-apply-steps {
+    gap: 10px;
+  }
+
+  .veda-home .vh-apply-step {
+    min-height: 0;
+    padding: 16px 14px 18px;
+  }
+
+  .veda-home .vh-apply-step h3 {
+    font-size: 17px;
+  }
+
+  .veda-home .vh-apply-step p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .veda-home .vh-apply-ghost {
+    top: 6px;
+    right: 10px;
+    font-size: 44px;
+  }
+}
+
+@media (max-width: 340px) {
+  .veda-home .vh-apply-steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================
+   6. ADMISSION CALL TO ACTION
+   Tablet and phone: photo on top, text below
+========================================= */
+
+@media (max-width: 900px) {
+  .veda-home .vh-admission-panel {
+    min-height: 0;
+    grid-template-columns: 1fr;
+  }
+
+  .veda-home .vh-admission-photo {
+    order: -1;
+    height: 260px;
+    min-height: 260px;
+  }
+
+  /* fade the photo into the navy text area underneath */
+  .veda-home .vh-admission-photo::after {
+    background: linear-gradient(180deg, transparent 45%, var(--deep-navy));
+  }
+
+  .veda-home .vh-admission-copy {
+    padding: 8px 32px 36px;
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-home .vh-admission-photo {
+    height: 220px;
+    min-height: 220px;
+  }
+
+  .veda-home .vh-admission-copy {
+    padding: 4px 22px 30px;
+  }
+
+  .veda-home .vh-admission-copy h2 {
+    font-size: clamp(28px, 7.4vw, 34px);
+  }
+
+  .veda-home .vh-admission-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    text-align: center;
+  }
+
+  .veda-home .vh-admission-actions .vh-btn {
+    min-height: 48px;
+    padding-inline: 18px;
+    font-size: 15px;
+    white-space: normal;
+  }
+
+  .veda-home .vh-admission-link {
+    justify-content: center;
+    font-size: 15px;
+  }
+}
+
+
+/* =========================================
+   7. GALLERY (swipe row on phones)
+========================================= */
+
+@media (max-width: 700px) {
+  .veda-home .vh-gallery-tile {
+    flex: 0 0 86%;
+    height: 240px;
+  }
+
+  .veda-home .vh-gallery-caption small {
+    font-size: 12px;
+  }
+
+  .veda-home .vh-gallery-caption strong {
+    font-size: 17px;
+  }
+}
+
+
+/* =========================================
+   8. IMPORTANT LINKS
+   Desktop 3 across | Tablet 2 across (side by side)
+   Phone 2 across (icon on top, text below)
+   Tiny phones 1 per row
+========================================= */
+
+.veda-home .vh-link-card,
+.veda-home .vh-link-details h3,
+.veda-home .vh-link-details p {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+@media (max-width: 1100px) {
+  .veda-home .vh-links-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-home .vh-links-grid {
     gap: 12px;
-    padding: 4px 2px 14px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    touch-action: pan-x;
   }
 
-  main.veda-home .vh-gallery-tile {
-    height: 280px;
-    flex: 0 0 clamp(280px, 36vw, 420px);
+  .veda-home .vh-link-card {
+    position: relative;
+    min-height: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px 16px 18px;
   }
 
-  main.veda-home .vh-gallery-caption {
-    opacity: 1;
-    transform: none;
+  .veda-home .vh-link-icon {
+    width: 44px;
+    height: 44px;
   }
 
-  main.veda-home .vh-gallery-open {
-    display: none;
+  .veda-home .vh-link-details {
+    width: 100%;
+    flex: none;
+  }
+
+  .veda-home .vh-link-details h3 {
+    margin-bottom: 4px;
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  .veda-home .vh-link-details p {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .veda-home .vh-link-arrow {
+    position: absolute;
+    top: 16px;
+    right: 14px;
   }
 }
 
-@media (hover: none) {
-  main.veda-home .vh-notice-track {
-    animation: none;
-  }
-
-  main.veda-home .vh-notice-viewport {
-    height: auto;
-    overflow: visible;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-
-  main.veda-home .vh-notice-list[aria-hidden="true"] {
-    display: none;
+@media (max-width: 340px) {
+  .veda-home .vh-links-grid {
+    grid-template-columns: 1fr;
   }
 }

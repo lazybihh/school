@@ -1565,3 +1565,534 @@
 .veda-about .about-management-note {
   font-size: 14px;
 }
+/* =========================================
+   VEDA ABOUT: RESPONSIVE FIXES
+   Import this LAST in About.jsx:
+
+     import "./About.css";
+     import "./AboutResponsive.css";
+
+   Every rule starts with ".veda-about" so it wins over the
+   old media queries and the font-size rules at the bottom of
+   About.css. The banner is NOT touched (you fixed it already).
+
+   Breakpoints: 1100 laptop-small | 900 tablet | 700 phone | 480 small phone
+========================================= */
+
+
+/* =========================================
+   1. SHARED: spacing, headings, buttons
+========================================= */
+
+@media (max-width: 900px) {
+  .veda-about .about-container {
+    width: calc(100% - 48px);
+  }
+
+  .veda-about .about-intro,
+  .veda-about .about-principal,
+  .veda-about .about-purpose,
+  .veda-about .about-values,
+  .veda-about .about-learning,
+  .veda-about .about-staff,
+  .veda-about .about-people {
+    padding-block: 44px;
+  }
+
+  .veda-about .about-history {
+    padding-block: 8px 44px;
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-about .about-container {
+    width: calc(100% - 36px);
+  }
+
+  .veda-about .about-intro,
+  .veda-about .about-principal,
+  .veda-about .about-purpose,
+  .veda-about .about-values,
+  .veda-about .about-learning,
+  .veda-about .about-staff,
+  .veda-about .about-people {
+    padding-block: 38px;
+  }
+
+  .veda-about .about-history {
+    padding-block: 4px 38px;
+  }
+
+  .veda-about h2 {
+    font-size: clamp(28px, 7.4vw, 34px);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+
+  .veda-about p {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .veda-about .about-eyebrow {
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  /* Buttons: full width, never dropping to a odd new line */
+  .veda-about .about-button {
+    width: 100%;
+    min-height: 50px;
+    justify-content: center;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .veda-about .about-container {
+    width: calc(100% - 28px);
+  }
+}
+
+
+/* =========================================
+   2. INTRO: simple, clean photo stack on phones
+   Big photo, small photo overlapping its corner,
+   "Life at VEDA" tag on the sky (not on the faces)
+========================================= */
+
+@media (max-width: 900px) {
+  .veda-about .about-intro-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .veda-about .about-intro-content {
+    max-width: 100%;
+  }
+
+  .veda-about .about-intro-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .veda-about .about-intro-visual {
+    width: min(100%, 620px);
+    justify-self: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-about .about-intro-visual {
+    width: 100%;
+    aspect-ratio: auto;
+    margin-bottom: 26px;
+  }
+
+  .veda-about .about-intro-main-image {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 54px 10px 10px 10px;
+  }
+
+  .veda-about .about-intro-main-image img {
+    object-position: center 40%;
+  }
+
+  .veda-about .about-intro-small-image {
+    right: 12px;
+    bottom: -26px;
+    width: 42%;
+    border-width: 4px;
+    box-shadow: 0 10px 24px rgba(6, 29, 57, 0.18);
+  }
+
+  .veda-about .about-intro-image-label {
+    top: 14px;
+    bottom: auto;
+    left: 14px;
+    padding: 9px 13px;
+  }
+
+  .veda-about .about-intro-image-label span {
+    font-size: 11px;
+  }
+
+  .veda-about .about-intro-image-label strong {
+    font-size: 16px;
+  }
+
+  /* the offset gold frame looks messy on small screens */
+  .veda-about .about-intro-outline {
+    display: none;
+  }
+}
+
+
+/* =========================================
+   3. HISTORY
+========================================= */
+
+@media (max-width: 700px) {
+  .veda-about .about-history-panel {
+    gap: 14px;
+    padding: 24px 20px;
+  }
+
+  .veda-about .about-history-panel h2 {
+    font-size: clamp(26px, 7vw, 30px);
+  }
+
+  .veda-about .about-history-panel > p {
+    padding-top: 16px;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+}
+
+
+/* =========================================
+   4. PRINCIPAL
+========================================= */
+
+@media (max-width: 900px) {
+  .veda-about .about-principal-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .veda-about .about-principal-content {
+    max-width: 100%;
+  }
+
+  .veda-about .about-principal-visual {
+    width: min(100%, 560px);
+    justify-self: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-about .about-quote-mark {
+    top: 34px;
+    right: 0;
+    font-size: 90px;
+  }
+
+  .veda-about .about-principal-visual {
+    width: 100%;
+    aspect-ratio: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .veda-about .about-principal-caption {
+    right: 6px;
+    padding: 10px 13px;
+  }
+
+  .veda-about .about-principal-caption span {
+    font-size: 11px;
+  }
+
+  .veda-about .about-principal-caption strong {
+    font-size: 15px;
+  }
+}
+
+
+/* =========================================
+   5. VISION + MISSION
+========================================= */
+
+@media (max-width: 700px) {
+  .veda-about .about-section-heading.centered {
+    margin-bottom: 24px;
+  }
+
+  .veda-about .about-purpose-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .veda-about .about-purpose-item {
+    min-height: 0;
+    padding: 22px 20px;
+  }
+
+  .veda-about .about-purpose-item h3 {
+    font-size: 24px;
+  }
+}
+
+
+/* =========================================
+   6. VALUES (2 x 2 on phones)
+========================================= */
+
+@media (max-width: 1100px) {
+  .veda-about .about-values-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .veda-about .about-values-intro {
+    max-width: 660px;
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-about .about-values-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 10px;
+  }
+
+  .veda-about .about-value {
+    padding: 8px 6px;
+  }
+
+  .veda-about .about-value h3 {
+    font-size: 18px;
+  }
+
+  .veda-about .about-value p {
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+}
+
+
+/* =========================================
+   7. LEARNING APPROACH
+========================================= */
+
+@media (max-width: 900px) {
+  .veda-about .about-learning-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .veda-about .about-learning-visual {
+    width: min(100%, 520px);
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-about .about-learning-visual {
+    width: 100%;
+    max-width: none;
+    aspect-ratio: 4 / 3.4;
+    border-radius: 9px 56px 9px 9px;
+  }
+
+  .veda-about .about-learning-visual-caption strong {
+    font-size: 17px;
+  }
+
+  .veda-about .about-approach-item {
+    gap: 12px;
+    padding: 14px 0;
+  }
+
+  .veda-about .about-approach-item p {
+    font-size: 14px;
+  }
+}
+
+
+/* =========================================
+   8. FEATURED STAFF
+   No scrolling anywhere: all 5 cards are always visible.
+   Laptop / tablet: 5 in one row, shrinking to fit
+   Phone: 2 per row, the 5th card centred underneath
+   The "Meet Our Faculty" button sits under the heading
+   on tablet and phone, full width.
+========================================= */
+
+.veda-about .about-staff-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 18px;
+  overflow: visible;
+}
+
+.veda-about .about-staff-card {
+  width: auto;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+@media (max-width: 1100px) {
+  .veda-about .about-staff-grid {
+    gap: 14px;
+  }
+
+  .veda-about .about-staff-info {
+    padding: 14px 12px 16px;
+  }
+
+  .veda-about .about-staff-info h3 {
+    font-size: 16px;
+  }
+
+  .veda-about .about-staff-info p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 900px) {
+  .veda-about .about-staff .about-section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .veda-about .about-staff .about-section-heading h2 {
+    max-width: 100%;
+  }
+
+  .veda-about .about-staff-link {
+    width: 100%;
+    margin-bottom: 0;
+    justify-content: space-between;
+  }
+
+  .veda-about .about-staff-grid {
+    gap: 10px;
+  }
+
+  .veda-about .about-staff-info {
+    padding: 11px 9px 13px;
+  }
+
+  .veda-about .about-staff-info h3 {
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .veda-about .about-staff-info p {
+    padding-left: 7px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}
+
+/* Phones: 2 per row, last card centred */
+@media (max-width: 700px) {
+  .veda-about .about-staff-grid {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .veda-about .about-staff-card {
+    flex: 0 0 calc(50% - 7px);
+  }
+
+  .veda-about .about-staff-info {
+    padding: 13px 12px 15px;
+  }
+
+  .veda-about .about-staff-info h3 {
+    font-size: 16px;
+  }
+
+  .veda-about .about-staff-info p {
+    font-size: 13px;
+  }
+}
+
+/* Very small phones: slightly tighter so names still fit */
+@media (max-width: 360px) {
+  .veda-about .about-staff-grid {
+    gap: 10px;
+  }
+
+  .veda-about .about-staff-card {
+    flex-basis: calc(50% - 5px);
+  }
+
+  .veda-about .about-staff-info h3 {
+    font-size: 15px;
+  }
+}
+
+
+/* =========================================
+   9. PEOPLE (teachers + leadership)
+========================================= */
+
+@media (max-width: 700px) {
+  .veda-about .about-people .about-section-heading {
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .veda-about .about-people-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .veda-about .about-person-photo {
+    max-height: none;
+    aspect-ratio: 16 / 10;
+  }
+
+  .veda-about .about-person-info {
+    padding: 18px 18px 20px;
+  }
+
+  .veda-about .about-person-info h3 {
+    font-size: 22px;
+  }
+
+  .veda-about .about-person-info p {
+    font-size: 15px;
+  }
+}
+
+
+/* =========================================
+   10. CLOSING BANNER
+   Phones: photo on top fading into the navy text
+========================================= */
+
+@media (max-width: 700px) {
+  .veda-about .about-cta-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .veda-about .about-cta-photo {
+    order: -1;
+    aspect-ratio: 16 / 10;
+  }
+
+  .veda-about .about-cta-photo::after {
+    background: linear-gradient(180deg, transparent 45%, var(--about-deep));
+  }
+
+  .veda-about .about-cta-content {
+    padding: 6px 20px 28px;
+  }
+
+  .veda-about .about-cta-content h2 {
+    font-size: clamp(28px, 7.4vw, 34px);
+  }
+
+  .veda-about .about-cta-buttons {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    text-align: center;
+  }
+
+  .veda-about .about-cta-link {
+    justify-content: center;
+    font-size: 15px;
+  }
+}

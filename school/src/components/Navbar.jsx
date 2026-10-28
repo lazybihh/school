@@ -21,7 +21,8 @@ const SCHOOL_LINKS = [
 
 const LINKS_AFTER = [
   { to: "/admissions", label: "Admissions" },
-  { to: "/blog-news", label: "Blog & News" },
+  { to: "/blog", label: "Blog" },
+  { to: "/blog-news", label: "News" },
   { to: "/gallery", label: "Gallery" },
   { to: "/contact", label: "Contact Us" }
 ];

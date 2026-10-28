@@ -902,3 +902,255 @@
     transition: none;
   }
 }
+/* =========================================
+   VEDA FACILITIES: RESPONSIVE FIXES
+   Import this LAST in Facilities.jsx:
+
+     import "./Facilities.css";
+     import "./FacilitiesResponsive.css";
+
+   What changes on smaller screens:
+     1. The navy highlights panel is hidden (tablet + phone)
+     2. The 6 facility options always show together, no scrolling
+     3. The 3 "other facilities" cards stay in ONE row, no scrolling
+
+   Every rule starts with ".veda-facilities" so it wins over
+   the old media queries in Facilities.css.
+========================================= */
+
+
+/* =========================================
+   1. INTRO: navy panel hidden on tablet and phone
+   (desktop keeps it on the right side, as designed)
+========================================= */
+
+@media (max-width: 900px) {
+  .veda-facilities .fa-highlights {
+    display: none;
+  }
+
+  .veda-facilities .fa-intro-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .veda-facilities .fa-intro,
+  .veda-facilities .fa-main,
+  .veda-facilities .fa-other {
+    padding: 34px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .veda-facilities .fa-container {
+    width: calc(100% - 36px);
+  }
+
+  .veda-facilities .fa-intro,
+  .veda-facilities .fa-main,
+  .veda-facilities .fa-other {
+    padding: 30px 0;
+  }
+
+  .veda-facilities .fa-intro h2,
+  .veda-facilities .fa-heading h2 {
+    font-size: clamp(27px, 7.4vw, 32px);
+  }
+
+  .veda-facilities .fa-lead {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .veda-facilities .fa-intro-link {
+    margin-top: 16px;
+  }
+}
+
+
+/* =========================================
+   2. FACILITY OPTIONS (Library, Laboratories ...)
+   Laptop: 6 in a row, icon above the name
+   Tablet and phone: 3 x 2 grid, no scrolling
+========================================= */
+
+@media (max-width: 1100px) {
+  .veda-facilities .fa-chip {
+    min-height: 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 6px;
+    text-align: center;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 900px) {
+  .veda-facilities .fa-chips {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0 0 20px;
+    padding: 0;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .veda-facilities .fa-chip {
+    flex: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .veda-facilities .fa-chips {
+    gap: 8px;
+  }
+
+  .veda-facilities .fa-chip {
+    gap: 7px;
+    padding: 11px 4px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    line-height: 1.25;
+  }
+
+  .veda-facilities .fa-chip-icon {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+
+/* =========================================
+   3. FACILITY DETAILS (photos + points)
+   small tidy-ups for tablet and phone
+========================================= */
+
+@media (max-width: 900px) {
+  .veda-facilities .fa-detail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .veda-facilities .fa-detail {
+    padding: 18px 16px;
+  }
+
+  .veda-facilities .fa-collage {
+    height: 240px;
+  }
+}
+
+
+/* =========================================
+   4. OUR OTHER FACILITIES: always 3 in one row
+   No scrolling, no arrows, no auto-scroll
+   (the page code switches auto-scroll off by itself
+   because nothing is left to scroll)
+========================================= */
+
+.veda-facilities .fa-track {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding: 8px 0 16px;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.veda-facilities .fa-other-card {
+  flex: none;
+  width: auto;
+}
+
+.veda-facilities .fa-arrows {
+  display: none;
+}
+
+/* Tablet: same layout, a little smaller */
+@media (max-width: 900px) {
+  .veda-facilities .fa-track {
+    gap: 12px;
+  }
+
+  .veda-facilities .fa-other-photo {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .veda-facilities .fa-other-icon {
+    bottom: -22px;
+    left: 16px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .veda-facilities .fa-other-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .veda-facilities .fa-other-body {
+    padding: 32px 16px 18px;
+  }
+
+  .veda-facilities .fa-other-name {
+    font-size: 20px;
+  }
+
+  .veda-facilities .fa-other-text {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+}
+
+/* Phone: three narrow cards. Photo, icon and name only;
+   the short description is hidden because it would turn into
+   a very tall, thin column. */
+@media (max-width: 600px) {
+  .veda-facilities .fa-track {
+    gap: 8px;
+    padding: 6px 0 12px;
+  }
+
+  .veda-facilities .fa-other-card {
+    border-radius: 10px;
+    border-bottom-width: 3px;
+  }
+
+  .veda-facilities .fa-other-photo {
+    aspect-ratio: 1 / 1;
+  }
+
+  .veda-facilities .fa-other-icon {
+    bottom: -16px;
+    left: 50%;
+    width: 34px;
+    height: 34px;
+    border-width: 2px;
+    transform: translateX(-50%);
+  }
+
+  .veda-facilities .fa-other-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .veda-facilities .fa-other-body {
+    padding: 24px 6px 14px;
+    text-align: center;
+  }
+
+  .veda-facilities .fa-other-name {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .veda-facilities .fa-other-text {
+    display: none;
+  }
+}

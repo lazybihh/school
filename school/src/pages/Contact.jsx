@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -7,8 +7,8 @@ import {
   ClipboardList,
   Globe,
   MapPin,
+  MessageCircle,
   Phone,
-  School,
   Send
 } from "lucide-react";
 
@@ -19,7 +19,7 @@ import "./Contact.css";
 
 /*
   SCHOOL DETAILS: fill these in with the school's real information.
-  Anything left empty ("") is simply not shown on the page.
+  Anything left empty ("") falls back to the sample text shown below.
 */
 const SCHOOL = {
   name: "VEDA International School",
@@ -28,6 +28,9 @@ const SCHOOL = {
   email: "",                           // for example "info@school.com"
   hours: ""                            // for example "Mon to Sat, 8:00 AM to 2:00 PM"
 };
+
+/* Used when SCHOOL.phone is empty. */
+const SAMPLE_PHONE = "+91 98765 43210";
 
 /*
   MAP: replace this with the agreed Google Maps embed link
@@ -71,38 +74,62 @@ const emptyForm = {
   message: ""
 };
 
-/* Shows a branded placeholder if a photograph is missing. */
+/* Small icons for the social buttons (drawn here so no extra package is needed). */
 
-function LocalImage({ src, alt, className = "", ...props }) {
-  const [failed, setFailed] = useState(false);
+function SocialIcon({ name }) {
+  const common = {
+    width: 16,
+    height: 16,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true
+  };
 
-  useEffect(() => {
-    setFailed(false);
-  }, [src]);
+  if (name === "Instagram") {
+    return (
+      <svg {...common}>
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.5" cy="6.5" r="0.6" />
+      </svg>
+    );
+  }
 
-  return (
-    <div className={`ct-image-holder ${className}`}>
-      {!failed ? (
-        <img src={src} alt={alt} onError={() => setFailed(true)} {...props} />
-      ) : (
-        <div className="ct-image-placeholder" role="img" aria-label={alt}>
-          <School size={28} strokeWidth={1.4} />
-          <span>VEDA</span>
-        </div>
-      )}
-    </div>
-  );
+  if (name === "Facebook") {
+    return (
+      <svg {...common}>
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+      </svg>
+    );
+  }
+
+  return <MessageCircle size={16} strokeWidth={2} aria-hidden="true" />;
 }
 
 function Contact() {
   const [form, setForm] = useState(emptyForm);
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
 
+  const phone = SCHOOL.phone || SAMPLE_PHONE;
+
+  /*
+    The four cards at the top. Every card has the same parts:
+      label, value (main line), detail (supporting line), and a footer
+      (a link, or social buttons). "featured" makes a card stand out.
+
+    SAMPLE TEXT: the "detail" lines and the fallback opening hours are
+    examples. Replace them with the school's approved wording.
+  */
   const infoCards = [
     {
       icon: MapPin,
       label: "VISIT US",
-      value: SCHOOL.address || "Thurana (Hansi), Haryana",
+      value: SCHOOL.address,
+      detail: "Visit us on any working day. Our team will be happy to help you.",
       linkText: "Get Directions",
       href: DIRECTIONS_URL,
       external: true
@@ -110,22 +137,26 @@ function Contact() {
     {
       icon: Phone,
       label: "CALL US",
-      value: SCHOOL.phone || "+91 98765 43210",
+      value: phone,
+      detail: SCHOOL.hours || "Monday to Saturday, 8:00 AM to 2:00 PM",
       linkText: "Call Now",
-      href: `tel:${(SCHOOL.phone || "+91 98765 43210").replace(/[^\d+]/g, "")}`
+      href: `tel:${phone.replace(/[^\d+]/g, "")}`
     },
     {
       icon: Globe,
       label: "SOCIAL MEDIA",
-      value: "Connect with VEDA for school support, notices and updates.",
+      value: "Stay Connected",
+      detail: "Follow VEDA for school notices and updates.",
       socialLinks: SOCIAL_LINKS
     },
     {
       icon: ClipboardList,
       label: "ADMISSIONS",
       value: "Looking to join VEDA?",
+      detail: "Admissions are open for Class 1 to 12. Talk to our admission team.",
       linkText: "Admission Enquiry",
-      to: "/admissions#enquiry"
+      to: "/admissions#enquiry",
+      featured: true
     }
   ];
 
@@ -196,17 +227,21 @@ function Contact() {
                 const Icon = card.icon;
 
                 return (
-                  <article className="ct-info-card" key={card.label}>
+                  <article
+                    className={card.featured ? "ct-info-card featured" : "ct-info-card"}
+                    key={card.label}
+                  >
                     <span className="ct-icon-circle">
-                      <Icon size={22} strokeWidth={1.7} />
+                      <Icon size={24} strokeWidth={1.7} />
                     </span>
 
                     <span className="ct-info-label">{card.label}</span>
-                    <p>{card.value}</p>
+                    <h3 className="ct-info-value">{card.value}</h3>
+                    <p className="ct-info-detail">{card.detail}</p>
 
-                    {card.socialLinks ? (
-                      <div className="ct-social-links">
-                        {card.socialLinks.map((link) => (
+                    <div className="ct-info-footer">
+                      {card.socialLinks &&
+                        card.socialLinks.map((link) => (
                           <a
                             key={link.label}
                             href={link.href}
@@ -214,29 +249,29 @@ function Contact() {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
+                            <SocialIcon name={link.label} />
                             {link.label}
                           </a>
                         ))}
-                      </div>
-                    ) : null}
 
-                    {card.to && (
-                      <Link to={card.to} className="ct-text-link">
-                        {card.linkText} <ArrowUpRight size={16} />
-                      </Link>
-                    )}
+                      {card.to && (
+                        <Link to={card.to} className="ct-text-link">
+                          {card.linkText} <ArrowUpRight size={16} />
+                        </Link>
+                      )}
 
-                    {card.href && (
-                      <a
-                        href={card.href}
-                        className="ct-text-link"
-                        {...(card.external
-                          ? { target: "_blank", rel: "noopener noreferrer" }
-                          : {})}
-                      >
-                        {card.linkText} <ArrowUpRight size={16} />
-                      </a>
-                    )}
+                      {card.href && (
+                        <a
+                          href={card.href}
+                          className="ct-text-link"
+                          {...(card.external
+                            ? { target: "_blank", rel: "noopener noreferrer" }
+                            : {})}
+                        >
+                          {card.linkText} <ArrowUpRight size={16} />
+                        </a>
+                      )}
+                    </div>
                   </article>
                 );
               })}

@@ -649,3 +649,271 @@
     animation-iteration-count: 1 !important;
   }
 }
+/* =========================================
+   VEDA FACULTY: RESPONSIVE FIXES
+   Import this LAST in Faculty.jsx:
+
+     import "./Faculty.css";
+     import "./FacultyResponsive.css";
+
+   Cards visible before anyone has to scroll:
+     Laptop / desktop ....... 4 cards
+     Tablet and big phone ... 3 cards
+     Phone .................. 2.5 cards (the 3rd peeks in so
+                              people can see there is more)
+
+   Every rule starts with ".veda-faculty" so it wins over the
+   old media queries in Faculty.css.
+========================================= */
+
+
+/* =========================================
+   1. NOTHING MAY BE WIDER THAN THE SCREEN
+   (this is what pushed the heading, search box and
+   dropdown off the right edge)
+========================================= */
+
+.veda-faculty {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.veda-faculty .fc-section,
+.veda-faculty .fc-container,
+.veda-faculty .fc-heading,
+.veda-faculty .fc-tools,
+.veda-faculty .fc-filters,
+.veda-faculty .fc-slider {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.veda-faculty .fc-container {
+  width: min(1240px, calc(100% - 80px));
+}
+
+.veda-faculty .fc-lead,
+.veda-faculty .fc-heading h2 {
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 1100px) {
+  .veda-faculty .fc-container {
+    width: min(1240px, calc(100% - 60px));
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-faculty .fc-container {
+    width: min(1240px, calc(100% - 36px));
+  }
+}
+
+@media (max-width: 360px) {
+  .veda-faculty .fc-container {
+    width: min(1240px, calc(100% - 28px));
+  }
+}
+
+
+/* =========================================
+   2. HEADING, SEARCH, SORT, FILTERS
+========================================= */
+
+@media (max-width: 800px) {
+  .veda-faculty .fc-tools {
+    grid-template-columns: minmax(0, 1fr) 190px;
+  }
+}
+
+@media (max-width: 700px) {
+  .veda-faculty .fc-section {
+    padding: 30px 0 32px;
+  }
+
+  .veda-faculty .fc-heading {
+    margin-bottom: 20px;
+  }
+
+  .veda-faculty .fc-heading h2 {
+    font-size: clamp(28px, 7.6vw, 34px);
+  }
+
+  .veda-faculty .fc-eyebrow {
+    font-size: 12px;
+    letter-spacing: 1.4px;
+  }
+
+  .veda-faculty .fc-lead {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* search on one line, sort menu under it, both full width */
+  .veda-faculty .fc-tools {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .veda-faculty .fc-search input,
+  .veda-faculty .fc-sort {
+    font-size: 15px;
+  }
+
+  /* pills WRAP onto two rows instead of running off the screen */
+  .veda-faculty .fc-filters {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 14px;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .veda-faculty .fc-filter {
+    min-height: 40px;
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+
+  .veda-faculty .fc-count {
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+}
+
+
+/* =========================================
+   3. CARDS
+========================================= */
+
+/* Tablet and big phone: exactly 3 cards in view */
+@media (min-width: 601px) and (max-width: 1100px) {
+  .veda-faculty .fc-track {
+    gap: 12px;
+  }
+
+  .veda-faculty .fc-card {
+    flex-basis: calc((100% - 24px) / 3);
+  }
+
+  .veda-faculty .fc-info {
+    padding: 14px 13px 16px;
+  }
+
+  .veda-faculty .fc-name {
+    font-size: 16px;
+  }
+
+  .veda-faculty .fc-role {
+    font-size: 13px;
+  }
+}
+
+/* Phone: 2.5 cards in view, portrait photos so faces stay big */
+@media (max-width: 600px) {
+  .veda-faculty .fc-track {
+    gap: 10px;
+    padding: 6px 0 14px;
+  }
+
+  .veda-faculty .fc-card {
+    flex: 0 0 calc((100% - 20px) / 2.5);
+  }
+
+  .veda-faculty .fc-photo {
+    aspect-ratio: 4 / 5;
+  }
+
+  .veda-faculty .fc-photo img {
+    object-position: center 20%;
+  }
+
+  .veda-faculty .fc-photo-placeholder span {
+    font-size: 24px;
+  }
+
+  .veda-faculty .fc-info {
+    padding: 11px 10px 13px;
+  }
+
+  .veda-faculty .fc-name {
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .veda-faculty .fc-role {
+    padding-left: 7px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}
+
+/* Arrows: centred on the cards, smaller on touch screens */
+@media (max-width: 1100px) {
+  .veda-faculty .fc-arrow {
+    top: 50%;
+    margin-top: -27px;
+  }
+
+  .veda-faculty .fc-arrow-left {
+    left: -10px;
+  }
+
+  .veda-faculty .fc-arrow-right {
+    right: -10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .veda-faculty .fc-arrow {
+    width: 34px;
+    height: 34px;
+    margin-top: -24px;
+  }
+
+  .veda-faculty .fc-arrow-left {
+    left: -4px;
+  }
+
+  .veda-faculty .fc-arrow-right {
+    right: -4px;
+  }
+}
+
+
+/* =========================================
+   4. NUMBERS BAND
+   3 across even on phones, so it stays short
+========================================= */
+
+@media (max-width: 600px) {
+  .veda-faculty .fc-stats {
+    margin-bottom: 28px;
+    padding: 24px 0;
+  }
+
+  .veda-faculty .fc-stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .veda-faculty .fc-stat {
+    padding: 6px 8px;
+  }
+
+  .veda-faculty .fc-stat + .fc-stat {
+    border-top: 0;
+    border-left: 1px solid #e3dac8;
+  }
+
+  .veda-faculty .fc-stat strong {
+    font-size: 28px;
+  }
+
+  .veda-faculty .fc-stat span {
+    font-size: 12px;
+    line-height: 1.4;
+    overflow-wrap: normal;
+  }
+}

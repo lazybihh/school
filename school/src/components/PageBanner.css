@@ -106,37 +106,14 @@
   color: #f2c55d;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .page-banner {
-    height: clamp(260px, 72vw, 380px);
+    height: auto;
+    aspect-ratio: 1962 / 801;
   }
 
   .page-banner-tag {
-    padding: 8px 11px;
-    font-size: 10px;
-    letter-spacing: 0.85px;
-  }
-
-  .page-banner-tag-school {
-    top: 14px;
-    left: 14px;
-  }
-
-  .page-banner-tag-location {
     display: none;
-  }
-
-  .page-banner-tag-caption {
-    bottom: 14px;
-    max-width: calc(100% - 32px);
-    padding: 9px 15px;
-  }
-
-  .page-banner-breadcrumb {
-    bottom: 84px;
-    left: 14px;
-    padding: 7px 9px;
-    font-size: 9px;
   }
 }
 
