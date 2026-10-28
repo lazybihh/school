@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 
 import {
   ArrowDown,
@@ -10,10 +9,8 @@ import {
   ChevronRight,
   Droplets,
   FlaskConical,
-  GraduationCap,
   HeartPulse,
   Library,
-  MapPin,
   Mic,
   Palette,
   Presentation,
@@ -27,6 +24,7 @@ import {
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import PageBanner from "../components/PageBanner";
 import "./Facilities.css";
 
 /* =====================================================
@@ -487,38 +485,11 @@ function Facilities() {
 
       <main className="veda-facilities">
 
-        {/* 1. BANNER */}
-        <section className="fa-banner" aria-label="Facilities">
-          <div className="fa-banner-stage">
-            <LocalImage
-              src="/images/hero.png"
-              alt="VEDA International School campus and students"
-              className="fa-banner-photo"
-              loading="eager"
-            />
-
-            <div className="fa-tag fa-tag-top-left">
-              <GraduationCap size={18} />
-              <strong>VEDA INTERNATIONAL SCHOOL</strong>
-            </div>
-
-            <div className="fa-tag fa-tag-top-right">
-              <MapPin size={16} />
-              <span>THURANA (HANSI)</span>
-            </div>
-
-            <nav className="fa-tag fa-tag-bottom-left" aria-label="Breadcrumb">
-              <Link to="/">Home</Link>
-              <ChevronRight size={14} />
-              <span aria-current="page">Facilities</span>
-            </nav>
-
-            <div className="fa-tag fa-tag-center">
-              <small>FACILITIES</small>
-              <strong>A Campus Built for Learning</strong>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          image="/images/hero.png"
+          alt="VEDA International School campus and students"
+          breadcrumb={[{ label: "Home", to: "/" }, { label: "Facilities" }]}
+        />
 
         {/* 2. INTRODUCTION: text on the left, three highlights on the right */}
         <section className="fa-intro">
@@ -531,7 +502,7 @@ function Facilities() {
               </div>
 
               <h2>
-                Everything Your Child <em>Needs to Grow</em>
+                Everything Your Child to <em>Grow</em>
               </h2>
 
               <p className="fa-lead">

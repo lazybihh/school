@@ -1,27 +1,16 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-
 import {
   ArrowUpRight,
   CalendarDays,
   ChevronRight,
-  GraduationCap,
-  MapPin,
   School
 } from "lucide-react";
-
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import PageBanner from "../components/PageBanner";
 import "./Blog.css";
-
-/*
-  All images are LOCAL (public/images). No external image URLs.
-
-  SAMPLE CONTENT: the news items below point to real pages of the website.
-  Replace them with approved school news when it is available.
-  To show a date on an item, fill in its "date" (for example "12 Nov 2026").
-  Items with an empty date simply show no date.
-*/
 
 const categories = ["All", "School News", "Announcements", "Updates"];
 
@@ -76,8 +65,6 @@ const newsItems = [
   }
 ];
 
-/* General learning articles for parents and students. */
-
 const articles = [
   {
     label: "STUDY HABITS",
@@ -116,8 +103,6 @@ const articles = [
   }
 ];
 
-/* The card shown beside the scrolling news list. */
-
 const featuredStory = {
   label: "FEATURED",
   title: "Learning at VEDA International School",
@@ -126,8 +111,6 @@ const featuredStory = {
   image: "/images/veda-classroom.jpg",
   link: "/about"
 };
-
-/* Shows a branded placeholder if a photograph is missing. */
 
 function LocalImage({ src, alt, className = "", ...props }) {
   const [failed, setFailed] = useState(false);
@@ -150,17 +133,8 @@ function LocalImage({ src, alt, className = "", ...props }) {
   );
 }
 
-/*
-  Vertical news list.
-  With more than 3 items it scrolls on its own and loops forever.
-  It stops while the mouse is over it or a link has keyboard focus.
-  With 3 items or fewer it is a normal static list.
-*/
-
 function NewsTicker({ items }) {
   const shouldScroll = items.length > 3;
-
-  // The list is repeated once so the loop has no visible jump.
   const copies = shouldScroll ? [0, 1] : [0];
 
   return (
@@ -192,7 +166,6 @@ function NewsTicker({ items }) {
                 <div className="bn-news-text">
                   <div className="bn-news-meta">
                     <span>{item.category.toUpperCase()}</span>
-
                     {item.date && (
                       <span className="bn-news-date">
                         <CalendarDays size={12} />
@@ -200,7 +173,6 @@ function NewsTicker({ items }) {
                       </span>
                     )}
                   </div>
-
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
                 </div>
@@ -217,58 +189,108 @@ function NewsTicker({ items }) {
 
 function BlogNews() {
   const [filter, setFilter] = useState("All");
+  const [showAllArticles, setShowAllArticles] = useState(false);
   const articlesGridRef = useRef(null);
+  const articlesPausedRef = useRef(false);
+  const dragStateRef = useRef({
+    isDown: false,
+    startX: 0,
+    scrollLeft: 0
+  });
+
+  // Automatic infinite scrolling, using the duplicated article set.
+  useEffect(() => {
+    const viewport = articlesGridRef.current;
+    if (!viewport) return undefined;
+
+    let frameId;
+    let previousTime = 0;
+    const speed = 24;
+
+    const tick = (time) => {
+      if (!previousTime) previousTime = time;
+      const elapsed = Math.min(time - previousTime, 40);
+      previousTime = time;
+
+      const firstSet = viewport.querySelector(".bn-articles-set");
+      const loopWidth = firstSet?.getBoundingClientRect().width || 0;
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      if (
+        !showAllArticles &&
+        !reducedMotion &&
+        !articlesPausedRef.current &&
+        !dragStateRef.current.isDown &&
+        loopWidth > 0
+      ) {
+        viewport.scrollLeft += (speed * elapsed) / 1000;
+
+        if (viewport.scrollLeft >= loopWidth) {
+          viewport.scrollLeft -= loopWidth;
+        }
+      }
+
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [showAllArticles]);
+
+  const moveArticles = (direction) => {
+    const viewport = articlesGridRef.current;
+    if (!viewport) return;
+
+    const firstSet = viewport.querySelector(".bn-articles-set");
+    const loopWidth = firstSet?.getBoundingClientRect().width || 0;
+    const step = Math.max(260, viewport.clientWidth * 0.8);
+
+    if (direction < 0 && viewport.scrollLeft <= 2 && loopWidth > 0) {
+      viewport.scrollLeft = loopWidth;
+    }
+
+    viewport.scrollBy({
+      left: direction * step,
+      behavior: "smooth"
+    });
+  };
 
   const visibleNews =
     filter === "All"
       ? newsItems
       : newsItems.filter((item) => item.category === filter);
 
+  const renderArticleCard = (article) => (
+    <article className="bn-article-card" key={article.title}>
+      <LocalImage
+        src={article.image}
+        alt={article.title}
+        className="bn-article-photo"
+        loading="lazy"
+      />
+      <div className="bn-article-body">
+        <span>{article.label}</span>
+        <h3>{article.title}</h3>
+        <p>{article.description}</p>
+      </div>
+    </article>
+  );
+
   return (
     <>
       <Navbar />
 
       <main className="veda-blog">
-
-        {/* 1. BANNER: clear photograph, text only as small tags */}
-
-        <section className="bn-banner" aria-label="Blog and News">
-          <div className="bn-banner-stage">
-            <LocalImage
-              src="/images/hero.png"
-              alt="VEDA International School campus and students"
-              className="bn-banner-photo"
-              loading="eager"
-            />
-
-            <div className="bn-tag bn-tag-top-left">
-              <GraduationCap size={17} />
-              <strong>VEDA INTERNATIONAL SCHOOL</strong>
-            </div>
-
-            <div className="bn-tag bn-tag-top-right">
-              <MapPin size={15} />
-              <span>THURANA (HANSI)</span>
-            </div>
-
-            <nav className="bn-tag bn-tag-bottom-left" aria-label="Breadcrumb">
-              <Link to="/">Home</Link>
-              <ChevronRight size={13} />
-              <span aria-current="page">Blog & News</span>
-            </nav>
-
-            <div className="bn-tag bn-tag-center">
-              <small>BLOG & NEWS</small>
-              <strong>News, Stories & Updates</strong>
-            </div>
-          </div>
-        </section>
-
-        {/* 2. LATEST NEWS: scrolling list and featured card */}
+        <PageBanner
+          image="/images/hero.png"
+          alt="VEDA International School campus and students"
+          breadcrumb={[{ label: "Home", to: "/" }, { label: "Blog & News" }]}
+        />
 
         <section className="bn-news">
           <div className="bn-container bn-news-layout">
-
             <div className="bn-news-main">
               <div className="bn-eyebrow">
                 <span />
@@ -297,7 +319,6 @@ function BlogNews() {
                 ))}
               </div>
 
-              {/* key restarts the scroll when the filter changes */}
               <NewsTicker items={visibleNews} key={filter} />
             </div>
 
@@ -313,89 +334,123 @@ function BlogNews() {
                 <span className="bn-featured-label">{featuredStory.label}</span>
                 <h3>{featuredStory.title}</h3>
                 <p>{featuredStory.description}</p>
-
                 <Link to={featuredStory.link} className="bn-text-link">
                   Know More About VEDA <ArrowUpRight size={16} />
                 </Link>
               </div>
             </article>
-
           </div>
         </section>
 
-        {/* 3. EDUCATIONAL ARTICLES */}
-
         <section className="bn-articles">
           <div className="bn-container">
-
             <div className="bn-section-heading">
               <div>
                 <div className="bn-eyebrow">
                   <span />
                   READ & LEARN
                 </div>
-
                 <h2>
                   Educational <em>Articles.</em>
                 </h2>
               </div>
 
-              <p className="bn-intro">
-                Simple ideas for parents and students to support learning at home.
-              </p>
-            </div>
-
-            <div className="bn-articles-carousel">
-              <div
-                className="bn-articles-grid"
-                role="region"
-                aria-label="Educational articles"
-                tabIndex={0}
-                ref={articlesGridRef}
-              >
-                <div className="bn-articles-track">
-                  {[0, 1].map((copy) => (
-                    <div
-                      className="bn-articles-set"
-                      key={copy}
-                      aria-hidden={copy === 1 ? "true" : undefined}
-                    >
-                      {articles.map((article) => (
-                        <article className="bn-article-card" key={article.title}>
-                          <LocalImage
-                            src={article.image}
-                            alt={article.title}
-                            className="bn-article-photo"
-                            loading="lazy"
-                          />
-
-                          <div className="bn-article-body">
-                            <span>{article.label}</span>
-                            <h3>{article.title}</h3>
-                            <p>{article.description}</p>
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                  ))}
-                </div>
+              <div className="bn-articles-heading-actions">
+                <p className="bn-intro">
+                  Simple ideas for parents and students to support learning at home.
+                </p>
+                <button
+                  className="bn-text-link bn-see-all"
+                  type="button"
+                  onClick={() => setShowAllArticles((current) => !current)}
+                  aria-expanded={showAllArticles}
+                >
+                  {showAllArticles ? "Show Carousel" : "See All Articles"}
+                  <ArrowUpRight size={16} aria-hidden="true" />
+                </button>
               </div>
-              <button
-                className="bn-articles-next"
-                type="button"
-                aria-label="Scroll to more educational articles"
-                onClick={() =>
-                  articlesGridRef.current?.scrollBy({
-                    left: articlesGridRef.current.clientWidth * 0.8,
-                    behavior: "smooth"
-                  })
-                }
-              >
-                <ChevronRight size={22} aria-hidden="true" />
-              </button>
             </div>
 
-            {/* Closing strip */}
+            {showAllArticles ? (
+              <div className="bn-articles-all">
+                {articles.map(renderArticleCard)}
+              </div>
+            ) : (
+              <div className="bn-articles-carousel">
+                <button
+                  className="bn-articles-arrow bn-articles-prev"
+                  type="button"
+                  aria-label="Previous educational articles"
+                  onClick={() => moveArticles(-1)}
+                >
+                  <ChevronRight size={22} aria-hidden="true" />
+                </button>
+
+                <div
+                  className="bn-articles-grid"
+                  role="region"
+                  aria-label="Educational articles"
+                  tabIndex={0}
+                  ref={articlesGridRef}
+                  onMouseEnter={() => {
+                    articlesPausedRef.current = true;
+                  }}
+                  onMouseLeave={() => {
+                    dragStateRef.current.isDown = false;
+                    articlesPausedRef.current = false;
+                  }}
+                  onFocus={() => {
+                    articlesPausedRef.current = true;
+                  }}
+                  onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                      articlesPausedRef.current = false;
+                    }
+                  }}
+                  onMouseDown={(event) => {
+                    if (event.button !== 0) return;
+                    dragStateRef.current = {
+                      isDown: true,
+                      startX: event.clientX,
+                      scrollLeft: event.currentTarget.scrollLeft
+                    };
+                    articlesPausedRef.current = true;
+                  }}
+                  onMouseMove={(event) => {
+                    if (!dragStateRef.current.isDown) return;
+                    event.preventDefault();
+                    const distance =
+                      event.clientX - dragStateRef.current.startX;
+                    event.currentTarget.scrollLeft =
+                      dragStateRef.current.scrollLeft - distance;
+                  }}
+                  onMouseUp={() => {
+                    dragStateRef.current.isDown = false;
+                  }}
+                >
+                  <div className="bn-articles-track">
+                    {[0, 1].map((copy) => (
+                      <div
+                        className="bn-articles-set"
+                        key={copy}
+                        aria-hidden={copy === 1 ? "true" : undefined}
+                      >
+                        {articles.map(renderArticleCard)}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  className="bn-articles-arrow bn-articles-next"
+                  type="button"
+                  aria-label="Next educational articles"
+                  onClick={() => moveArticles(1)}
+                >
+                  <ChevronRight size={22} aria-hidden="true" />
+                </button>
+              </div>
+            )}
 
             <div className="bn-cta">
               <div>
@@ -407,16 +462,13 @@ function BlogNews() {
                 <Link to="/contact" className="bn-btn">
                   Contact Us <ArrowUpRight size={16} />
                 </Link>
-
                 <Link to="/gallery" className="bn-cta-link">
                   View Gallery
                 </Link>
               </div>
             </div>
-
           </div>
         </section>
-
       </main>
 
       <Footer />

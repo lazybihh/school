@@ -322,8 +322,9 @@ function Faculty() {
         <PageBanner
           image="/images/hero.png"
           alt="VEDA International School campus and students"
-          label="FACULTY AND STAFF"
-          caption="The People Behind VEDA"
+          // label="FACULTY AND STAFF"
+          // caption="The People Behind VEDA"
+          
           breadcrumb={[{ label: "Home", to: "/" }, { label: "Faculty" }]}
         />
 

@@ -56,8 +56,8 @@ function Classes() {
         <PageBanner
           image="/images/hero.png"
           alt="VEDA International School campus and students"
-          label="CLASSES"
-          caption="Learning at Every Stage"
+          // label="CLASSES"
+          // caption="Learning at Every Stage"
           breadcrumb={[{ label: "Home", to: "/" }, { label: "Classes" }]}
         />
 

@@ -4,10 +4,8 @@ import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
   CheckCircle2,
-  ChevronRight,
   ClipboardList,
   Globe,
-  GraduationCap,
   MapPin,
   Phone,
   School,
@@ -16,6 +14,7 @@ import {
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import PageBanner from "../components/PageBanner";
 import "./Contact.css";
 
 /*
@@ -165,39 +164,11 @@ function Contact() {
 
       <main className="veda-contact">
 
-        {/* 1. BANNER: clear photograph, text only as small tags */}
-
-        <section className="ct-banner" aria-label="Contact Us">
-          <div className="ct-banner-stage">
-            <LocalImage
-              src="/images/hero.png"
-              alt="VEDA International School campus and students"
-              className="ct-banner-photo"
-              loading="eager"
-            />
-
-            <div className="ct-tag ct-tag-top-left">
-              <GraduationCap size={18} />
-              <strong>VEDA INTERNATIONAL SCHOOL</strong>
-            </div>
-
-            <div className="ct-tag ct-tag-top-right">
-              <MapPin size={16} />
-              <span>THURANA (HANSI)</span>
-            </div>
-
-            <nav className="ct-tag ct-tag-bottom-left" aria-label="Breadcrumb">
-              <Link to="/">Home</Link>
-              <ChevronRight size={14} />
-              <span aria-current="page">Contact Us</span>
-            </nav>
-
-            <div className="ct-tag ct-tag-center">
-              <small>CONTACT US</small>
-              <strong>We'd Love to Hear from You</strong>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          image="/images/hero.png"
+          alt="VEDA International School campus and students"
+          breadcrumb={[{ label: "Home", to: "/" }, { label: "Contact Us" }]}
+        />
 
         {/* 2. CONTACT DETAILS */}
 

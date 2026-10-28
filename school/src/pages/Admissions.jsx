@@ -472,8 +472,6 @@ import {
   ChevronRight,
   ClipboardList,
   FileText,
-  GraduationCap,
-  MapPin,
   School,
   Send,
   UserCheck
@@ -481,6 +479,7 @@ import {
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import PageBanner from "../components/PageBanner";
 import "./Admissions.css";
 
 /*
@@ -616,39 +615,11 @@ function Admissions() {
 
       <main className="veda-admissions">
 
-        {/* 1. BANNER: clear photograph, text only as small tags */}
-
-        <section className="ad-banner" aria-label="Admissions">
-          <div className="ad-banner-stage">
-            <LocalImage
-              src="/images/hero.png"
-              alt="VEDA International School campus and students"
-              className="ad-banner-photo"
-              loading="eager"
-            />
-
-            <div className="ad-tag ad-tag-top-left">
-              <GraduationCap size={18} />
-              <strong>VEDA INTERNATIONAL SCHOOL</strong>
-            </div>
-
-            <div className="ad-tag ad-tag-top-right">
-              <MapPin size={16} />
-              <span>THURANA (HANSI)</span>
-            </div>
-
-            <nav className="ad-tag ad-tag-bottom-left" aria-label="Breadcrumb">
-              <Link to="/">Home</Link>
-              <ChevronRight size={14} />
-              <span aria-current="page">Admissions</span>
-            </nav>
-
-            <div className="ad-tag ad-tag-center">
-              <small>ADMISSIONS</small>
-              <strong>Begin Your Journey with VEDA</strong>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          image="/images/hero.png"
+          alt="VEDA International School campus and students"
+          breadcrumb={[{ label: "Home", to: "/" }, { label: "Admissions" }]}
+        />
 
         {/* 2. INTRODUCTION AND QUICK LINKS */}
 

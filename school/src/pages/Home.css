@@ -1411,3 +1411,277 @@
     transform: none;
   }
 }
+
+/* =========================================
+   RESPONSIVE POLISH (CSS only)
+   Selectors start with "main.veda-home" so they win over the
+   font-size block above, whatever order the files load in.
+========================================= */
+
+/* ---------- HERO BANNER: keep the picture's wide shape ----------
+   On screens up to 1100px the banner height follows its width, so the
+   photo is no longer cropped into a box. If the picture looks cut off at
+   the sides, change 16 / 9 to match your banner (for example 3 / 2). */
+@media (max-width: 1100px) {
+  main.veda-home .vh-hero-stage {
+    height: auto;
+    max-height: 560px;
+    aspect-ratio: 16 / 9;
+  }
+
+  main.veda-home .vh-hero-picture img {
+    object-position: center center;
+  }
+}
+
+/* ---------- HERO TAGS: both tags stay visible on every screen ---------- */
+@media (max-width: 900px) {
+  main.veda-home .vh-hero .page-banner-tag {
+    padding: 8px 11px;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+  }
+
+  main.veda-home .vh-hero .page-banner-tag-school {
+    top: 14px;
+    left: 14px;
+  }
+
+  main.veda-home .vh-hero .page-banner-tag-location {
+    top: 14px;
+    right: 14px;
+    display: flex;
+  }
+}
+
+/* Phones: school tag top-left, location tag bottom-right, both small */
+@media (max-width: 600px) {
+  main.veda-home .vh-hero .page-banner-tag {
+    gap: 6px;
+    padding: 6px 9px;
+    font-size: 8.5px;
+    letter-spacing: 0.55px;
+  }
+
+  main.veda-home .vh-hero .page-banner-tag svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  main.veda-home .vh-hero .page-banner-tag-school {
+    top: 10px;
+    left: 10px;
+    border-left-width: 2px;
+  }
+
+  main.veda-home .vh-hero .page-banner-tag-location {
+    top: auto;
+    right: 10px;
+    bottom: 10px;
+    display: flex;
+    border-right-width: 2px;
+  }
+}
+
+/* ---------- Tablet: 601px to 1100px ---------- */
+@media (min-width: 601px) and (max-width: 1100px) {
+  main.veda-home .vh-highlights,
+  main.veda-home .vh-notices,
+  main.veda-home .vh-admissions,
+  main.veda-home .vh-important,
+  main.veda-home .vh-apply,
+  main.veda-home .vh-gallery {
+    padding-block: 44px;
+  }
+}
+
+/* Gallery swipe row on tablets: slightly taller photos */
+@media (min-width: 601px) and (max-width: 900px) {
+  main.veda-home .vh-gallery-tile {
+    height: 280px;
+  }
+}
+
+/* ---------- Large phones and portrait tablets: up to 720px ---------- */
+@media (max-width: 720px) {
+  main.veda-home h2 {
+    font-size: clamp(30px, 7.4vw, 40px);
+    line-height: 1.18;
+  }
+
+  main.veda-home .vh-school-story-content h3 {
+    font-size: clamp(24px, 6.4vw, 30px);
+  }
+
+  /* Principal card stacks: photo on top */
+  main.veda-home .vh-school-story {
+    grid-template-columns: 1fr;
+  }
+
+  main.veda-home .vh-principal-photo {
+    height: 300px;
+    min-height: 300px;
+  }
+
+  main.veda-home .vh-school-story-content {
+    padding: 28px 24px;
+  }
+
+  /* Admission panel stacks: photo below the text */
+  main.veda-home .vh-admission-panel {
+    grid-template-columns: 1fr;
+  }
+
+  main.veda-home .vh-admission-copy {
+    padding: 32px 28px;
+  }
+
+  main.veda-home .vh-admission-photo {
+    height: 260px;
+    min-height: 260px;
+  }
+
+  main.veda-home .vh-admission-photo::after {
+    background: linear-gradient(0deg, transparent 50%, var(--deep-navy));
+  }
+}
+
+/* ---------- Phones: up to 600px ---------- */
+@media (max-width: 600px) {
+  main.veda-home .vh-hero-stage {
+    height: clamp(240px, 60vw, 360px);
+    max-height: none;
+    aspect-ratio: auto;
+  }
+
+  main.veda-home .vh-principal-photo {
+    height: 260px;
+    min-height: 260px;
+  }
+
+  main.veda-home .vh-admission-photo {
+    height: 220px;
+    min-height: 220px;
+  }
+
+  main.veda-home .vh-admission-copy {
+    padding: 28px 22px;
+  }
+
+  main.veda-home .vh-btn,
+  main.veda-home .vh-text-link,
+  main.veda-home .vh-admission-link {
+    font-size: 14px;
+  }
+
+  main.veda-home .vh-section-aside p,
+  main.veda-home .vh-school-story-content > p,
+  main.veda-home .vh-admission-copy > p,
+  main.veda-home .vh-important-intro,
+  main.veda-home .vh-apply-side p {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  main.veda-home .vh-admission-actions {
+    width: 100%;
+  }
+
+  main.veda-home .vh-admission-actions .vh-btn {
+    width: 100%;
+  }
+}
+
+/* ---------- Small phones: up to 480px ---------- */
+@media (max-width: 480px) {
+  /* Admission steps: one comfortable column */
+  main.veda-home .vh-apply-steps {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  main.veda-home .vh-apply-step {
+    min-height: 0;
+    padding: 20px 20px 22px;
+  }
+
+  main.veda-home .vh-apply-ghost {
+    top: 10px;
+    right: 18px;
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 380px) {
+  main.veda-home .vh-btn {
+    font-size: 13px;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* ---------- Touch-friendly tap sizes ---------- */
+@media (max-width: 768px), (pointer: coarse) {
+  main.veda-home .vh-hero-controls-inner {
+    min-height: 48px;
+  }
+
+  main.veda-home .vh-hero-indicators button {
+    width: 44px;
+    height: 44px;
+    font-size: 13px;
+  }
+
+  main.veda-home .vh-hero-arrows button {
+    width: 40px;
+    height: 40px;
+  }
+
+  main.veda-home .vh-text-link {
+    min-height: 44px;
+  }
+}
+
+/* Touch laptops/tablets wider than 900px can't hover:
+   show every gallery caption instead of hiding it */
+@media (hover: none) and (min-width: 901px) {
+  main.veda-home .vh-gallery-row {
+    height: auto;
+    gap: 12px;
+    padding: 4px 2px 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    touch-action: pan-x;
+  }
+
+  main.veda-home .vh-gallery-tile {
+    height: 280px;
+    flex: 0 0 clamp(280px, 36vw, 420px);
+  }
+
+  main.veda-home .vh-gallery-caption {
+    opacity: 1;
+    transform: none;
+  }
+
+  main.veda-home .vh-gallery-open {
+    display: none;
+  }
+}
+
+@media (hover: none) {
+  main.veda-home .vh-notice-track {
+    animation: none;
+  }
+
+  main.veda-home .vh-notice-viewport {
+    height: auto;
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  main.veda-home .vh-notice-list[aria-hidden="true"] {
+    display: none;
+  }
+}

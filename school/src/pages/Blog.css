@@ -1,3 +1,4 @@
+
 /* =========================================
    VEDA INTERNATIONAL SCHOOL: BLOG & NEWS
 ========================================= */
@@ -9,7 +10,6 @@
   --warm-gold: #b78324;
   --ivory: #fcf8f0;
   --muted: #586c81;
-
   width: 100%;
   overflow: clip;
   background: #fff;
@@ -45,7 +45,7 @@
   margin-inline: auto;
 }
 
-/* ---------- Shared text styles ---------- */
+/* Shared text styles */
 
 .bn-eyebrow {
   display: flex;
@@ -101,7 +101,7 @@
   color: var(--warm-gold);
 }
 
-/* ---------- Images and fallback ---------- */
+/* Images and fallback */
 
 .bn-image-holder {
   position: relative;
@@ -141,7 +141,6 @@
 
 .bn-banner {
   --edge: max(40px, calc((100vw - 1240px) / 2));
-
   background: var(--deep-navy);
 }
 
@@ -298,7 +297,7 @@
   color: #fff;
 }
 
-/* Scrolling list */
+/* Scrolling news list */
 
 .bn-ticker {
   margin-inline: -8px;
@@ -317,7 +316,6 @@
   will-change: transform;
 }
 
-/* Stops while hovering or while a link has keyboard focus */
 .bn-ticker.is-scrolling:hover .bn-ticker-track,
 .bn-ticker.is-scrolling:focus-within .bn-ticker-track {
   animation-play-state: paused;
@@ -331,8 +329,12 @@
 }
 
 @keyframes bn-scroll {
-  from { transform: translateY(0); }
-  to { transform: translateY(-50%); }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
 }
 
 .bn-news-item {
@@ -460,7 +462,7 @@
 }
 
 /* =========================================
-   3. ARTICLES
+   3. EDUCATIONAL ARTICLES
 ========================================= */
 
 .bn-articles {
@@ -481,49 +483,43 @@
   margin: 0;
 }
 
+.bn-articles-heading-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.bn-see-all {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
 .bn-articles-carousel {
   position: relative;
+  min-width: 0;
 }
 
 .bn-articles-grid {
+  width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 2px 2px 12px;
+  padding: 4px 2px 16px;
   scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+  overscroll-behavior-x: contain;
+}
+
+.bn-articles-grid:active {
+  cursor: grabbing;
 }
 
 .bn-articles-grid::-webkit-scrollbar {
   display: none;
-}
-
-.bn-articles-next {
-  position: absolute;
-  z-index: 2;
-  top: 50%;
-  right: 12px;
-  display: grid;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  transform: translateY(-50%);
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  border-radius: 50%;
-  background: #fff;
-  color: var(--navy);
-  box-shadow: 0 5px 18px rgba(13, 43, 74, 0.2);
-  cursor: pointer;
-  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
-}
-
-.bn-articles-next:hover {
-  transform: translateY(-50%) scale(1.06);
-  background: var(--navy);
-  color: #fff;
-}
-
-.bn-articles-next:focus-visible {
-  outline: 3px solid var(--gold);
-  outline-offset: 3px;
 }
 
 .bn-articles-grid:focus-visible {
@@ -534,31 +530,66 @@
 .bn-articles-track {
   display: flex;
   width: max-content;
-  animation: bn-articles-scroll 45s linear infinite;
-  will-change: transform;
-}
-
-.bn-articles-carousel:hover .bn-articles-track,
-.bn-articles-carousel:focus-within .bn-articles-track {
-  animation-play-state: paused;
+  gap: 0;
+  will-change: scroll-position;
 }
 
 .bn-articles-set {
   display: flex;
   flex: 0 0 auto;
-  gap: 18px;
+  gap: 20px;
   width: max-content;
-  padding-right: 18px;
+  padding-right: 20px;
 }
 
-@keyframes bn-articles-scroll {
-  to {
-    transform: translateX(-50%);
-  }
+/* Previous and next arrows */
+
+.bn-articles-arrow {
+  position: absolute;
+  z-index: 3;
+  top: 42%;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--navy);
+  box-shadow: 0 5px 18px rgba(13, 43, 74, 0.2);
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
 }
+
+.bn-articles-prev {
+  left: 12px;
+}
+
+.bn-articles-prev svg {
+  transform: rotate(180deg);
+}
+
+.bn-articles-next {
+  right: 12px;
+}
+
+.bn-articles-arrow:hover {
+  transform: scale(1.06);
+  background: var(--navy);
+  color: #fff;
+}
+
+.bn-articles-arrow:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Article cards */
 
 .bn-article-card {
-  flex: 0 0 calc((min(1240px, 100vw - 80px) - 36px) / 3);
+  flex: 0 0 360px;
+  width: 360px;
+  min-width: 0;
   overflow: hidden;
   border-radius: 10px;
   background: #fff;
@@ -584,7 +615,7 @@
 }
 
 .bn-article-body {
-  padding: 18px 18px 20px;
+  padding: 18px 20px 20px;
 }
 
 .bn-article-body span {
@@ -611,7 +642,17 @@
   line-height: 1.7;
 }
 
-/* Closing strip */
+/* See All Articles grid */
+
+.bn-articles-all {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* =========================================
+   4. CLOSING STRIP
+========================================= */
 
 .bn-cta {
   display: flex;
@@ -681,7 +722,7 @@
 }
 
 /* =========================================
-   RESPONSIVE
+   5. RESPONSIVE
 ========================================= */
 
 @media (max-width: 1100px) {
@@ -714,13 +755,37 @@
   }
 
   .bn-article-card {
-    flex-basis: calc((100vw - 66px) / 2);
+    flex-basis: 320px;
+    width: 320px;
+  }
+
+  .bn-articles-all {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 760px) {
   .bn-article-card {
-    flex-basis: calc((100vw - 48px) * 0.85);
+    flex-basis: 82vw;
+    width: 82vw;
+  }
+
+  .bn-articles-heading-actions {
+    align-items: flex-start;
+  }
+
+  .bn-articles-all {
+    grid-template-columns: 1fr;
+  }
+
+  .bn-articles-set {
+    gap: 14px;
+    padding-right: 14px;
+  }
+
+  .bn-articles-arrow {
+    width: 40px;
+    height: 40px;
   }
 
   .bn-article-photo {
@@ -749,7 +814,8 @@
   }
 
   .bn-article-card {
-    flex-basis: calc((100vw - 36px) * 0.85);
+    flex-basis: 86vw;
+    width: 86vw;
   }
 
   .bn-banner {
@@ -815,7 +881,7 @@
   }
 }
 
-/* Calm motion for visitors who prefer it. */
+/* Respect reduced-motion preferences */
 
 @media (prefers-reduced-motion: reduce) {
   .veda-blog *,
@@ -824,15 +890,6 @@
     transition-duration: 0.01ms !important;
   }
 
-  .veda-blog .bn-articles-track {
-    animation: none;
-  }
-
-  .veda-blog .bn-articles-grid {
-    overflow-x: auto;
-  }
-
-  /* The news list becomes a normal scrollable list */
   .veda-blog .bn-ticker.is-scrolling .bn-ticker-track {
     animation: none;
   }
@@ -845,6 +902,8 @@
     display: none;
   }
 }
+
+/* Final text-size adjustments */
 
 .veda-blog .bn-eyebrow,
 .veda-blog .bn-news-meta,

@@ -106,8 +106,8 @@ function About() {
         <PageBanner
           image="/images/hero.png"
           alt="VEDA International School campus and students"
-          label="ABOUT US"
-          caption="Our Story. Our Purpose."
+          // label="ABOUT US"
+          // caption="Our Story. Our Purpose."
           breadcrumb={[
             { label: "Home", to: "/" },
             { label: "About Us" }

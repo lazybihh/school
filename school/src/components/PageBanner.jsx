@@ -18,10 +18,10 @@ export function PageBannerTags({ label, caption, breadcrumb }) {
         <span>THURANA (HANSI)</span>
       </div>
 
-      <div className="page-banner-tag page-banner-tag-caption">
+      {/* <div className="page-banner-tag page-banner-tag-caption">
         <small>{label}</small>
         <strong>{caption}</strong>
-      </div>
+      </div> */}
 
       {breadcrumb?.length > 0 && (
         <nav className="page-banner-tag page-banner-breadcrumb" aria-label="Breadcrumb">
@@ -53,7 +53,7 @@ export default function PageBanner({
   breadcrumb
 }) {
   return (
-    <section className="page-banner" aria-label={caption}>
+    <section className="page-banner" aria-label={caption || label || alt}>
       <LocalImage
         src={image}
         alt={alt}

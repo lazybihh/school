@@ -5,8 +5,6 @@ import {
   ArrowUpRight,
   ChevronLeft,
   ChevronRight,
-  GraduationCap,
-  MapPin,
   School,
   X,
   ZoomIn
@@ -14,6 +12,7 @@ import {
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import PageBanner from "../components/PageBanner";
 import "./Gallery.css";
 
 /*
@@ -146,39 +145,11 @@ function Gallery() {
 
       <main className="veda-gallery">
 
-        {/* 1. BANNER: clear photograph, text only as small tags */}
-
-        <section className="gl-banner" aria-label="Gallery">
-          <div className="gl-banner-stage">
-            <LocalImage
-              src="/images/hero.png"
-              alt="VEDA International School campus and students"
-              className="gl-banner-photo"
-              loading="eager"
-            />
-
-            <div className="gl-tag gl-tag-top-left">
-              <GraduationCap size={17} />
-              <strong>VEDA INTERNATIONAL SCHOOL</strong>
-            </div>
-
-            <div className="gl-tag gl-tag-top-right">
-              <MapPin size={15} />
-              <span>THURANA (HANSI)</span>
-            </div>
-
-            <nav className="gl-tag gl-tag-bottom-left" aria-label="Breadcrumb">
-              <Link to="/">Home</Link>
-              <ChevronRight size={13} />
-              <span aria-current="page">Gallery</span>
-            </nav>
-
-            <div className="gl-tag gl-tag-center">
-              <small>PHOTO GALLERY</small>
-              <strong>Moments at VEDA</strong>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          image="/images/hero.png"
+          alt="VEDA International School campus and students"
+          breadcrumb={[{ label: "Home", to: "/" }, { label: "Gallery" }]}
+        />
 
         {/* 2. PHOTO GRID */}
 

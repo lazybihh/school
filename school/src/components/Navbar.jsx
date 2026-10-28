@@ -100,11 +100,11 @@ function Navbar() {
                 className="veda-logo"
               />
 
-              <div className="veda-brand-text">
+              {/* <div className="veda-brand-text">
                 <span className="veda-brand-name">VEDA</span>
                 <span className="veda-brand-subtitle">INTERNATIONAL SCHOOL</span>
                 <span className="veda-brand-location">THURANA (HANSI)</span>
-              </div>
+              </div> */}
             </Link>
 
             <div
