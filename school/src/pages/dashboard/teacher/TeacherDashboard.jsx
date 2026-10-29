@@ -7,7 +7,6 @@ import TeacherAssignments from "./TeacherAssignments";
 import TeacherAttendance from "./TeacherAttendance";
 import TeacherClasses from "./TeacherClasses";
 import TeacherOverview from "./TeacherOverview";
-
 import React, { useState } from "react";
 
 import useSchool from "../shared/useSchool";

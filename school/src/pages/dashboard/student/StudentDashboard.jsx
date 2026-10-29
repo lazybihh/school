@@ -7,7 +7,6 @@ import StudentTimetable from "./StudentTimetable";
 import StudentAttendance from "./StudentAttendance";
 import StudentAcademics from "./StudentAcademics";
 import StudentOverview from "./StudentOverview";
-
 import React, { useState } from "react";
 
 import useSchool from "../shared/useSchool";

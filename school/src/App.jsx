@@ -44,12 +44,9 @@ import { SchoolProvider } from "./context/SchoolContext";
 
 // DASHBOARD STYLES
 
-import "./pages/dashboard/admin/Admin.css";
-import "./pages/dashboard/shared/Role.css";
-
 export default function App() {
   return (
-    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <BrowserRouter future={{ v7_startTransition:  true, v7_relativeSplatPath: true }}>
       <SchoolProvider>
         <ScrollToTop />
 

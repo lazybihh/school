@@ -17,6 +17,7 @@ import AdminAccounts from "./AdminAccounts";
 import AdminResults from "./AdminResults";
 import AdminTimetable from "./AdminTimetable";
 import useSchool from "../shared/useSchool";
+import "./Admin.css";
 
 const pages = {
   overview: ["Admin Overview", AdminOverview],

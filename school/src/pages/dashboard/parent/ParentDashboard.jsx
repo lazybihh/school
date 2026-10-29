@@ -8,7 +8,6 @@ import ParentAcademics from "./ParentAcademics";
 import ParentAttendance from "./ParentAttendance";
 import ParentChildren from "./ParentChildren";
 import ParentOverview from "./ParentOverview";
-
 import React, { useState } from "react";
 
 import useSchool from "../shared/useSchool";
