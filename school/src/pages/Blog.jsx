@@ -1,8 +1,9 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+
 import {
   ArrowRight,
+  ArrowLeft,
   ArrowUpRight,
   CalendarDays,
   Clock3,
@@ -13,13 +14,45 @@ import {
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PageBanner from "../components/PageBanner";
+
 import "./Blog.css";
 
-/*
-  BLOG DATA
-  Kept here to maintain your four-file requirement.
-  These are sample articles, not verified school news.
-*/
+/* =========================================================
+   1. SETTINGS
+   Change these numbers and names in one place.
+========================================================= */
+
+const STORIES_PER_PAGE = 9;
+const ALL_STORIES = "All Stories";
+
+const categories = [
+  ALL_STORIES,
+  "School News",
+  "Events",
+  "Achievements",
+  "Student Life",
+  "Announcements"
+];
+
+/* =========================================================
+   2. BLOG DATA
+
+   Right now the stories are written here by hand.
+   The BlogDetail page also reads this list.
+
+   TO ADD A BACKEND LATER:
+   - Ask your backend for the list, for example:
+       GET /api/blogs
+   - Each story must have the same fields as below
+     (id, slug, category, date, readTime, featured,
+      image, title, description, content).
+   - Replace this list with the data you get back, using
+     useState + useEffect inside Blog and BlogDetail.
+   - Nothing else in this file needs to change.
+
+   These stories are demo content. Replace them with
+   verified school updates before publishing.
+========================================================= */
 
 export const blogs = [
   {
@@ -28,8 +61,8 @@ export const blogs = [
     category: "Student Life",
     date: "October 12, 2026",
     readTime: "3 min read",
-    featured: true,
-    image: "/veda_blog_7_cropped/blog-1.jpg",
+    featured: true, // the one story shown in the top card
+    image: "/facilities/sports-3.jpg",
     title: "Small Steps, Big Dreams: Building a Brighter Future",
     description:
       "Every great journey begins with curiosity. From discovering new ideas in the classroom to building friendships and exploring individual talents, school life creates countless opportunities to learn and grow. Discover how meaningful everyday experiences inspire confidence, creativity and a lifelong love for learning.",
@@ -134,173 +167,328 @@ export const blogs = [
       "This section can be used to share upcoming activities, important notices and other useful information.",
       "Please refer to official school communications for confirmed dates, schedules and announcements."
     ]
+  },
+  {
+    id: 8,
+    slug: "power-of-reading",
+    category: "Student Life",
+    date: "September 5, 2026",
+    readTime: "3 min read",
+    image: "/veda_blog_7_cropped/blog-1.jpg",
+    title: "The Power of Reading and Imagination",
+    description:
+      "How books introduce young learners to new ideas, encourage imagination and develop a lasting curiosity about the world.",
+    content: [
+      "Reading is an important part of a child's learning journey. Books introduce new perspectives, encourage imagination and help students discover ideas beyond their immediate surroundings.",
+      "A positive reading environment gives children opportunities to expand their vocabulary, develop communication skills and explore different subjects at their own pace.",
+      "By making reading an enjoyable everyday experience, we can encourage young learners to develop curiosity and a lifelong appreciation for knowledge."
+    ]
+  },
+  {
+    id: 9,
+    slug: "growing-together",
+    category: "School News",
+    date: "September 1, 2026",
+    readTime: "2 min read",
+    image: "/veda_blog_7_cropped/blog-3.jpg",
+    title: "Growing Together Through Shared Experiences",
+    description:
+      "Exploring the importance of friendship, collaboration and meaningful connections throughout the school journey.",
+    content: [
+      "School life provides valuable opportunities for children to learn alongside one another and develop meaningful relationships.",
+      "Collaborative activities encourage communication, cooperation and respect for different ideas.",
+      "Every shared experience contributes to personal growth and reminds us that education is about more than academic learning."
+    ]
   }
 ];
 
-const categories = [
-  "All Stories",
-  "School News",
-  "Events",
-  "Achievements",
-  "Student Life",
-  "Announcements"
-];
+/* =========================================================
+   3. SMALL PIECES OF THE PAGE
+   Each piece does one job. The main Blog page at the
+   bottom puts them together.
+========================================================= */
+
+/* Shows a photo. If the photo is missing, shows a navy box
+   with a book icon instead of broken text. */
+function StoryImage({ src, alt }) {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  if (imageFailed) {
+    return (
+      <div className="vb-image-fallback" role="img" aria-label={alt}>
+        <BookOpen size={44} strokeWidth={1.3} />
+      </div>
+    );
+  }
+
+  return <img src={src} alt={alt} onError={() => setImageFailed(true)} />;
+}
+
+/* The top card: page introduction + the featured story */
+function IntroCard({ story }) {
+  return (
+    <section className="vb-hero">
+      <div className="vb-container vb-hero-layout">
+
+        {/* Left: featured photo */}
+        <div className="vb-hero-visual">
+          <Link
+            to={`/blog/${story.slug}`}
+            className="vb-hero-photo"
+            aria-label={`Read ${story.title}`}
+          >
+            <StoryImage src={story.image} alt={story.title} />
+          </Link>
+
+          <div className="vb-image-label">
+            <Sparkles size={15} />
+            <span>
+              <small>FEATURED</small>
+              VEDA STORY
+            </span>
+          </div>
+        </div>
+
+        {/* Right: introduction text + featured story details */}
+        <div className="vb-hero-content">
+          <span className="vb-kicker">
+            <span className="vb-kicker-line" />
+            THE VEDA JOURNAL
+          </span>
+
+          <h1>
+            Stories Beyond,
+            
+            <em> the Classroom.</em>
+          </h1>
+
+          <p className="vb-hero-description">
+            Explore meaningful experiences, inspiring ideas and memorable
+            moments from our school community. Every story offers a glimpse
+            into the curiosity and creativity that make learning special.
+            {/* From classroom discoveries and student achievements to
+            celebrations, sports and school news, the Veda Journal brings
+            together the moments that shape our children. */}
+          </p>
+
+          <div className="vb-featured-info">
+            <div className="vb-featured-meta">
+              <span className="vb-category">{story.category}</span>
+
+              <span className="vb-date">
+                <CalendarDays size={15} />
+                {story.date}
+              </span>
+            </div>
+
+            <h2>{story.title}</h2>
+
+            <div className="vb-featured-actions">
+              <Link to={`/blog/${story.slug}`} className="vb-primary-link">
+                Explore Featured Story
+                <ArrowUpRight size={18} />
+              </Link>
+
+              <span className="vb-read-time">
+                <Clock3 size={15} />
+                {story.readTime}
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* One story card in the grid */
+function StoryCard({ story, number }) {
+  const storyLink = `/blog/${story.slug}`;
+
+  return (
+    <article className="vb-card">
+
+      <Link
+        to={storyLink}
+        className="vb-card-photo"
+        aria-label={`Read ${story.title}`}
+      >
+        <StoryImage src={story.image} alt={story.title} />
+
+        <span className="vb-card-number">
+          {String(number).padStart(2, "0")}
+        </span>
+      </Link>
+
+      <div className="vb-card-body">
+
+        <div className="vb-card-topline">
+          <span className="vb-category">{story.category}</span>
+          <span className="vb-date">{story.date}</span>
+        </div>
+
+        <h3>
+          <Link to={storyLink}>{story.title}</Link>
+        </h3>
+
+        <p>{story.description}</p>
+
+        <div className="vb-card-bottom">
+          <span className="vb-read-time">
+            <Clock3 size={14} />
+            {story.readTime}
+          </span>
+
+          <Link
+            to={storyLink}
+            className="vb-card-arrow"
+            aria-label={`Read ${story.title}`}
+          >
+            <ArrowUpRight size={19} />
+          </Link>
+        </div>
+
+      </div>
+    </article>
+  );
+}
+
+/* Shown when a category has no stories */
+function EmptyMessage({ onShowAll }) {
+  return (
+    <div className="vb-empty">
+      <BookOpen size={34} strokeWidth={1.4} />
+
+      <h3>No stories in this category yet.</h3>
+
+      <p>Explore another category to discover more articles.</p>
+
+      <button type="button" onClick={onShowAll}>
+        View All Stories
+        <ArrowRight size={17} />
+      </button>
+    </div>
+  );
+}
+
+/* Previous / 01 02 03 / Next buttons */
+function Pagination({ currentPage, totalPages, onChangePage }) {
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  return (
+    <nav className="vb-pagination" aria-label="Blog pagination">
+
+      <button
+        type="button"
+        className="vb-page-nav"
+        onClick={() => onChangePage(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        <ArrowLeft size={17} />
+        Previous
+      </button>
+
+      <div className="vb-page-numbers">
+        {pageNumbers.map((page) => (
+          <button
+            key={page}
+            type="button"
+            className={`vb-page-number ${currentPage === page ? "active" : ""}`}
+            onClick={() => onChangePage(page)}
+            aria-label={`Go to page ${page}`}
+            aria-current={currentPage === page ? "page" : undefined}
+          >
+            {String(page).padStart(2, "0")}
+          </button>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        className="vb-page-nav"
+        onClick={() => onChangePage(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        Next
+        <ArrowRight size={17} />
+      </button>
+
+    </nav>
+  );
+}
+
+/* =========================================================
+   4. THE BLOG PAGE
+========================================================= */
 
 function Blog() {
-  const [activeCategory, setActiveCategory] = useState("All Stories");
+  // Which category button is selected, and which page we are on
+  const [activeCategory, setActiveCategory] = useState(ALL_STORIES);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const featuredBlog = blogs.find((item) => item.featured);
+  // The featured story goes in the top card.
+  // Every other story goes in the grid below.
+  const featuredStory = blogs.find((story) => story.featured);
+  const otherStories = blogs.filter((story) => !story.featured);
 
-  const regularBlogs = blogs.filter((item) => !item.featured);
+  // Keep only the stories from the selected category
+  const storiesInCategory =
+    activeCategory === ALL_STORIES
+      ? otherStories
+      : otherStories.filter((story) => story.category === activeCategory);
 
-  const filteredBlogs =
-    activeCategory === "All Stories"
-      ? regularBlogs
-      : regularBlogs.filter(
-          (item) => item.category === activeCategory
-        );
+  // Work out which stories belong on the current page
+  const totalPages = Math.ceil(storiesInCategory.length / STORIES_PER_PAGE);
+  const firstStoryIndex = (currentPage - 1) * STORIES_PER_PAGE;
+  const storiesOnThisPage = storiesInCategory.slice(
+    firstStoryIndex,
+    firstStoryIndex + STORIES_PER_PAGE
+  );
+
+  // When a category is clicked, go back to page 1
+  function selectCategory(category) {
+    setActiveCategory(category);
+    setCurrentPage(1);
+  }
+
+  // When a page is clicked, show it and scroll to the stories
+  function goToPage(page) {
+    if (page < 1 || page > totalPages) return;
+
+    setCurrentPage(page);
+
+    document
+      .getElementById("veda-journal")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   return (
     <>
       <Navbar />
 
+      <PageBanner
+        image="/images/hero.png"
+        alt="VEDA International School"
+        label="VEDA JOURNAL"
+        caption="Stories from our school community"
+        breadcrumb={[
+          { label: "Home", to: "/" },
+          { label: "Blog" }
+        ]}
+      />
+
       <main className="veda-blog">
-        <PageBanner
-          image="/images/hero.png"
-          alt="VEDA International School campus and students"
-          label="THE VEDA JOURNAL"
-          caption="Stories that inspire"
-          breadcrumb={[{ label: "Home", to: "/" }, { label: "Blog" }]}
-        />
 
-        {/* PAGE INTRODUCTION */}
+        {/* Introduction + featured story */}
+        {featuredStory && <IntroCard story={featuredStory} />}
 
-        <section className="vb-intro">
-          <div className="vb-container vb-intro-inner">
-
-            <div className="vb-intro-copy">
-              <span className="vb-kicker">
-                <span className="vb-kicker-line" />
-                THE VEDA JOURNAL
-              </span>
-
-              <h1>
-                Stories that <em>inspire.</em>
-                
-                Moments that matter.
-              </h1>
-
-              {/* <p>
-                A closer look at the experiences, ideas and
-                everyday moments that bring our learning
-                community together.
-              </p> */}
-            </div>
-          </div>
-        </section>
-
-        {/* FEATURED EDITORIAL STORY */}
-
-        <section className="vb-featured-section">
+        {/* Category buttons + story grid */}
+        <section className="vb-journal-section" id="veda-journal">
           <div className="vb-container">
 
-            <div className="vb-section-top">
-              <span>01 / EDITOR'S PICK</span>
-              <div />
-              <span>FEATURED JOURNAL</span>
-            </div>
+            <div className="vb-journal-bar">
 
-            <article className="vb-featured">
-
-              <Link
-                className="vb-featured-photo"
-                to={`/blog/${featuredBlog.slug}`}
-                aria-label={`Read ${featuredBlog.title}`}
-              >
-                <img
-                  src={featuredBlog.image}
-                  alt={featuredBlog.title}
-                />
-
-                <span className="vb-photo-corner">
-                  <Sparkles size={15} />
-                  Featured Story
-                </span>
-              </Link>
-
-              <div className="vb-featured-panel">
-
-                <div className="vb-featured-meta">
-                  <span className="vb-category">
-                    {featuredBlog.category}
-                  </span>
-
-                  <span className="vb-date">
-                    <CalendarDays size={15} />
-                    {featuredBlog.date}
-                  </span>
-                </div>
-
-                <h2>{featuredBlog.title}</h2>
-
-                <div className="vb-gold-rule" />
-
-                <p>{featuredBlog.description}</p>
-
-                <div className="vb-featured-actions">
-
-                  <Link
-                    to={`/blog/${featuredBlog.slug}`}
-                    className="vb-primary-link"
-                  >
-                    Explore This Story
-                    <ArrowUpRight size={18} />
-                  </Link>
-
-                  <span className="vb-read-time">
-                    <Clock3 size={15} />
-                    {featuredBlog.readTime}
-                  </span>
-
-                </div>
-              </div>
-
-            </article>
-
-          </div>
-        </section>
-
-        {/* ALL ARTICLES */}
-
-        <section className="vb-journal-section">
-          <div className="vb-container">
-
-            <div className="vb-journal-heading">
-              <div>
-                <span className="vb-kicker">
-                  <span className="vb-kicker-line" />
-                  EXPLORE THE JOURNAL
-                </span>
-
-                <h2>Latest from VEDA<span>.</span></h2>
-
-                {/* <p>
-                  Discover new perspectives, shared experiences
-                  and stories from our school community.
-                </p> */}
-              </div>
-
-              <div className="vb-journal-count">
-                <strong>
-                  {String(filteredBlogs.length).padStart(2, "0")}
-                </strong>
-                <span>STORIES</span>
-              </div>
-            </div>
-
-            {/* CATEGORY FILTERS */}
-
-            <div className="vb-filter-bar">
               <div className="vb-filters" aria-label="Blog categories">
                 {categories.map((category) => (
                   <button
@@ -309,123 +497,44 @@ function Blog() {
                     className={`vb-filter ${
                       activeCategory === category ? "active" : ""
                     }`}
-                    onClick={() => setActiveCategory(category)}
+                    onClick={() => selectCategory(category)}
                     aria-pressed={activeCategory === category}
                   >
                     {category}
                   </button>
                 ))}
               </div>
+
+              <div className="vb-journal-count">
+                <strong>
+                  {String(storiesInCategory.length).padStart(2, "0")}
+                </strong>
+                <span>STORIES</span>
+              </div>
+
             </div>
 
-            {/* ARTICLE GRID */}
-
-            {filteredBlogs.length > 0 ? (
+            {storiesOnThisPage.length > 0 ? (
               <div className="vb-grid">
-
-                {filteredBlogs.map((blog, index) => (
-                  <article className="vb-card" key={blog.id}>
-
-                    <Link
-                      to={`/blog/${blog.slug}`}
-                      className="vb-card-photo"
-                      aria-label={`Read ${blog.title}`}
-                    >
-                      <img
-                        src={blog.image}
-                        alt={blog.title}
-                        loading="lazy"
-                      />
-
-                      <span className="vb-card-number">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                    </Link>
-
-                    <div className="vb-card-body">
-
-                      <div className="vb-card-topline">
-                        <span className="vb-category">
-                          {blog.category}
-                        </span>
-
-                        <span className="vb-date">
-                          {blog.date}
-                        </span>
-                      </div>
-
-                      <h3>
-                        <Link to={`/blog/${blog.slug}`}>
-                          {blog.title}
-                        </Link>
-                      </h3>
-
-                      <p>{blog.description}</p>
-
-                      <div className="vb-card-bottom">
-
-                        <span className="vb-read-time">
-                          <Clock3 size={14} />
-                          {blog.readTime}
-                        </span>
-
-                        <Link
-                          to={`/blog/${blog.slug}`}
-                          className="vb-card-arrow"
-                          aria-label={`Read ${blog.title}`}
-                        >
-                          <ArrowUpRight size={19} />
-                        </Link>
-
-                      </div>
-
-                    </div>
-
-                  </article>
+                {storiesOnThisPage.map((story, index) => (
+                  <StoryCard
+                    key={story.id}
+                    story={story}
+                    number={firstStoryIndex + index + 1}
+                  />
                 ))}
-
               </div>
             ) : (
-              <div className="vb-empty">
-                <BookOpen size={34} strokeWidth={1.4} />
-                <h3>No stories in this category yet.</h3>
-                <p>Explore another category to discover more articles.</p>
-
-                <button
-                  type="button"
-                  onClick={() => setActiveCategory("All Stories")}
-                >
-                  View All Stories
-                  <ArrowRight size={17} />
-                </button>
-              </div>
+              <EmptyMessage onShowAll={() => selectCategory(ALL_STORIES)} />
             )}
 
-          </div>
-        </section>
-
-        {/* CLOSING STRIP */}
-
-        <section className="vb-closing">
-          <div className="vb-container vb-closing-inner">
-
-            <div>
-              <span className="vb-closing-label">
-                BEYOND THE CLASSROOM
-              </span>
-
-              <h2>There's always more to discover.</h2>
-
-              <p>
-                Explore the values and vision behind VEDA
-                International School.
-              </p>
-            </div>
-
-            <Link to="/about" className="vb-closing-link">
-              Discover Our School
-              <ArrowUpRight size={18} />
-            </Link>
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onChangePage={goToPage}
+              />
+            )}
 
           </div>
         </section>
