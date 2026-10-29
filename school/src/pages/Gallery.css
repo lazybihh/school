@@ -258,12 +258,14 @@
 
 .gl-filters {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   margin: 20px 0 22px;
 }
 
 .gl-filters button {
+  min-width: 0;
+  flex: 1 1 0;
   padding: 7px 15px;
   border: 1px solid rgba(8, 43, 85, 0.14);
   border-radius: 999px;
@@ -272,6 +274,7 @@
   font: inherit;
   font-size: 12px;
   font-weight: 650;
+  white-space: nowrap;
   cursor: pointer;
   transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
 }
@@ -698,7 +701,11 @@
 .veda-gallery .gl-cta p,
 .veda-gallery .gl-cta-link,
 .veda-gallery .gl-btn,
-.veda-gallery .gl-filters button,
 .veda-gallery .gl-count {
   font-size: 15px;
+}
+
+.veda-gallery .gl-filters button {
+  padding-inline: clamp(4px, 1.2vw, 15px);
+  font-size: clamp(10px, 1.05vw, 12px);
 }

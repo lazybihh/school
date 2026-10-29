@@ -192,6 +192,8 @@ function BlogNews() {
   const [showAllArticles, setShowAllArticles] = useState(false);
   const articlesGridRef = useRef(null);
   const articlesPausedRef = useRef(false);
+  const arrowMotionRef = useRef(false);
+  const arrowMotionTimeoutRef = useRef(null);
   const dragStateRef = useRef({
     isDown: false,
     startX: 0,
@@ -222,6 +224,7 @@ function BlogNews() {
         !showAllArticles &&
         !reducedMotion &&
         !articlesPausedRef.current &&
+        !arrowMotionRef.current &&
         !dragStateRef.current.isDown &&
         loopWidth > 0
       ) {
@@ -236,7 +239,10 @@ function BlogNews() {
     };
 
     frameId = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(frameId);
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(arrowMotionTimeoutRef.current);
+    };
   }, [showAllArticles]);
 
   const moveArticles = (direction) => {
@@ -245,18 +251,32 @@ function BlogNews() {
 
     const firstSet = viewport.querySelector(".news-articles-set");
     const loopWidth = firstSet?.getBoundingClientRect().width || 0;
-    const step = Math.max(260, viewport.clientWidth * 0.8);
-    let nextPosition = viewport.scrollLeft + direction * step;
-
-    if (loopWidth > 0) {
-      if (nextPosition < 0) {
-        nextPosition += loopWidth;
-      } else if (nextPosition >= loopWidth) {
-        nextPosition -= loopWidth;
-      }
+    const firstCard = firstSet?.querySelector(".news-article-card");
+    const isSmallScreen = window.matchMedia("(max-width: 760px)").matches;
+    const cardWidth = firstCard?.getBoundingClientRect().width || 0;
+    const cardGap = firstSet
+      ? Number.parseFloat(window.getComputedStyle(firstSet).gap) || 0
+      : 0;
+    const step = isSmallScreen && cardWidth
+      ? cardWidth + cardGap
+      : Math.max(260, viewport.clientWidth * 0.8);
+    if (loopWidth > 0 && viewport.scrollLeft + direction * step < 0) {
+      viewport.scrollLeft += loopWidth;
     }
 
-    viewport.scrollLeft = nextPosition;
+    arrowMotionRef.current = true;
+    window.clearTimeout(arrowMotionTimeoutRef.current);
+    viewport.scrollTo({
+      left: viewport.scrollLeft + direction * step,
+      behavior: "smooth"
+    });
+
+    arrowMotionTimeoutRef.current = window.setTimeout(() => {
+      if (loopWidth > 0 && viewport.scrollLeft >= loopWidth) {
+        viewport.scrollLeft -= loopWidth;
+      }
+      arrowMotionRef.current = false;
+    }, 700);
   };
 
   const visibleNews =

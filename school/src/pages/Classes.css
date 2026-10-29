@@ -105,13 +105,14 @@
 /* Stage filter */
 
 .cl-filters {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
   margin-bottom: 20px;
 }
 
 .cl-filter {
+  width: 100%;
   min-height: 42px;
   padding: 0 18px;
   border: 1px solid rgba(8, 43, 85, 0.18);
@@ -302,11 +303,33 @@
   .cl-container {
     width: calc(100% - 48px);
   }
+
+  .cl-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cl-filter {
+    flex: 0 0 calc((100% - 20px) / 3);
+    padding-inline: 8px;
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 600px) {
   .cl-container {
     width: calc(100% - 36px);
+  }
+
+  .cl-filters {
+    gap: 8px;
+  }
+
+  .cl-filter {
+    flex-basis: calc((100% - 16px) / 3);
+    padding-inline: 5px;
+    font-size: 12px;
   }
 
   .cl-classes {

@@ -395,7 +395,7 @@ function Home() {
 
               <div className="vh-notices-title">
                 <h2>Latest <em>Notices.</em></h2>
-                <Link to="/blog-news" className="vh-text-link">
+                <Link to="/blog-news" className="vh-text-link vh-notices-view-all">
                   View All <ArrowUpRight size={17} />
                 </Link>
               </div>

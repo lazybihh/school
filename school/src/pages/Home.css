@@ -2157,3 +2157,41 @@
     grid-template-columns: 1fr;
   }
 }
+
+.veda-home .vh-notices-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.veda-home .vh-notices-title h2 {
+  font-size: clamp(24px, 3vw, 36px);
+}
+
+.veda-home .vh-notices-title .vh-notices-view-all {
+  flex: 0 0 auto;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 13px;
+  border: 1px solid var(--navy);
+  border-radius: 6px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.veda-home .vh-notices-title .vh-notices-view-all svg {
+  color: var(--gold);
+}
+
+.veda-home .vh-notices-title .vh-notices-view-all:hover {
+  gap: 7px;
+  background: #174778;
+  color: #fff;
+  transform: translateY(-2px);
+}

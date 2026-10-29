@@ -269,12 +269,14 @@
 
 .news-filters {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   margin: 18px 0 16px;
 }
 
 .news-filters button {
+  min-width: 0;
+  flex: 1 1 0;
   padding: 7px 15px;
   border: 1px solid rgba(8, 43, 85, 0.14);
   border-radius: 999px;
@@ -284,6 +286,7 @@
   font-size: 12px;
   font-weight: 650;
   cursor: pointer;
+  white-space: nowrap;
   transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
 }
 
@@ -499,11 +502,15 @@
 }
 
 .news-articles-carousel {
-  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px 44px;
+  column-gap: 8px;
   min-width: 0;
 }
 
 .news-articles-grid {
+  grid-column: 1 / -1;
+  grid-row: 1;
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -545,9 +552,8 @@
 /* Previous and next arrows */
 
 .news-articles-arrow {
-  position: absolute;
+  position: static;
   z-index: 3;
-  top: 42%;
   display: grid;
   width: 44px;
   height: 44px;
@@ -562,7 +568,8 @@
 }
 
 .news-articles-prev {
-  left: 12px;
+  grid-column: 2;
+  grid-row: 2;
 }
 
 .news-articles-prev svg {
@@ -570,7 +577,8 @@
 }
 
 .news-articles-next {
-  right: 12px;
+  grid-column: 3;
+  grid-row: 2;
 }
 
 .news-articles-arrow:hover {
@@ -766,8 +774,8 @@
 
 @media (max-width: 760px) {
   .news-article-card {
-    flex-basis: 82vw;
-    width: 82vw;
+    flex-basis: calc(62vw - 11px);
+    width: calc(62vw - 11px);
   }
 
   .news-articles-heading-actions {
@@ -784,12 +792,25 @@
   }
 
   .news-articles-arrow {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
 
   .news-article-photo {
-    height: 200px;
+    height: 150px;
+  }
+
+  .news-article-body {
+    padding: 14px 15px 16px;
+  }
+
+  .veda-news .news-article-body h3 {
+    font-size: 16px;
+  }
+
+  .veda-news .news-article-body p {
+    font-size: 13px;
+    line-height: 1.55;
   }
 
   .news-section-heading {
@@ -811,11 +832,6 @@
 @media (max-width: 600px) {
   .news-container {
     width: calc(100% - 36px);
-  }
-
-  .news-article-card {
-    flex-basis: 86vw;
-    width: 86vw;
   }
 
   .news-banner {
@@ -929,4 +945,16 @@
 
 .veda-news .news-text h3 {
   font-size: 16px;
+}
+
+@media (max-width: 760px) {
+  .veda-news .news-article-body p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+}
+
+.veda-news .news-filters button {
+  padding-inline: clamp(3px, 1vw, 12px);
+  font-size: clamp(10px, 2.6vw, 13px);
 }

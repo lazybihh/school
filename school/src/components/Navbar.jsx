@@ -10,13 +10,15 @@ import "./Navbar.css";
 */
 const LINKS_BEFORE = [
   { to: "/", label: "Home", end: true },
-  { to: "/about", label: "About Us" }
+  { to: "/about", label: "About Us" },
+  { to: "/academics", label: "Academics" }
 ];
 
 const SCHOOL_LINKS = [
   { to: "/classes", label: "Classes" },
   { to: "/faculty", label: "Faculty" },
-  { to: "/facilities", label: "Facilities" }
+  { to: "/facilities", label: "Facilities" },
+  { to: "/fee-structure", label: "Fee Structure" }
 ];
 
 const LINKS_AFTER = [

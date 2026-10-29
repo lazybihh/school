@@ -100,11 +100,11 @@ function Footer() {
             <span className="vf-heading-line" />
 
             <Link to="/">Home</Link>
-            <Link to="/about">About Our School</Link>
+            <Link to="/about">About VEDA</Link>
             <Link to="/admissions">Admissions</Link>
             <Link to="/gallery">School Gallery</Link>
             <Link to="/blog-news">Blog & News</Link>
-            <Link to="/contact">Contact Us</Link>
+            <Link to="/contact">Contact</Link>
           </div>
 
           {/* USEFUL LINKS */}
@@ -119,6 +119,8 @@ function Footer() {
             <Link to="/gallery">School Activities</Link>
             <Link to="/contact">Contact & Location</Link>
             <Link to="/about">About VEDA</Link>
+            <Link to="/privacy">Privacy Policy</Link>
+            <Link to="/terms">Terms &amp; Conditions</Link>
           </div>
 
           {/* CONTACT */}
@@ -182,13 +184,6 @@ function Footer() {
             <span />
             <Link to="/about">About VEDA</Link>
             <span />
-            <Link to="/admissions">Admissions</Link>
-            <span />
-            <Link to="/contact">Contact</Link>
-            <span />
-            <Link to="/privacy">Privacy Policy</Link>
-            <span />
-            <Link to="/terms">Terms &amp; Conditions</Link>
           </div>
         </div>
       </div>

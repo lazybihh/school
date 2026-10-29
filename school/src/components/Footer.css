@@ -74,6 +74,7 @@
   font-size: clamp(22px, 2.1vw, 30px);
   font-weight: 600;
   line-height: 1.25;
+  white-space: nowrap;
 }
 
 .vf-admission-btn {
@@ -342,11 +343,18 @@
 .vf-bottom-links {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 15px;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
 }
 
 .vf-bottom-links a {
+  flex: 0 0 auto;
   color: #b9c9db;
   font-size: 11px;
   text-decoration: none;
@@ -377,6 +385,7 @@
 }
 
 .vf-bottom-links > span {
+  flex: 0 0 1px;
   width: 1px;
   height: 12px;
   background: rgba(255, 255, 255, 0.18);
@@ -414,6 +423,17 @@
 
   .vf-top-text {
     flex-basis: calc(100% - 80px);
+    min-width: 0;
+  }
+
+  .vf-top-text h2 {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: clamp(18px, 3.2vw, 22px);
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   .vf-admission-btn {
@@ -459,7 +479,7 @@
   }
 
   .vf-top-text h2 {
-    font-size: 22px;
+    font-size: clamp(18px, 5vw, 21px);
   }
 
   .vf-admission-btn {
@@ -496,6 +516,10 @@
 
   .vf-bottom-links {
     gap: 10px;
+  }
+
+  .vf-bottom-links .vf-dashboard-btn {
+    padding-inline: 8px;
   }
 }
 

@@ -12,6 +12,8 @@ import {
 
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Academics from "./pages/Academics";
+import FeeStructure from "./pages/Feestructure";
 import Classes from "./pages/Classes";
 import Faculty from "./pages/Faculty";
 import Facilities from "./pages/Facilities";
@@ -58,6 +60,10 @@ export default function App() {
           <Route path="/" element={<Home />} />
 
           <Route path="/about" element={<About />} />
+
+          <Route path="/academics" element={<Academics />} />
+
+          <Route path="/fee-structure" element={<FeeStructure />} />
 
           <Route path="/classes" element={<Classes />} />
 

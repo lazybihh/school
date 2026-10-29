@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Menu, Bell, Search } from "lucide-react";
-
 import AdminSidebar from "./AdminSidebar";
 import AdminOverview from "./AdminOverview";
 import StudentInfo from "./StudentInfo";

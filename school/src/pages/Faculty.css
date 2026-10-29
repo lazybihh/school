@@ -749,31 +749,34 @@
     line-height: 1.7;
   }
 
-  /* search on one line, sort menu under it, both full width */
+  /* Keep search and sort controls on one row. */
   .veda-faculty .fc-tools {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 0.65fr);
+    gap: 8px;
     margin-bottom: 14px;
   }
 
   .veda-faculty .fc-search input,
   .veda-faculty .fc-sort {
-    font-size: 15px;
+    font-size: 13px;
   }
 
-  /* pills WRAP onto two rows instead of running off the screen */
+  /* Three filter buttons per row, with the final two centered. */
   .veda-faculty .fc-filters {
     flex-wrap: wrap;
     gap: 8px;
     margin: 0 0 14px;
     padding: 0;
     overflow: visible;
+    justify-content: center;
   }
 
   .veda-faculty .fc-filter {
     min-height: 40px;
-    padding: 7px 14px;
-    font-size: 13px;
+    flex: 0 0 calc((100% - 16px) / 3);
+    padding: 7px 6px;
+    font-size: 12px;
+    white-space: normal;
   }
 
   .veda-faculty .fc-count {
